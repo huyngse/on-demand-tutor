@@ -1,7 +1,7 @@
-const index = () => {
+const RegisterPage = () => {
   return (
     <div>index</div>
   )
 }
 
-export default index
+export default RegisterPage;

@@ -27,7 +27,7 @@ const LoginPage = () => {
           <label htmlFor="email" className="font-bold">Email</label>
           <Form.Item
             name="email"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập email của bạn!' }]}
             className="mb-3"
           >
             <Input id="email" />
@@ -35,7 +35,8 @@ const LoginPage = () => {
           <label htmlFor="password" className="font-bold">Mật khẩu</label>
           <Form.Item
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+            
           >
             <Input.Password id="password" />
           </Form.Item>
@@ -45,7 +46,9 @@ const LoginPage = () => {
             </Button>
           </Form.Item>
           <div className="text-end">
-            <button type="button" className="text-blue-600 underline">Quên mật khẩu</button>
+            <Link to={"/forget-password"}>
+              <button type="button" className="text-blue-600 underline">Quên mật khẩu</button>
+            </Link>
           </div>
         </Form>
       </div>

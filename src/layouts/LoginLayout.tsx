@@ -20,7 +20,7 @@ const LoginLayout = ({ children }: LoginLayoutProps) => {
                     </Link>
                     {/* <h5 className="text-white italic font-semibold text-xl bottom-11 z-10">Khai phá tiềm năng của bạn với dịch vụ dạy kèm theo yêu cầu!</h5> */}
                 </div>
-                <div className="col-span-7 ">
+                <div className="col-span-7 min-h-[100vh] bg-white">
                     {children}
                 </div>
             </div>
