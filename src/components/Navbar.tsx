@@ -7,7 +7,7 @@ const Navbar = () => {
             <div className="flex items-center">
                 <div className="text-xl font-bold me-5">
                     <Link to="/">
-                        Estate<span className="text-blue-600">Network</span>
+                        On<span className="text-blue-600">Demand</span>Tutor
                     </Link>
                 </div>
                 <div className="font-semibold text-base flex gap-5">
