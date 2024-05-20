@@ -51,7 +51,7 @@ const RegisterPage = () => {
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
               className="mb-3"
             >
-              <Input.Password id="confirmPassword" />
+              <Input.Password id="password" autoComplete="new-password"/>
             </Form.Item>
             <label htmlFor="confirmPassword" className="font-bold">Nhập lại mật khẩu</label>
             <Form.Item

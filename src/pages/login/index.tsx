@@ -1,8 +1,8 @@
 import { Button, Form, FormProps, Input } from "antd";
 import { Link } from "react-router-dom";
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
   console.log('Success:', values);
