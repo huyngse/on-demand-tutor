@@ -1,0 +1,26 @@
+[
+    {
+        "id": 0,
+        "name": "Sinh viên"
+    },
+    {
+        "id": 1,
+        "name": "Giáo viên"
+    },
+    {
+        "id": 2,
+        "name": "Giảng viên"
+    },
+    {
+        "id": 3,
+        "name": "Người đi làm"
+    },
+    {
+        "id": 4,
+        "name": "Chuyên gia"
+    },
+    {
+        "id": 5,
+        "name": "Người nước ngoài"
+    }
+]

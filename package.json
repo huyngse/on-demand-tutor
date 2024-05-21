@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.3",
+    "@reduxjs/toolkit": "^2.2.5",
     "@tiptap/extension-color": "^2.3.2",
     "@tiptap/extension-typography": "^2.3.2",
     "@tiptap/extension-youtube": "^2.3.2",

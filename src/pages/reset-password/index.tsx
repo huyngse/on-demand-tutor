@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButton";
 import { Button, Form, FormProps, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type FieldType = {
   otp: string;
@@ -9,8 +9,10 @@ type FieldType = {
 };
 
 const RecoverPasswordPage = () => {
+  const navigate = useNavigate();
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values);
+    navigate("/login");
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -31,7 +33,7 @@ const RecoverPasswordPage = () => {
         >
           <p className="font-semibold text-center">Kiểu tra email của bạn, chúng tôi đã gửi đến địa chỉ email bạn đã nhập</p>
           <div className="pt-5 flex justify-center">
-            <Form.Item name="otp" className="mb-3">
+            <Form.Item name="otp" className="mb-3"   rules={[{ required: true, message: 'Vui lòng nhập mã OTP!' }]}>
               <Input.OTP />
             </Form.Item>
           </div>

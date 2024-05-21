@@ -1,6 +1,8 @@
 const index = () => {
   return (
-    <div>Home Page</div>
+    <div className="p-5">
+      <h1 className="text-4xl font-semibold text-center">Trang Chủ</h1>
+    </div>
   )
 }
 

@@ -13,7 +13,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             <div className="flex-1">
                 {children}
             </div>
-            <div className="min-h-10 border border-b">Footer</div>
+            <div className="min-h-10 border border-b p-3 text-center">© 2024 OnDemandTutor - SWP391</div>
         </div>
     )
 }
