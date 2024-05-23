@@ -17,3 +17,12 @@ export const getAllTutors = async () => {
     return handleApiError(error);
   }
 }
+
+export const getTutorById = async (id: number) => {
+  try {
+    const tutor = tutorData.find(tutor => tutor.id == id);
+    return { error: null, data: tutor, success: true };
+  } catch (error) {
+    return handleApiError(error);
+  }
+}

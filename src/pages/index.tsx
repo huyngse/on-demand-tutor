@@ -6,6 +6,7 @@ import ForgetPasswordPage from "./reset-password/ForgetPasswordPage";
 import RegisterPage from "./register";
 import TutorListPage from "./home/tutor-list";
 import ClassListPage from "./home/class-list";
+import TutorDetailPage from "./home/tutor-detail";
 export {
     LoginPage,
     HomePage,
@@ -14,5 +15,6 @@ export {
     ForgetPasswordPage,
     RegisterPage,
     TutorListPage,
-    ClassListPage
+    ClassListPage,
+    TutorDetailPage
 };

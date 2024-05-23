@@ -4,7 +4,17 @@ import '@/styles/index.css'
 import { Provider } from 'react-redux'
 import { store } from './lib/redux/store'
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { LoginPage, HomePage, ErrorPage, RecoverPasswordPage, ForgetPasswordPage, RegisterPage, TutorListPage, ClassListPage } from '@/pages';
+import {
+  LoginPage,
+  HomePage,
+  ErrorPage,
+  RecoverPasswordPage,
+  ForgetPasswordPage,
+  RegisterPage,
+  TutorListPage,
+  ClassListPage,
+  TutorDetailPage
+} from '@/pages';
 import MainLayout from './layouts/MainLayout'
 import LoginLayout from './layouts/LoginLayout'
 
@@ -41,6 +51,14 @@ const router = createBrowserRouter([
     element: (
       <MainLayout>
         <TutorListPage />
+      </MainLayout>
+    ),
+  },
+  {
+    path: '/tutor/:id',
+    element: (
+      <MainLayout>
+        <TutorDetailPage />
       </MainLayout>
     ),
   },
@@ -84,6 +102,7 @@ const router = createBrowserRouter([
       </LoginLayout>
     ),
   },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

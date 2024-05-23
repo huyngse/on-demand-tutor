@@ -9,11 +9,13 @@ const TutorCard = ({ data }: TutorCardProps) => {
     return (
         <div className="drop-shadow rounded-lg overflow-hidden bg-white">
             <div className="h-[200px] overflow-hidden">
-                <img src={data.profilePicUrl} alt="tutor profile picture" className="w-full -translate-y-7" />
+                <img src={data.profilePicUrl} alt="tutor profile picture" className="w-full h-full object-cover" />
             </div>
             <div className="p-3 flex flex-col gap-1">
                 <div className="font-bold text-center text-xl">
-                    {data.fullName}
+                    <a href={`/tutor/${data.id}`}>
+                        {data.fullName}
+                    </a>
                 </div>
                 <div className="flex justify-center items-center gap-1">
                     <MapPin className="w-4" />

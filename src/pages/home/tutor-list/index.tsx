@@ -114,7 +114,7 @@ const TutorListPage = () => {
             size="large"
           // enterButton={<Button>Hello</Button>}
           />
-          <p className="text-white text-sm">Có 17126 kết quả</p>
+          <p className="text-white text-sm">Có {tutors?.length} kết quả</p>
         </div>
         <div className="p-5 grid grid-cols-12 gap-5">
           <div className="col-span-3">
@@ -125,7 +125,7 @@ const TutorListPage = () => {
               </h2>
               <p className="font-bold mb-1">Tỉnh/thành</p>
               <Form.Item name="city" className="mb-3">
-                <Select options={cityOptions} placeholder="-- Chọn tỉnh/thành --" onChange={onCityChange} />
+                <Select showSearch options={cityOptions} placeholder="-- Chọn tỉnh/thành --" onChange={onCityChange} />
               </Form.Item>
               <p className="font-bold mb-1">Quận/huyện</p>
               <Form.Item name="district">

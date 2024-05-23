@@ -46,11 +46,8 @@ export const tutorData = [
     <p>
     <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">- Toán + Tiếng Việt cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cho trẻ em&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 2</span>
 </p>`,
-    teachingArea: `
-    <p>
-    <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội</span>
-</p>`,
-    achievementImages: [
+    teachingArea: "Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội",
+    achievements: [
       {
         id: 0,
         imageUrl: "/src/assets/images/bang_ky_su.jpg",
@@ -104,8 +101,8 @@ export const tutorData = [
   },
   {
     id: 1,
-    fullName: "Nguyễn Văn A",
-    profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+    fullName: "Nguyễn Văn B",
+    profilePicUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2pyY8nB_FTB3jY9ESDqy_ROINaLtuY5_XGD5qqSpEQ&s",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
     ward: "Phường Tam Phú",
@@ -149,11 +146,8 @@ export const tutorData = [
     <p>
     <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">- Toán + Tiếng Việt cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cho trẻ em&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 2</span>
 </p>`,
-    teachingArea: `
-    <p>
-    <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội</span>
-</p>`,
-    achievementImages: [
+    teachingArea: "Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội",
+    achievements: [
       {
         id: 0,
         imageUrl: "/src/assets/images/bang_ky_su.jpg",
@@ -207,7 +201,7 @@ export const tutorData = [
   },
   {
     id: 2,
-    fullName: "Nguyễn Văn A",
+    fullName: "Nguyễn Văn C",
     profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
@@ -252,11 +246,8 @@ export const tutorData = [
     <p>
     <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">- Toán + Tiếng Việt cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cho trẻ em&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 2</span>
 </p>`,
-    teachingArea: `
-    <p>
-    <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội</span>
-</p>`,
-    achievementImages: [
+    teachingArea: "Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội",
+    achievements: [
       {
         id: 0,
         imageUrl: "/src/assets/images/bang_ky_su.jpg",
@@ -310,7 +301,7 @@ export const tutorData = [
   },
   {
     id: 3,
-    fullName: "Nguyễn Văn A",
+    fullName: "Nguyễn Văn D",
     profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
@@ -355,11 +346,8 @@ export const tutorData = [
     <p>
     <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">- Toán + Tiếng Việt cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cho trẻ em&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 1&nbsp;</span><br><span style="white-space:pre-wrap;">- Tiếng anh cấp 2</span>
 </p>`,
-    teachingArea: `
-    <p>
-    <meta charset="utf-8"><span data-metadata=""></span><span data-buffer=""></span><span style="white-space:pre-wrap;">Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội</span>
-</p>`,
-    achievementImages: [
+    teachingArea: "Q.Đống Đa, Q.Hai Bà Trưng, Q.Hoàn Kiếm, Q.Hoàng Mai | Hà Nội",
+    achievements: [
       {
         id: 0,
         imageUrl: "/src/assets/images/bang_ky_su.jpg",
