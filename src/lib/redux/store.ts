@@ -1,7 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import addressReducer from "./addressSlice";
+import userReducer from "./userSlice";
 const rootReducer = combineReducers({
     address: addressReducer,
+    user: userReducer,
 });
 
 

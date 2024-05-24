@@ -17,6 +17,8 @@ import {
 } from '@/pages';
 import MainLayout from './layouts/MainLayout'
 import LoginLayout from './layouts/LoginLayout'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -102,13 +104,41 @@ const router = createBrowserRouter([
       </LoginLayout>
     ),
   },
-
 ]);
-
+const adminRouter = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
+    ),
+    errorElement: (
+      <MainLayout>
+        <ErrorPage />
+      </MainLayout>
+    ),
+    children: [
+      {
+        path: '/',
+        element: (
+          <HomePage />
+        ),
+      },
+      {
+        path: '/home',
+        element: (
+          <HomePage />
+        ),
+      },
+    ],
+  },
+]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer autoClose={3000}/>
     </Provider>
   </React.StrictMode>,
 )

@@ -1,18 +1,44 @@
+import { checkToken, login } from "@/lib/api/authentication-api";
 import { Button, Form, FormProps, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
+import { useEffect, useState } from "react";
 type FieldType = {
   email: string;
   password: string;
 };
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log('Success:', values);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
 const LoginPage = () => {
+  const [loggedUser, setLoggedUser] = useState<any>();
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await checkToken();
+      setLoggedUser(data);
+    }
+    fetchData();
+  }, []);
+  const navigate = useNavigate();
+ 
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const { data } = await login(values.email, values.password);
+    if (data) {
+      toast.success("Đăng nhập thành công!");
+      Cookies.set('loggedUser', JSON.stringify(data), { expires: 7 });
+      setTimeout(() => { navigate("/") }, 1000);
+    } else {
+      toast.error("Sai mật khẩu hoặc email!");
+    }
+  };
+
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  if (loggedUser) {
+    navigate("/");
+  }
+
   return (
     <div className="rounded-lg shadow min-h-[100vh] bg-white py-16 px-20 flex flex-col justify-between">
       <div className="flex flex-col gap-5">
@@ -36,7 +62,7 @@ const LoginPage = () => {
           <Form.Item
             name="password"
             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-            
+
           >
             <Input.Password id="password" />
           </Form.Item>

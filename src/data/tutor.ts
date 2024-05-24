@@ -2,7 +2,7 @@ export const tutorData = [
   {
     id: 0,
     fullName: "Nguyễn Văn A",
-    profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+    profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
     ward: "Phường Tam Phú",
@@ -202,7 +202,7 @@ export const tutorData = [
   {
     id: 2,
     fullName: "Nguyễn Văn C",
-    profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+    profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
     ward: "Phường Tam Phú",
@@ -302,7 +302,7 @@ export const tutorData = [
   {
     id: 3,
     fullName: "Nguyễn Văn D",
-    profilePicUrl: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg",
+    profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
     city: "Thành phố Hồ Chí Minh",
     district: "Quận Thủ Đức",
     ward: "Phường Tam Phú",
