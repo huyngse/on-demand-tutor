@@ -15,6 +15,7 @@ import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
 import 'react-toastify/dist/ReactToastify.css';
 import AdminLayout from '@/layouts/AdminLayout'
+import ProtectedRoute from './ProtectedRoute';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -46,9 +47,12 @@ const router = createBrowserRouter([
     {
         path: '/admin',
         element: (
-            <AdminLayout>
-                <Outlet />
-            </AdminLayout>
+            <ProtectedRoute roles={["admin"]}>
+                <AdminLayout>
+                    <Outlet />
+                </AdminLayout>
+            </ProtectedRoute>
+
         ),
         errorElement: (
             <AdminLayout>

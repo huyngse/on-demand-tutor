@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/hooks/useRedux";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 type ProtectedRouteProps = {
@@ -9,9 +9,11 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({ roles, children }: ProtectedRouteProps) => {
     const loggedUser = useAppSelector(state => state.user.loggedUser);
     const navigate = useNavigate();
-    if (!(loggedUser && roles.includes(loggedUser.role))) {
-        navigate("/");
-    }
+    useEffect(() => {
+        if (!(loggedUser && roles.includes(loggedUser?.role))) {
+            navigate("/");
+        }
+    }, [])
     return (
         <>
             {children}
