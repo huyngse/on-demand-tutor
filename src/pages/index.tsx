@@ -7,6 +7,8 @@ import RegisterPage from "./register";
 import TutorListPage from "./home/tutor-list";
 import ClassListPage from "./home/class-list";
 import TutorDetailPage from "./home/tutor-detail";
+import AdminDashboardPage from "./admin/dashboard";
+import AdminManageAccountPage from "./admin/manage-account";
 export {
     LoginPage,
     HomePage,
@@ -16,5 +18,7 @@ export {
     RegisterPage,
     TutorListPage,
     ClassListPage,
-    TutorDetailPage
+    TutorDetailPage,
+    AdminDashboardPage,
+    AdminManageAccountPage,
 };

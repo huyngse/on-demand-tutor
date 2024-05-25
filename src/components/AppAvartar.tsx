@@ -1,12 +1,16 @@
+import { setLoggedUser } from "@/lib/redux/userSlice";
 import { Avatar, Dropdown, MenuProps } from "antd"
 import Cookies from "js-cookie";
 import { CircleUser, DoorOpen } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const AppAvartar = ({ user }: any) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const logout = () => {
         Cookies.remove('loggedUser');
+        dispatch(setLoggedUser(null));
         navigate("/login");
     }
     const items: MenuProps['items'] = [

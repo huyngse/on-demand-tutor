@@ -3,29 +3,36 @@ import { Button, Form, FormProps, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setLoggedUser } from "@/lib/redux/userSlice";
 type FieldType = {
   email: string;
   password: string;
 };
 
 const LoginPage = () => {
-  const [loggedUser, setLoggedUser] = useState<any>();
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await checkToken();
-      setLoggedUser(data);
+      if (data) {
+        navigate("/");
+      }
     }
     fetchData();
   }, []);
   const navigate = useNavigate();
- 
+
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const { data } = await login(values.email, values.password);
     if (data) {
       toast.success("Đăng nhập thành công!");
       Cookies.set('loggedUser', JSON.stringify(data), { expires: 7 });
-      setTimeout(() => { navigate("/") }, 1000);
+      dispatch(setLoggedUser(data));
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } else {
       toast.error("Sai mật khẩu hoặc email!");
     }
@@ -35,9 +42,7 @@ const LoginPage = () => {
     console.log('Failed:', errorInfo);
   };
 
-  if (loggedUser) {
-    navigate("/");
-  }
+
 
   return (
     <div className="rounded-lg shadow min-h-[100vh] bg-white py-16 px-20 flex flex-col justify-between">

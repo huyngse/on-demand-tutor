@@ -1,15 +1,19 @@
 import { checkToken } from "@/lib/api/authentication-api";
 import { Button } from "antd"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom"
 import AppAvartar from "./AppAvartar";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/hooks/useRedux";
+import { setLoggedUser } from "@/lib/redux/userSlice";
 
 const Navbar = () => {
-    const [loggedUser, setLoggedUser] = useState<any>();
+    const dispatch = useDispatch();
+    const loggedUser = useAppSelector(state => state.user.loggedUser);;
     useEffect(() => {
         const fetchData = async () => {
             const { data } = await checkToken();
-            setLoggedUser(data);
+            dispatch(setLoggedUser(data));
         }
         fetchData();
     }, []);
@@ -36,7 +40,7 @@ const Navbar = () => {
             <div className="flex gap-3 items-center">
                 {
                     loggedUser ? (
-                        <AppAvartar user={loggedUser}/>
+                        <AppAvartar user={loggedUser} />
                     ) : (
                         <>
                             <Link to="/login">
