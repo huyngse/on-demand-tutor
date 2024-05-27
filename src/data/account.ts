@@ -6,6 +6,7 @@ export const accountData = [
         fullName: "Nguyễn Văn A",
         role: "admin",
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
+        dob: "2003-01-01",
         isActive: true,
     }, 
     {
@@ -15,6 +16,7 @@ export const accountData = [
         fullName: "Nguyễn Văn B",
         role: "tutor",
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
+        dob: "2003-01-01",
         isActive: false,
     }, 
     {
@@ -24,6 +26,7 @@ export const accountData = [
         fullName: "Nguyễn Văn C",
         role: "student",
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
+        dob: "2003-01-01",
         isActive: true,
     }, 
     {
@@ -33,6 +36,7 @@ export const accountData = [
         fullName: "Nguyễn Văn D",
         role: "moderator",
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
+        dob: "2003-01-01",
         isActive: true,
     }, 
 ]

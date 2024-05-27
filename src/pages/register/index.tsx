@@ -1,10 +1,11 @@
-import { Button, Form, FormProps, Input, Radio } from "antd";
+import { Button, DatePicker, Form, FormProps, Input, Radio } from "antd";
 import { Link } from "react-router-dom";
 type FieldType = {
   fullName: string;
   email: string;
   password: string;
   confirmPassword: string;
+  dob: string;
   role: string;
 };
 const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
@@ -27,20 +28,43 @@ const RegisterPage = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            className="grid grid-cols-3 gap-2"
           >
             <label htmlFor="fullName" className="font-bold">Họ và tên</label>
             <Form.Item
               name="fullName"
               rules={[{ required: true, message: 'Vui lòng họ và tên!' }]}
-              className="mb-3"
+              className="mb-3 col-span-2"
             >
               <Input id="fullName" />
             </Form.Item>
+            <label htmlFor="dob" className="font-bold">Ngày sinh</label>
+            <Form.Item
+              name="dob"
+              rules={[
+                { required: true, message: 'Vui lòng nhập ngày sinh!' },
+                {
+                  validator: (_, value) => {
+                    if (value && new Date().getFullYear() - value?.$y > 1) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Năm sinh không hợp lệ'))
+                  },
+                },
+              ]}
+              className="mb-3 col-span-2"
+            >
+              <DatePicker id="dob" format={'DD/MM/YYYY'} />
+            </Form.Item>
+
             <label htmlFor="email" className="font-bold">Email</label>
             <Form.Item
               name="email"
-              rules={[{ required: true, message: 'Vui lòng nhập email của bạn!' }]}
-              className="mb-3"
+              rules={[
+                { required: true, message: 'Vui lòng nhập email của bạn!' },
+                { type: 'email', message: 'email không hợp lệ' }
+              ]}
+              className="mb-3 col-span-2"
             >
               <Input id="email" />
             </Form.Item>
@@ -48,28 +72,39 @@ const RegisterPage = () => {
             <Form.Item
               name="password"
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-              className="mb-3"
+              className="mb-3 col-span-2"
             >
-              <Input.Password id="password" autoComplete="new-password"/>
+              <Input.Password id="password" autoComplete="new-password" />
             </Form.Item>
             <label htmlFor="confirmPassword" className="font-bold">Nhập lại mật khẩu</label>
             <Form.Item
               name="confirmPassword"
-              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-
+              rules={[
+                { required: true, message: 'Vui lòng nhập mật khẩu!' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Mật khẩu không khớp'));
+                  },
+                })
+              ]}
+              className="col-span-2"
             >
               <Input.Password id="confirmPassword" />
             </Form.Item>
             <p className="font-bold">Bạn là</p>
             <Form.Item name="role"
               rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản!' }]}
+              className="col-span-2"
             >
               <Radio.Group>
                 <Radio value="parent"> Phụ huynh, học sinh </Radio>
                 <Radio value="tutor"> Gia sư </Radio>
               </Radio.Group>
             </Form.Item>
-            <Form.Item className="mb-0">
+            <Form.Item className="mb-0 col-span-3">
               <Button type="primary" htmlType="submit" className="w-full">
                 Đăng Ký
               </Button>
@@ -81,7 +116,7 @@ const RegisterPage = () => {
           Đã là thành viên? <Link to={"/login"} className="text-blue-500 font-semibold">Đăng nhập</Link> tại đây
         </div>
       </div>
-    </div>
+    </div >
 
   )
 }

@@ -5,3 +5,7 @@ export function formatDate(date: Date): string {
 
     return `${day}/${month}/${year}`;
 }
+
+export function dateToString(date: any) {
+    return `${date.$y}-${date.$M + 1}-${date.$D}`;
+}
