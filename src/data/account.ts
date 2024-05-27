@@ -8,6 +8,7 @@ export const accountData = [
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
         dob: "2003-01-01",
         isActive: true,
+        gender: "male",
     }, 
     {
         id: 1,
@@ -18,6 +19,7 @@ export const accountData = [
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
         dob: "2003-01-01",
         isActive: false,
+        gender: "male",
     }, 
     {
         id: 2,
@@ -28,6 +30,7 @@ export const accountData = [
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
         dob: "2003-01-01",
         isActive: true,
+        gender: "female",
     }, 
     {
         id: 3,
@@ -38,5 +41,6 @@ export const accountData = [
         profilePicUrl: "/src/assets/images/default_profile_picture.jpg",
         dob: "2003-01-01",
         isActive: true,
+        gender: "male",
     }, 
 ]

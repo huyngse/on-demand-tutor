@@ -17,3 +17,13 @@ export const getAllAccounts = async () => {
     return handleApiError(error);
   }
 }
+
+export const getAccountById = async (id: number) => {
+  const account = accountData.find(a => a.id == id)
+  try {
+    return { error: null, data: account, success: true };
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+

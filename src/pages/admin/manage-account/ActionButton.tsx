@@ -1,10 +1,17 @@
 import { Button, Dropdown, MenuProps } from "antd"
 import { EllipsisVertical, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
+import UpdateAccountButton from "./UpdateAccountButton";
 type ActionButtonProps = {
     id: number;
     isActive: boolean;
 }
 const ActionButton = ({ id, isActive }: ActionButtonProps) => {
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+    const showUpdateModal = () => {
+        setIsUpdateModalOpen(true);
+    };
     const handleDelete = () => {
         console.log("Delete account with id: ", id);
     }
@@ -13,6 +20,7 @@ const ActionButton = ({ id, isActive }: ActionButtonProps) => {
             label: "Chỉnh sửa",
             key: '0',
             icon: <Pencil width={15} />,
+            onClick: showUpdateModal,
         },
         {
             label: isActive ? "Hủy kích hoạt" : "Kích hoạt",
@@ -30,9 +38,13 @@ const ActionButton = ({ id, isActive }: ActionButtonProps) => {
         },
     ];
     return (
-        <Dropdown menu={{ items }} trigger={['click']}>
-            <Button type="default" shape="circle" icon={<EllipsisVertical width={15} />} />
-        </Dropdown>
+        <>
+            <Dropdown menu={{ items }} trigger={['click']}>
+                <Button type="default" shape="circle" icon={<EllipsisVertical width={15} />} />
+            </Dropdown>
+            <UpdateAccountButton isModalOpen={isUpdateModalOpen} setIsModalOpen={setIsUpdateModalOpen} accountId={id} />
+        </>
+
     )
 }
 

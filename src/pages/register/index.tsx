@@ -7,6 +7,7 @@ type FieldType = {
   confirmPassword: string;
   dob: string;
   role: string;
+  gender: "male" | "female";
 };
 const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
   console.log('Success:', values);
@@ -36,7 +37,7 @@ const RegisterPage = () => {
               rules={[{ required: true, message: 'Vui lòng họ và tên!' }]}
               className="mb-3 col-span-2"
             >
-              <Input id="fullName" placeholder="Họ và tên"/>
+              <Input id="fullName" placeholder="Họ và tên" />
             </Form.Item>
             <label htmlFor="dob" className="font-bold">Ngày sinh</label>
             <Form.Item
@@ -54,9 +55,19 @@ const RegisterPage = () => {
               ]}
               className="mb-3 col-span-2"
             >
-              <DatePicker id="dob" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full"/>
+              <DatePicker id="dob" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full" />
             </Form.Item>
-
+            <p className="font-bold">Giới tính</p>
+            <Form.Item
+              name="gender"
+              rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
+              className="col-span-2"
+            >
+              <Radio.Group defaultValue="male">
+                <Radio value="male"> Nam </Radio>
+                <Radio value="female"> Nữ </Radio>
+              </Radio.Group>
+            </Form.Item>
             <label htmlFor="email" className="font-bold">Email</label>
             <Form.Item
               name="email"
@@ -66,7 +77,7 @@ const RegisterPage = () => {
               ]}
               className="mb-3 col-span-2"
             >
-              <Input id="email" placeholder="email"/>
+              <Input id="email" placeholder="Email" />
             </Form.Item>
             <label htmlFor="password" className="font-bold">Mật khẩu</label>
             <Form.Item
@@ -74,7 +85,7 @@ const RegisterPage = () => {
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
               className="mb-3 col-span-2"
             >
-              <Input.Password id="password" autoComplete="new-password" placeholder="Mật khẩu"/>
+              <Input.Password id="password" autoComplete="new-password" placeholder="Mật khẩu" />
             </Form.Item>
             <label htmlFor="confirmPassword" className="font-bold">Nhập lại mật khẩu</label>
             <Form.Item
@@ -92,7 +103,7 @@ const RegisterPage = () => {
               ]}
               className="col-span-2"
             >
-              <Input.Password id="confirmPassword" placeholder="Nhập lại mật khẩu"/>
+              <Input.Password id="confirmPassword" placeholder="Nhập lại mật khẩu" />
             </Form.Item>
             <p className="font-bold">Bạn là</p>
             <Form.Item name="role"
@@ -100,7 +111,7 @@ const RegisterPage = () => {
               className="col-span-2"
             >
               <Radio.Group>
-                <Radio value="parent"> Phụ huynh, học sinh </Radio>
+                <Radio value="student_parent"> Phụ huynh, học sinh </Radio>
                 <Radio value="tutor"> Gia sư </Radio>
               </Radio.Group>
             </Form.Item>
