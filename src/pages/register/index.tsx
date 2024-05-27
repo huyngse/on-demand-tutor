@@ -36,7 +36,7 @@ const RegisterPage = () => {
               rules={[{ required: true, message: 'Vui lòng họ và tên!' }]}
               className="mb-3 col-span-2"
             >
-              <Input id="fullName" />
+              <Input id="fullName" placeholder="Họ và tên"/>
             </Form.Item>
             <label htmlFor="dob" className="font-bold">Ngày sinh</label>
             <Form.Item
@@ -54,7 +54,7 @@ const RegisterPage = () => {
               ]}
               className="mb-3 col-span-2"
             >
-              <DatePicker id="dob" format={'DD/MM/YYYY'} />
+              <DatePicker id="dob" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full"/>
             </Form.Item>
 
             <label htmlFor="email" className="font-bold">Email</label>
@@ -66,7 +66,7 @@ const RegisterPage = () => {
               ]}
               className="mb-3 col-span-2"
             >
-              <Input id="email" />
+              <Input id="email" placeholder="email"/>
             </Form.Item>
             <label htmlFor="password" className="font-bold">Mật khẩu</label>
             <Form.Item
@@ -74,7 +74,7 @@ const RegisterPage = () => {
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
               className="mb-3 col-span-2"
             >
-              <Input.Password id="password" autoComplete="new-password" />
+              <Input.Password id="password" autoComplete="new-password" placeholder="Mật khẩu"/>
             </Form.Item>
             <label htmlFor="confirmPassword" className="font-bold">Nhập lại mật khẩu</label>
             <Form.Item
@@ -92,7 +92,7 @@ const RegisterPage = () => {
               ]}
               className="col-span-2"
             >
-              <Input.Password id="confirmPassword" />
+              <Input.Password id="confirmPassword" placeholder="Nhập lại mật khẩu"/>
             </Form.Item>
             <p className="font-bold">Bạn là</p>
             <Form.Item name="role"
