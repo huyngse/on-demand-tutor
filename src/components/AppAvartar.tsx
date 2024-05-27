@@ -17,11 +17,10 @@ const AppAvartar = ({ user }: any) => {
         {
             key: '2',
             label: (
-                <button onClick={logout}>
-                    Đăng xuất
-                </button>
+                "Đăng xuất"
             ),
             icon: <DoorOpen />,
+            onClick: logout,
         },
     ];
     return (

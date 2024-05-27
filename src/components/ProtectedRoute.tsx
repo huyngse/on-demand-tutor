@@ -1,5 +1,8 @@
 import { useAppSelector } from "@/hooks/useRedux";
+import { checkToken } from "@/lib/api/authentication-api";
+import { setLoggedUser } from "@/lib/redux/userSlice";
 import { ReactNode, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 type ProtectedRouteProps = {
@@ -7,12 +10,18 @@ type ProtectedRouteProps = {
     children: ReactNode;
 }
 const ProtectedRoute = ({ roles, children }: ProtectedRouteProps) => {
-    const loggedUser = useAppSelector(state => state.user.loggedUser);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     useEffect(() => {
-        if (!(loggedUser && roles.includes(loggedUser?.role))) {
-            navigate("/");
+        const fetchData = async () => {
+            const { data } = await checkToken();
+            dispatch(setLoggedUser(data));
+            if (!(data && roles.includes(data?.role))) {
+                navigate("/");
+            }
         }
+        fetchData();
+
     }, [])
     return (
         <>

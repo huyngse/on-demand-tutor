@@ -6,7 +6,6 @@ type FieldType = {
   password: string;
   confirmPassword: string;
   role: string;
-
 };
 const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
   console.log('Success:', values);

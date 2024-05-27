@@ -10,6 +10,7 @@ import {
     ClassListPage,
     TutorDetailPage,
     AdminDashboardPage,
+    AdminManageAccountPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -70,6 +71,12 @@ const router = createBrowserRouter([
                 path: '/admin/dashboard',
                 element: (
                     <AdminDashboardPage />
+                ),
+            },
+            {
+                path: '/admin/manage-account',
+                element: (
+                    <AdminManageAccountPage />
                 ),
             },
         ],
@@ -134,6 +141,7 @@ const router = createBrowserRouter([
 
 
 const AppRouter = () => {
+   
     return (
         <RouterProvider router={router} />
     )

@@ -1,8 +1,10 @@
 import { ReactNode, useState } from 'react';
 import type { MenuProps } from 'antd';
-import { Layout, Menu } from 'antd';
+import { Avatar, Layout, Menu } from 'antd';
 import { Book, BookUser, CircleHelp, DoorOpen, Newspaper, Users } from 'lucide-react';
 import useAuthentication from '@/hooks/useAuthentication';
+import { useAppSelector } from '@/hooks/useRedux';
+import { useNavigate } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -13,6 +15,8 @@ type AdminLayoutProps = {
     children: ReactNode
 }
 const AdminLayout = ({ children }: AdminLayoutProps) => {
+    const loggedUser = useAppSelector(state => state.user.loggedUser);
+    const navigate = useNavigate();
     const { logout } = useAuthentication();
     const items: MenuItem[] = [
         {
@@ -53,20 +57,52 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             disabled: true,
         },
         {
-            label: <button onClick={logout}>Đăng xuất</button>,
+            label: "Đăng xuất",
             key: "6",
             icon: <DoorOpen />,
         },
     ];
+    const handleSidebarClick = (e: any) => {
+        switch (e.key) {
+            case "6": {
+                logout();
+                break;
+            }
+            case "1a": {
+                navigate("/admin/manage-account");
+                break;
+            }
+        }
+    }
     const [collapsed, setCollapsed] = useState(false);
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={250}>
-                <h1>Hello</h1>
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+                {
+                    !collapsed && (
+                        <div className="demo-logo-vertical text-white py-3 px-5">
+                            <div className='font-sm'>
+                                Quản lí
+                            </div>
+                            <div className='font-bold text-xl'>
+                                On<span className='text-blue-400'>Demand</span>Tutor
+                            </div>
+                        </div>
+                    )
+                }
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={['1']}
+                    mode="inline"
+                    items={items}
+                    onClick={handleSidebarClick}
+                />
             </Sider>
             <Layout>
-                <Header style={{ padding: 0 }} />
+                <Header className='px-3 bg-white flex justify-end items-center gap-2'>
+                    <p className='font-bold'>{loggedUser?.fullName}</p>
+                    <Avatar shape="circle" className="drop-shadow" src={loggedUser?.profilePicUrl} />
+                </Header>
                 <Content style={{ margin: '0 16px' }}>
                     <div
                         style={{
@@ -78,7 +114,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
-                    Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                    OnDemandTutor ©{new Date().getFullYear()} - SWP391
                 </Footer>
             </Layout>
         </Layout>
