@@ -11,6 +11,7 @@ import {
     TutorDetailPage,
     AdminDashboardPage,
     AdminManageAccountPage,
+    AdminUpdateAccountPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -77,6 +78,12 @@ const router = createBrowserRouter([
                 path: '/admin/manage-account',
                 element: (
                     <AdminManageAccountPage />
+                ),
+            },
+            {
+                path: '/admin/account/:accountId/edit',
+                element: (
+                    <AdminUpdateAccountPage />
                 ),
             },
         ],

@@ -2,11 +2,10 @@ import TiptapView from "@/components/tiptap/TiptapView";
 import { getTutorById } from "@/lib/api/tutor-api";
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import { Button } from "antd";
-import { BookText, BriefcaseBusiness, Check, EllipsisVertical, Flag, MapPin, Tag } from "lucide-react";
+import { BookText, BriefcaseBusiness, Check, Flag, MapPin, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AchievementCard from "./AchievementCard";
-import { formatDate } from "@/utils/dateUtil";
 import Feedback from "./Feedback";
 
 const TutorDetailPage = () => {

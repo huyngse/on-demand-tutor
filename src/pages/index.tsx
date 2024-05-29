@@ -9,6 +9,7 @@ import ClassListPage from "./home/class-list";
 import TutorDetailPage from "./home/tutor-detail";
 import AdminDashboardPage from "./admin/dashboard";
 import AdminManageAccountPage from "./admin/manage-account";
+import AdminUpdateAccountPage from "./admin/manage-account/UpdateAccountPage";
 export {
     LoginPage,
     HomePage,
@@ -21,4 +22,5 @@ export {
     TutorDetailPage,
     AdminDashboardPage,
     AdminManageAccountPage,
+    AdminUpdateAccountPage,
 };

@@ -10,16 +10,49 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.id < b.id) {
+                        return -1;
+                    } else if (a.id > b.id) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                },
+            },
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.email < b.email) {
+                        return -1;
+                    } else if (a.email > b.email) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                },
+            },
         },
         {
             title: 'Họ và tên',
             dataIndex: 'fullName',
             key: 'fullName',
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.name < b.name) {
+                        return -1;
+                    } else if (a.name > b.name) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                },
+            },
         },
         {
             title: 'Vai trò',
@@ -55,29 +88,51 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                         {roleName}
                     </Tag>
                 )
-            }
+            },
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.role < b.role) {
+                        return -1;
+                    } else if (a.role > b.role) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                },
+            },
         },
         {
             title: 'Trạng thái',
             key: 'isActive',
             render: (_: any, record: any) => (
                 <div>
-                   <div className={`${record.isActive ? "bg-green-500" : "bg-red-500"} p-1 inline-block rounded-full`}></div>
+                    <div className={`${record.isActive ? "bg-green-500" : "bg-red-500"} p-1 inline-block rounded-full`}></div>
                 </div>
             ),
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.isActive === b.isActive) {
+                        return 0;
+                    } else if (a.isActive) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                },
+            },
         },
         {
             title: '',
             key: 'action',
             render: (_: any, record: any) => (
                 <div>
-                    <ActionButton id={record.id} isActive={record.isActive}/>
+                    <ActionButton id={record.id} isActive={record.isActive} />
                 </div>
             ),
         },
     ];
     return (
-        <Table dataSource={dataSource} columns={columns} rowKey="id"/>
+        <Table dataSource={dataSource} columns={columns} rowKey="id" />
     )
 }
 

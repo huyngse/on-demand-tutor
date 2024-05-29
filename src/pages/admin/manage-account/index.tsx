@@ -1,8 +1,6 @@
 import { getAllAccounts } from "@/lib/api/account-api";
 import { useEffect, useState } from "react";
 import DataTable from "./DataTable";
-import { Button } from "antd";
-import { SquarePlus } from "lucide-react";
 import CreateAccountButton from "./CreateAccountButton";
 
 const AdminManageAccountPage = () => {
