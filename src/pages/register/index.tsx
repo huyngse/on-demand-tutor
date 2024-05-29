@@ -62,8 +62,9 @@ const RegisterPage = () => {
               name="gender"
               rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
               className="col-span-2"
+              initialValue={"male"}
             >
-              <Radio.Group defaultValue="male">
+              <Radio.Group>
                 <Radio value="male"> Nam </Radio>
                 <Radio value="female"> Nữ </Radio>
               </Radio.Group>
