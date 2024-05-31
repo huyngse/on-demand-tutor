@@ -61,7 +61,7 @@ const UpdateAccountPage = () => {
             >
                 <div className="flex flex-col gap-2 col-span-4 px-5">
                     <div className="overflow-hidden drop-shadow rounded-lg aspect-square">
-                        <img src={account?.profilePicUrl} alt="" className="w-[full] h-[full] object-cover" />
+                        <img src={account?.profilePicUrl} alt="" className="w-full h-full object-cover" />
                     </div>
                     <UpdateAvatarButton />
                     <Button>Gỡ ảnh đại diện</Button>

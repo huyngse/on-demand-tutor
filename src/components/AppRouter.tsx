@@ -12,12 +12,15 @@ import {
     AdminDashboardPage,
     AdminManageAccountPage,
     AdminUpdateAccountPage,
+    TutorProfilePage,
+    TutorDashboardPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
 import 'react-toastify/dist/ReactToastify.css';
 import AdminLayout from '@/layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute';
+import TutorLayout from '@/layouts/TutorLayout';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -89,6 +92,42 @@ const router = createBrowserRouter([
         ],
     },
     {
+        path: '/tutor',
+        element: (
+            <ProtectedRoute roles={["tutor"]}>
+                <TutorLayout>
+                    <Outlet />
+                </TutorLayout>
+            </ProtectedRoute>
+
+        ),
+        errorElement: (
+            <AdminLayout>
+                <ErrorPage />
+            </AdminLayout>
+        ),
+        children: [
+            {
+                path: '/tutor/',
+                element: (
+                    <TutorDashboardPage />
+                ),
+            },
+            {
+                path: '/tutor/dashboard',
+                element: (
+                    <TutorDashboardPage />
+                ),
+            },
+            {
+                path: '/tutor/profile',
+                element: (
+                    <TutorProfilePage />
+                ),
+            },
+        ],
+    },
+    {
         path: '/tutor-list',
         element: (
             <MainLayout>
@@ -148,7 +187,7 @@ const router = createBrowserRouter([
 
 
 const AppRouter = () => {
-   
+
     return (
         <RouterProvider router={router} />
     )

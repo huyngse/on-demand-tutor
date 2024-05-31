@@ -29,10 +29,10 @@ const UpdateAvatarButton = () => {
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 items-center">
                     {
                         image && (
-                            <div className="max-h-[500px]">
+                            <div className="h-[400px] w-[400px] overflow-hidden">
                                 <img src={image} alt="" onClick={handleImageClick} className="w-full h-full object-cover" />
                             </div>
                         )

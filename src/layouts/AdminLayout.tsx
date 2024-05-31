@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Avatar, Layout, Menu } from 'antd';
-import { Book, BookUser, CircleHelp, DoorOpen, Newspaper, Users } from 'lucide-react';
+import { Book, BookUser, CircleHelp, DoorOpen, LayoutDashboard, Newspaper, Users } from 'lucide-react';
 import useAuthentication from '@/hooks/useAuthentication';
 import { useAppSelector } from '@/hooks/useRedux';
 import { useNavigate } from 'react-router-dom';
@@ -20,13 +20,18 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     const { logout } = useAuthentication();
     const items: MenuItem[] = [
         {
+            label: "Dashboard",
+            key: "dashboard",
+            icon: <LayoutDashboard />,
+        },
+        {
             label: "Quản lí người dùng",
-            key: "1",
+            key: "user",
             icon: <Users />,
             children: [
                 {
                     label: "Tài khoản",
-                    key: "1a",
+                    key: "account",
                 },
                 {
                     label: "Gia sư",
@@ -36,39 +41,46 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         },
         {
             label: "Quản lí môn học",
-            key: "2",
+            key: "subject",
             icon: <Book />,
         },
         {
             label: "Quản lí lớp học",
-            key: "3",
+            key: "class",
             icon: <BookUser />,
         },
         {
             label: "Quản lí FAQ",
-            key: "4",
+            key: "faq",
             icon: <CircleHelp />,
             disabled: true,
         },
         {
             label: "Quản lí blog",
-            key: "5",
+            key: "blog",
             icon: <Newspaper />,
             disabled: true,
         },
         {
+            type: 'divider',
+        },
+        {
             label: "Đăng xuất",
-            key: "6",
+            key: "logout",
             icon: <DoorOpen />,
         },
     ];
     const handleSidebarClick = (e: any) => {
         switch (e.key) {
-            case "6": {
+            case "logout": {
                 logout();
                 break;
             }
-            case "1a": {
+            case "dashboard": {
+                navigate("/admin/dashboard");
+                break;
+            }
+            case "account": {
                 navigate("/admin/manage-account");
                 break;
             }

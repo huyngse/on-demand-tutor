@@ -1,14 +1,16 @@
 import useAuthentication from "@/hooks/useAuthentication";
+import { useAppSelector } from "@/hooks/useRedux";
 import { Avatar, Dropdown, MenuProps } from "antd"
 import { CircleUser, DoorOpen } from "lucide-react";
 
 const AppAvartar = ({ user }: any) => {
+    const loggedUser = useAppSelector(state => state.user.loggedUser);
     const { logout } = useAuthentication();
     const items: MenuProps['items'] = [
         {
             key: '1',
             label: (
-                <a href="profile">
+                <a href={`${loggedUser.role == "tutor" && "/tutor/dashboard"}`}>
                     Quản lý tài khoản
                 </a>
             ),

@@ -44,9 +44,9 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             key: 'fullName',
             sorter: {
                 compare: (a: any, b: any) => {
-                    if (a.name < b.name) {
+                    if (a.fullName < b.fullName) {
                         return -1;
-                    } else if (a.name > b.name) {
+                    } else if (a.fullName > b.fullName) {
                         return 1;
                     } else {
                         return 0;
@@ -72,8 +72,8 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                         color = "cyan";
                         break;
                     }
-                    case "student": {
-                        roleName = "Học sinh/phụ huynh";
+                    case "student_parent": {
+                        roleName = "Phụ huynh/Học sinh";
                         color = "blue";
                         break;
                     }
@@ -100,6 +100,24 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                     }
                 },
             },
+            filters: [
+                {
+                    text: 'Gia sư',
+                    value: 'tutor',
+                },
+                {
+                    text: 'Phụ huynh/Học sinh',
+                    value: 'student_parent',
+                },
+                {
+                    text: 'Admin',
+                    value: 'admin',
+                },
+                {
+                    text: 'Quản trị viên',
+                    value: 'moderator',
+                },
+            ],
         },
         {
             title: 'Trạng thái',
