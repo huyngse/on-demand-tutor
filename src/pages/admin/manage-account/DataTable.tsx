@@ -100,6 +100,7 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                     }
                 },
             },
+            onFilter: (value: any, record: any) => record.role === value,
             filters: [
                 {
                     text: 'Gia sư',
