@@ -14,6 +14,8 @@ import {
     AdminUpdateAccountPage,
     TutorProfilePage,
     TutorDashboardPage,
+    TutorUpdateProfilePage,
+    TutorCertification,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -123,6 +125,18 @@ const router = createBrowserRouter([
                 path: '/tutor/profile',
                 element: (
                     <TutorProfilePage />
+                ),
+            },
+            {
+                path: '/tutor/profile/edit',
+                element: (
+                    <TutorUpdateProfilePage />
+                ),
+            },
+            {
+                path: '/tutor/certification',
+                element: (
+                    <TutorCertification />
                 ),
             },
         ],

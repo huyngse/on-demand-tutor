@@ -26,3 +26,12 @@ export const getTutorById = async (id: number) => {
     return handleApiError(error);
   }
 }
+
+export const getTutorByAccountId = async (accountId: number) => {
+  try {
+    const tutor = tutorData.find(tutor => tutor.accountId == accountId);
+    return { error: null, data: tutor, success: true };
+  } catch (error) {
+    return handleApiError(error);
+  }
+}

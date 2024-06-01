@@ -12,6 +12,8 @@ import AdminManageAccountPage from "./admin/manage-account";
 import AdminUpdateAccountPage from "./admin/manage-account/UpdateAccountPage";
 import TutorProfilePage from "./tutor/profile/TutorProfilePage";
 import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
+import TutorCertification from "./tutor/profile/TutorCertification";
+import TutorUpdateProfilePage from "./tutor/profile/TutorUpdateProfilePage";
 export {
     LoginPage,
     HomePage,
@@ -27,4 +29,6 @@ export {
     AdminUpdateAccountPage,
     TutorProfilePage,
     TutorDashboardPage,
+    TutorCertification,
+    TutorUpdateProfilePage,
 };
