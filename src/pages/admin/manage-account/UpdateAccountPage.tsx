@@ -1,5 +1,5 @@
 import { getAccountById } from "@/lib/api/account-api";
-import { Button, DatePicker, Form, FormProps, Input, Select } from "antd";
+import { Button, DatePicker, Form, FormProps, Input, Radio, Select } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ const UpdateAccountPage = () => {
         password: string;
         role: string;
         isActive: boolean;
+        phoneNumber: string;
         gender: "male" | "female";
     };
     const handleCancel = () => {
@@ -47,6 +48,8 @@ const UpdateAccountPage = () => {
                     form.setFieldValue("email", result.data.email);
                     form.setFieldValue("password", result.data.password);
                     form.setFieldValue("role", result.data.role);
+                    form.setFieldValue("phone", result.data.phone);
+                    form.setFieldValue("gender", result.data.gender);
                 }
             }
         }
@@ -89,6 +92,23 @@ const UpdateAccountPage = () => {
                         className="mb-3 col-span-3"
                     >
                         <Input id="fullName" placeholder="Họ và tên" />
+                    </Form.Item>
+                    <label htmlFor="phoneNumber" className="font-bold">Số điện thoại</label>
+                    <Form.Item
+                        name="phoneNumber"
+                        className="mb-3 col-span-3"
+                    >
+                        <Input id="phoneNumber" placeholder="Số điện thoại" />
+                    </Form.Item>
+                    <label htmlFor="gender" className="font-bold">Giới tính</label>
+                    <Form.Item
+                        name="gender"
+                        className="mb-3 col-span-3"
+                    >
+                        <Radio.Group id="gender">
+                            <Radio value="male"> Nam </Radio>
+                            <Radio value="female"> Nữ </Radio>
+                        </Radio.Group>
                     </Form.Item>
                     <label htmlFor="dob" className="font-bold">Ngày sinh</label>
                     <Form.Item

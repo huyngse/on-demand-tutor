@@ -55,6 +55,17 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             },
         },
         {
+            title: 'Giới tính',
+            dataIndex: 'gender',
+            key: 'gender',
+            render: (_: any, record: any) => {
+                return record.gender == "male" ?
+                    <span className="text-blue-500">Nam</span>
+                    :
+                    <span className="text-pink-500">Nữ</span>
+            }
+        },
+        {
             title: 'Vai trò',
             dataIndex: 'role',
             key: 'role',

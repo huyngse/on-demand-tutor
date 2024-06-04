@@ -9,6 +9,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 1,
@@ -20,6 +21,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: false,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 2,
@@ -31,6 +33,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "female",
+        phone: "",
     }, 
     {
         id: 3,
@@ -42,6 +45,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 4,
@@ -53,6 +57,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 5,
@@ -64,6 +69,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 6,
@@ -75,6 +81,7 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
     {
         id: 7,
@@ -86,5 +93,6 @@ export const accountData = [
         dob: "2003-01-01",
         isActive: true,
         gender: "male",
+        phone: "",
     }, 
 ]
