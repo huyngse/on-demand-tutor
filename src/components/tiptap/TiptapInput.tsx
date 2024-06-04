@@ -173,32 +173,31 @@ const MenuBar = () => {
                     <Redo className="w-4 h-4" />
                 </Button>
                 <Button onClick={() => handleAddYoutube()}  >
-                    <Youtube className="w-4 h-4"/>
-                </Button>
-                <Button onClick={() => handleClickAddOpenFile()}  >
-                    <ImagePlus className="w-4 h-4" />
+                    <Youtube className="w-4 h-4" />
                 </Button>
             </div>
         </>
     );
 };
 
-export default function TiptapInput({ content = '<h2>This is a example</h2>', handleUpdate = () => { } }: any) {
+export default function TiptapInput({ content = '<p></p>', handleUpdate = () => { } }: any) {
     return (
-        <EditorProvider
-            slotBefore={
-                <>
-                    <MenuBar />
-                </>
-            }
-            extensions={extensions}
-            content={content}
-            editable={true}
-            onUpdate={({ editor }) => {
-                handleUpdate(editor.getHTML());
-            }}
-        >
-            {null}
-        </EditorProvider>
+        <div className='border rounded-lg border-gray-300 p-1'>
+            <EditorProvider
+                slotBefore={
+                    <>
+                        <MenuBar />
+                    </>
+                }
+                extensions={extensions}
+                content={content}
+                editable={true}
+                onUpdate={({ editor }) => {
+                    handleUpdate(editor.getHTML());
+                }}
+            >
+                {null}
+            </EditorProvider>
+        </div>
     );
 }

@@ -3,7 +3,7 @@ import { useAppSelector } from "@/hooks/useRedux";
 import { Avatar, Layout, Menu, MenuProps } from "antd";
 import { ArrowBigLeft, Bell, CalendarClock, CircleUserRound, DoorOpen, LayoutDashboard, Shapes } from "lucide-react";
 import { ReactNode, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -88,9 +88,12 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
                             <div className='font-sm'>
                                 Gia sư
                             </div>
-                            <div className='font-bold text-xl'>
-                                On<span className='text-blue-500'>Demand</span>Tutor
-                            </div>
+                            <Link to={"/"}>
+                                <div className='font-bold text-xl'>
+                                    On<span className='text-blue-500'>Demand</span>Tutor
+                                </div>
+                            </Link>
+
                         </div>
                     )
                 }

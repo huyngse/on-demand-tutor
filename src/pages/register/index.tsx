@@ -49,7 +49,7 @@ const RegisterPage = () => {
                     if (value && new Date().getFullYear() - value?.$y > 1) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('Năm sinh không hợp lệ'))
+                    return Promise.reject(new Error('Ngày sinh không hợp lệ'))
                   },
                 },
               ]}

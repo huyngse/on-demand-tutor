@@ -5,7 +5,7 @@ import AchievementCard from "@/pages/home/tutor-detail/AchievementCard";
 import Feedback from "@/pages/home/tutor-detail/Feedback";
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import { Button, Dropdown, MenuProps, Tooltip } from "antd";
-import { Album, BookText, BriefcaseBusiness, EllipsisVertical, MapPin, Pencil, Tag } from "lucide-react";
+import { Album, BookText, BriefcaseBusiness, EllipsisVertical, ImageUp, MapPin, Pencil, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,11 @@ const TutorProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   const items: MenuProps['items'] = [
+    {
+      label: "Cập nhật ảnh đại diện",
+      key: 'update-pfp',
+      icon: <ImageUp width={15}/>,
+    },
     {
       label: "Chỉnh sửa thông tin cá nhân",
       key: 'update-profile',
