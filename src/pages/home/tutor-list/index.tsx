@@ -11,7 +11,6 @@ import { SelectOptionType } from "@/types/antd-types";
 import { CityType, DistrictType } from "@/types/address";
 import { getAllTutors } from "@/lib/api/tutor-api";
 import TutorCard from "./TutorCard";
-import CertificationImage from "@/assets/images/bang_ky_su.jpg";
 type FieldType = {
   city?: string;
   district?: string;
@@ -21,7 +20,6 @@ type FieldType = {
 const { Search } = Input;
 const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 const TutorListPage = () => {
-  console.log(CertificationImage);
   const addresses: CityType[] = useAppSelector(state => state.address.value);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
   const [tutors, setTutors] = useState<any[]>();

@@ -35,7 +35,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 },
                 {
                     label: "Gia sư",
-                    key: "1b",
+                    key: "tutor",
                 },
             ]
         },
@@ -82,6 +82,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             }
             case "account": {
                 navigate("/admin/manage-account");
+                break;
+            }
+            case "tutor": {
+                navigate("/admin/manage-tutor");
                 break;
             }
         }

@@ -22,7 +22,7 @@ type FieldType = {
   street: string;
   tutorType: string;
   subjects: any[];
-  academicBackground: string;
+  school: string;
   basicInfo: string;
   experimentInfo: string;
   achievementInfo: string;
@@ -132,7 +132,7 @@ const TutorUpdateProfilePage = () => {
           form.setFieldValue("street", tutorResult.data.street);
           form.setFieldValue("dob", dayjs(loggedUser.dob));
           form.setFieldValue("tutorType", tutorResult.data.tutorType);
-          form.setFieldValue("academicBackground", tutorResult.data.academicBackground);
+          form.setFieldValue("school", tutorResult.data.school);
           form.setFieldValue("basicInfo", tutorResult.data.basicInfo);
           form.setFieldValue("experimentInfo", tutorResult.data.experimentInfo);
           form.setFieldValue("achievementInfo", tutorResult.data.achievementInfo);
@@ -290,7 +290,7 @@ const TutorUpdateProfilePage = () => {
               </Form.Item>
               <Form.Item
                 label="Trường đang học/đã tốt nghiệp"
-                name="academicBackground"
+                name="school"
                 className="m-0 col-span-12"
                 rules={[{ required: true, message: 'Vui lòng nhập trường học!' }]}
               >

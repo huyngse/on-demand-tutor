@@ -23,7 +23,7 @@ export const tutorData = [
       }
     ],
     tutorType: "Sinh viên",
-    academicBackground: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
+    school: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
     pricePerSession: 200000,
     teachingMethod: "offline",
     noOfClasses: 1,
@@ -58,7 +58,7 @@ export const tutorData = [
     timetable: [
       {
         day: "monday",
-        morning: false,
+        morning: true,
         noon: false,
         night: true
       },
@@ -124,7 +124,7 @@ export const tutorData = [
       }
     ],
     tutorType: "Sinh viên",
-    academicBackground: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
+    school: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
     pricePerSession: 200000,
     teachingMethod: "offline",
     noOfClasses: 1,
@@ -225,7 +225,7 @@ export const tutorData = [
       }
     ],
     tutorType: "Sinh viên",
-    academicBackground: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
+    school: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
     pricePerSession: 200000,
     teachingMethod: "offline",
     noOfClasses: 1,
@@ -326,7 +326,7 @@ export const tutorData = [
       }
     ],
     tutorType: "Sinh viên",
-    academicBackground: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
+    school: "Đại học năm 1 - Chuyên ngành Kiểm toán - Trường Đại học Kinh",
     pricePerSession: 200000,
     teachingMethod: "offline",
     noOfClasses: 1,

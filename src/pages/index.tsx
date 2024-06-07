@@ -10,6 +10,9 @@ import TutorDetailPage from "./home/tutor-detail";
 import AdminDashboardPage from "./admin/dashboard";
 import AdminManageAccountPage from "./admin/manage-account";
 import AdminUpdateAccountPage from "./admin/manage-account/UpdateAccountPage";
+import AdminManageTutorPage from "./admin/manage-tutor/ManageTutorPage";
+import AdminUpdateTutorPage from "./admin/manage-tutor/ManageTutorPage";
+import AdminTutorDetailPage from "./admin/manage-tutor/TutorDetailPage";
 import TutorProfilePage from "./tutor/profile/TutorProfilePage";
 import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
 import TutorCertification from "./tutor/profile/TutorCertification";
@@ -27,8 +30,11 @@ export {
     AdminDashboardPage,
     AdminManageAccountPage,
     AdminUpdateAccountPage,
+    AdminManageTutorPage,
+    AdminUpdateTutorPage,
     TutorProfilePage,
     TutorDashboardPage,
     TutorCertification,
     TutorUpdateProfilePage,
+    AdminTutorDetailPage,
 };

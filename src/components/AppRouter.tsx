@@ -16,6 +16,9 @@ import {
     TutorDashboardPage,
     TutorUpdateProfilePage,
     TutorCertification,
+    AdminManageTutorPage,
+    AdminTutorDetailPage,
+    AdminUpdateTutorPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -89,6 +92,24 @@ const router = createBrowserRouter([
                 path: '/admin/account/:accountId/edit',
                 element: (
                     <AdminUpdateAccountPage />
+                ),
+            },
+            {
+                path: '/admin/manage-tutor',
+                element: (
+                    <AdminManageTutorPage />
+                ),
+            },
+            {
+                path: '/admin/tutor/:tutorId',
+                element: (
+                    <AdminTutorDetailPage />
+                ),
+            },
+            {
+                path: '/admin/tutor/:tutorId/edit',
+                element: (
+                    <AdminUpdateTutorPage />
                 ),
             },
         ],
