@@ -19,6 +19,8 @@ import {
     AdminManageTutorPage,
     AdminTutorDetailPage,
     AdminUpdateTutorPage,
+    StudentProfilePage,
+    StudentUpdateProfilePage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -26,6 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminLayout from '@/layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute';
 import TutorLayout from '@/layouts/TutorLayout';
+import ParentLayout from '@/layouts/ParentLayout';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -57,7 +60,7 @@ const router = createBrowserRouter([
     {
         path: '/admin',
         element: (
-            <ProtectedRoute roles={["admin"]}>
+            <ProtectedRoute roles={["Admin"]}>
                 <AdminLayout>
                     <Outlet />
                 </AdminLayout>
@@ -117,7 +120,7 @@ const router = createBrowserRouter([
     {
         path: '/tutor',
         element: (
-            <ProtectedRoute roles={["tutor"]}>
+            <ProtectedRoute roles={["Tutor"]}>
                 <TutorLayout>
                     <Outlet />
                 </TutorLayout>
@@ -158,6 +161,42 @@ const router = createBrowserRouter([
                 path: '/tutor/certification',
                 element: (
                     <TutorCertification />
+                ),
+            },
+        ],
+    },
+    {
+        path: '/student',
+        element: (
+            <ProtectedRoute roles={["Student"]}>
+                <ParentLayout>
+                    <Outlet />
+                </ParentLayout>
+            </ProtectedRoute>
+
+        ),
+        errorElement: (
+            <AdminLayout>
+                <ErrorPage />
+            </AdminLayout>
+        ),
+        children: [
+            {
+                path: '/student/',
+                element: (
+                    <StudentProfilePage />
+                ),
+            },
+            {
+                path: '/student/profile',
+                element: (
+                    <TutorProfilePage />
+                ),
+            },
+            {
+                path: '/student/profile/edit',
+                element: (
+                    <StudentUpdateProfilePage />
                 ),
             },
         ],

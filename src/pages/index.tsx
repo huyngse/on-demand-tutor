@@ -17,6 +17,10 @@ import TutorProfilePage from "./tutor/profile/TutorProfilePage";
 import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
 import TutorCertification from "./tutor/profile/TutorCertification";
 import TutorUpdateProfilePage from "./tutor/profile/TutorUpdateProfilePage";
+import StudentClassPage from "./student/class/StudentClassPage";
+import StudentProfilePage from "./student/profile/StudentProfilePage";
+import StudentTimetable from "./student/timetable/StudentTimetable";
+import StudentUpdateProfilePage from "./student/profile/StudentUpdateProfilePage";
 export {
     LoginPage,
     HomePage,
@@ -37,4 +41,8 @@ export {
     TutorCertification,
     TutorUpdateProfilePage,
     AdminTutorDetailPage,
+    StudentClassPage,
+    StudentProfilePage,
+    StudentTimetable,
+    StudentUpdateProfilePage
 };

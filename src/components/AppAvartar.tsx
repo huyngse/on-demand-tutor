@@ -6,11 +6,30 @@ import { CircleUser, DoorOpen } from "lucide-react";
 const AppAvartar = ({ user }: any) => {
     const loggedUser = useAppSelector(state => state.user.loggedUser);
     const { logout } = useAuthentication();
+    var profileUrl: string;
+    switch (loggedUser.role) {
+        case "Admin": {
+            profileUrl = "/admin/";
+            break;
+        }
+        case "Tutor": {
+            profileUrl = "/tutor/";
+            break;
+        }
+        case "Student": {
+            profileUrl = "/student/";
+            break;
+        }
+        default: {
+            profileUrl = "";
+        }
+    }
+
     const items: MenuProps['items'] = [
         {
             key: '1',
             label: (
-                <a href={`${loggedUser.role == "tutor" && "/tutor/dashboard"}`}>
+                <a href={profileUrl}>
                     Quản lý tài khoản
                 </a>
             ),
