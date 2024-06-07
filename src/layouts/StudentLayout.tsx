@@ -7,11 +7,11 @@ import { ArrowBigLeft, Bell, CalendarClock, CircleUserRound, DoorOpen, Shapes } 
 import { ReactNode, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-type ParentLayoutProps = {
+type StudentLayoutProps = {
     children: ReactNode,
 }
 type MenuItem = Required<MenuProps>['items'][number];
-const ParentLayout = ({ children }: ParentLayoutProps) => {
+const StudentLayout = ({ children }: StudentLayoutProps) => {
     const [collapsed, setCollapsed] = useState(false);
     const loggedUser = useAppSelector(state => state.user.loggedUser);
     const navigate = useNavigate();
@@ -132,4 +132,4 @@ const ParentLayout = ({ children }: ParentLayoutProps) => {
     )
 }
 
-export default ParentLayout
+export default StudentLayout

@@ -28,7 +28,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AdminLayout from '@/layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute';
 import TutorLayout from '@/layouts/TutorLayout';
-import ParentLayout from '@/layouts/ParentLayout';
+import StudentLayout from '@/layouts/StudentLayout';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -128,9 +128,9 @@ const router = createBrowserRouter([
 
         ),
         errorElement: (
-            <AdminLayout>
+            <TutorLayout>
                 <ErrorPage />
-            </AdminLayout>
+            </TutorLayout>
         ),
         children: [
             {
@@ -169,16 +169,16 @@ const router = createBrowserRouter([
         path: '/student',
         element: (
             <ProtectedRoute roles={["Student"]}>
-                <ParentLayout>
+                <StudentLayout>
                     <Outlet />
-                </ParentLayout>
+                </StudentLayout>
             </ProtectedRoute>
 
         ),
         errorElement: (
-            <AdminLayout>
+            <StudentLayout>
                 <ErrorPage />
-            </AdminLayout>
+            </StudentLayout>
         ),
         children: [
             {
@@ -190,7 +190,7 @@ const router = createBrowserRouter([
             {
                 path: '/student/profile',
                 element: (
-                    <TutorProfilePage />
+                    <StudentProfilePage />
                 ),
             },
             {
