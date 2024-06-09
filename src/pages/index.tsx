@@ -17,6 +17,10 @@ import TutorProfilePage from "./tutor/profile/TutorProfilePage";
 import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
 import TutorCertification from "./tutor/profile/TutorCertification";
 import TutorUpdateProfilePage from "./tutor/profile/TutorUpdateProfilePage";
+import TutorClassPage from "./tutor/class/TutorClassPage";
+import TutorClassDetailPage from "./tutor/class/TutorClassDetailPage";
+import TutorCreateClassPage from "./tutor/class/TutorCreateClassPage";
+import TutorUpdateClassPage from "./tutor/class/TutorUpdateClassPage";
 import StudentClassPage from "./student/class/StudentClassPage";
 import StudentProfilePage from "./student/profile/StudentProfilePage";
 import StudentTimetable from "./student/timetable/StudentTimetable";
@@ -40,9 +44,13 @@ export {
     TutorDashboardPage,
     TutorCertification,
     TutorUpdateProfilePage,
+    TutorClassPage,
+    TutorClassDetailPage,
+    TutorCreateClassPage,
+    TutorUpdateClassPage,
     AdminTutorDetailPage,
     StudentClassPage,
     StudentProfilePage,
     StudentTimetable,
-    StudentUpdateProfilePage
+    StudentUpdateProfilePage,
 };

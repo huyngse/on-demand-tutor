@@ -76,6 +76,10 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
                 navigate("/tutor/dashboard");
                 break;
             }
+            case "class": {
+                navigate("/tutor/class");
+                break;
+            }
         }
     }
     const [collapsed, setCollapsed] = useState(false);
