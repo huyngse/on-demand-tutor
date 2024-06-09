@@ -13,7 +13,7 @@ const ActionButton = ({ id, isActive }: ActionButtonProps) => {
     console.log("Delete account with id: ", id);
   }
   const handleToggleActive = (currentState: boolean) => {
-    toast.success(`${currentState ? "Hủy kích hoạt" : "Kích hoạt"} tài khoản thành công`);
+    toast.success(`${currentState ? "Đóng lớp" : "Mở lớp"} tài khoản thành công`);
   }
   const items: MenuProps['items'] = [
     {
@@ -24,13 +24,13 @@ const ActionButton = ({ id, isActive }: ActionButtonProps) => {
     },
     {
       label: "Chỉnh sửa",
-      key: '0',
+      key: '1',
       icon: <Pencil width={15} />,
       onClick: () => { navigate(`/tutor/class/${id}/edit`) }
   },
     {
-      label: isActive ? "Hủy kích hoạt" : "Kích hoạt",
-      key: '1',
+      label: isActive ? "Đóng lớp" : "Mở lớp",
+      key: '2',
       icon: isActive ? <EyeOff width={15} /> : <Eye width={15} />,
       onClick: () => { handleToggleActive(isActive) },
     },

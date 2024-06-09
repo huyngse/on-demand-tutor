@@ -35,11 +35,13 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
             label: "Thời gian biểu",
             key: "timetable",
             icon: <CalendarClock />,
+            disabled: true,
         },
         {
             label: "Thông báo",
             key: "notification",
             icon: <Bell />,
+            disabled: true,
         },
         {
             type: 'divider',
