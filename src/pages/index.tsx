@@ -22,9 +22,9 @@ import TutorClassDetailPage from "./tutor/class/TutorClassDetailPage";
 import TutorCreateClassPage from "./tutor/class/TutorCreateClassPage";
 import TutorUpdateClassPage from "./tutor/class/TutorUpdateClassPage";
 import StudentClassPage from "./student/class/StudentClassPage";
-import StudentProfilePage from "./student/profile/StudentProfilePage";
+import StudentProfilePage from "./student/profile/StudentProfile_Page";
 import StudentTimetable from "./student/timetable/StudentTimetable";
-import StudentUpdateProfilePage from "./student/profile/StudentUpdateProfilePage";
+import StudentUpdateProfilePage from "./student/profile/UpdateStudentProfile_Page";
 export {
     LoginPage,
     HomePage,

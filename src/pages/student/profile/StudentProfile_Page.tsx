@@ -1,6 +1,6 @@
 // src/components/StudentProfilePage.tsx
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './StudentProfilePage.css';
+import './StudentProfile_Page.css';
 
 interface FormData {
   username: string;
