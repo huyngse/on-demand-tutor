@@ -135,7 +135,7 @@ const Datatable = ({ dataSource }: DataTableProps) => {
     },
   ];
   return (
-    <Table dataSource={dataSource} columns={columns} rowKey="classId" />
+    <Table dataSource={dataSource} columns={columns} rowKey="ClassId" />
   )
 }
 
