@@ -1,7 +1,6 @@
-import { accountData } from "@/data/account";
 import Cookies from "js-cookie";
 
-// import { axiosClient } from './config/axios-client';
+import { axiosClient } from './config/axios-client';
 export const handleApiError = (error: any) => {
   try {
     const errorMessage = error.response?.data || 'An unexpected error occurred.';
@@ -12,12 +11,17 @@ export const handleApiError = (error: any) => {
   }
 };
 
-export const login = async (email: string, password: string) => {
+export const login = async (userName: string, password: string) => {
   const response: any = { error: null, data: null, success: false }
+  const requestBody = {
+    userName: userName,
+    password: password
+  }
   try {
-    const user = accountData.find((account) => account.email == email && account.password == password);
-    if (user) {
-      response.data = { ...user, password: "" };
+    const { data } = await axiosClient.post("api/v1/users/login", requestBody);
+
+    if (data) {
+      response.data = data;
       response.success = true;
     }
     return response;

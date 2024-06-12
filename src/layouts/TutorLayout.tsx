@@ -114,7 +114,9 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
 
             <Layout className="bg-blue-50">
                 <Header className='px-3 bg-white flex justify-end items-center gap-2'>
-                    <p className='font-bold'>{loggedUser?.fullName}</p>
+                    <p className='font-bold'>
+                        {loggedUser?.fullName ? loggedUser.fullName : "Họ và tên"}
+                    </p>
                     <Avatar shape="circle" className="drop-shadow" src={loggedUser?.profilePicUrl} />
                 </Header>
                 <Content style={{ margin: '0 16px' }} >

@@ -8,6 +8,7 @@ const useAuthentication = () => {
     const navigate = useNavigate();
     const logout = () => {
         Cookies.remove('loggedUser');
+        localStorage.removeItem('accessToken');
         dispatch(setLoggedUser(null));
         navigate("/login");
     }

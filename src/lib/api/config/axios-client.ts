@@ -1,6 +1,6 @@
 import axios from 'axios';
 // const BASE_URL: string | undefined = import.meta.env.BACKEND_URL;
-export const BASE_URL = 'https://befamsproject.ddns.net';
+export const BASE_URL = 'https://localhost:7120/';
 // export const BASE_URL = 'http://localhost/:8888';
 
 export const axiosClient = axios.create({
