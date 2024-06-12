@@ -15,10 +15,6 @@ interface User {
   District: string;
   Ward: string;
   Street: string;
-  TutorType: string;
-  School: string;
-  Description: string;
-  Skill: string;
 }
 
 const StudentProfilePage = () => {
@@ -30,13 +26,13 @@ const StudentProfilePage = () => {
     // Fetch student details
     const fetchStudentDetails = async () => {
       // Fake API call, replace with actual API call
-      const result = await fetch(`/api/student/${loggedUser.id}`);
+      const result = await fetch(`/api/student/${loggedUser?.id}`);
       const data = await result.json();
       setStudentDetail(data);
     };
 
     fetchStudentDetails();
-  }, [loggedUser.id]);
+  }, [loggedUser]);
 
   const items: MenuProps['items'] = [
     {
@@ -51,6 +47,7 @@ const StudentProfilePage = () => {
       onClick: () => { navigate("/student/profile/edit") }
     }
   ];
+  if(loggedUser == null) return;
 
   return (
     <div>
@@ -87,9 +84,6 @@ const StudentProfilePage = () => {
                     <span className="block">Giới tính: {studentDetail?.Gender}</span>
                     <span className="block">Số điện thoại: {studentDetail?.PhoneNumber}</span>
                     <span className="block">Địa chỉ: {`${studentDetail?.Street}, ${studentDetail?.Ward}, ${studentDetail?.District}, ${studentDetail?.City}`}</span>
-                    <span className="block">Trường học: {studentDetail?.School}</span>
-                    <span className="block">Mô tả: {studentDetail?.Description}</span>
-                    <span className="block">Kỹ năng: {studentDetail?.Skill}</span>
                   </div>
                 </td>
               </tr>
