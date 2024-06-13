@@ -1,14 +1,16 @@
+import { register } from "@/lib/api/authentication-api";
 import { Button, DatePicker, Form, FormProps, Input, Radio } from "antd";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 type FieldType = {
   username: string;
-  // fullName: string;
+  fullname: string;
   profileImage: string;
   phoneNumber: string;
   emailAddress: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   dateOfBirth: any;
   role: string;
   gender: "Male" | "Female";
@@ -20,29 +22,44 @@ type FieldType = {
   school: string;
   tutorDescription: string;
 };
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log('Success:', values);
-  const requestBody = {
-    ...values
-  };
-  requestBody.profileImage = "";
-  requestBody.city = "";
-  requestBody.district = "";
-  requestBody.ward = "";
-  requestBody.street = "";
-  requestBody.tutorType = "";
-  requestBody.school = "";
-  requestBody.tutorDescription = "";
-  requestBody.dateOfBirth = values.dateOfBirth.toISOString();
-  console.log("requestBody: ", requestBody);
-};
 
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    setIsLoading(true);
+    console.log('Success:', values);
+    const requestBody = {
+      ...values
+    };
+    delete requestBody.confirmPassword;
+    requestBody.profileImage = "";
+    requestBody.city = "";
+    requestBody.district = "";
+    requestBody.ward = "";
+    requestBody.street = "";
+    requestBody.tutorType = "";
+    requestBody.school = "";
+    requestBody.tutorDescription = "";
+    requestBody.dateOfBirth = values.dateOfBirth.toISOString();
+    console.log("requestBody: ", requestBody);
+    const { error } = await register(requestBody);
+    if (error) {
+      toast.error("Đăng ký thất bại!");
+    } else {
+      toast.success("Đăng ký thành công!");
+      setTimeout(() => {
+        navigate("/login")
+      },1000);
+    }
+    setIsLoading(false);
+  };
+  
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
   useEffect(() => {
     form.setFieldValue("profileImage", "");
     form.setFieldValue("city", "");
@@ -68,21 +85,34 @@ const RegisterPage = () => {
             className="grid grid-cols-3 gap-2"
             form={form}
           >
-            {/* 
-            <label htmlFor="fullName" className="font-bold">Họ và tên</label>
-               <Form.Item
-              name="fullName"
-              rules={[{ required: true, message: 'Vui lòng họ và tên!' }]}
+            <label htmlFor="fullname" className="font-bold">Họ và tên</label>
+            <Form.Item
+              name="fullname"
+              rules={[
+                { required: true, message: 'Vui lòng họ và tên!' },
+                { type: 'string', min: 4, max: 20, message: "Họ và tên phải chứa 4-30 ký tự" }
+
+              ]}
               className="mb-3 col-span-2"
             >
-              <Input id="fullName" placeholder="Họ và tên" />
+              <Input id="fullname" placeholder="Họ và tên" />
             </Form.Item>
-             */}
             <label htmlFor="phoneNumber" className="font-bold">Số điện thoại</label>
             <Form.Item
               name="phoneNumber"
               rules={[
                 { required: true, message: 'Vui lòng nhập số điện thoại của bạn!' },
+                () => ({
+                  validator(_, value) {
+                    if (value) {
+                      const phoneNumber = value.replace(/\D/g, '');
+                      if (phoneNumber.length >= 10 && phoneNumber.length <= 14) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Số điện thoại không hợp lệ'));
+                    }
+                  },
+                })
               ]}
               className="mb-3 col-span-2"
             >
@@ -96,10 +126,12 @@ const RegisterPage = () => {
                 { required: true, message: 'Vui lòng nhập ngày sinh!' },
                 {
                   validator: (_, value) => {
-                    if (value && new Date().getFullYear() - value?.$y > 1) {
-                      return Promise.resolve();
+                    if (value) {
+                      if (new Date().getFullYear() - value?.$y > 1) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Ngày sinh không hợp lệ'))
                     }
-                    return Promise.reject(new Error('Ngày sinh không hợp lệ'))
                   },
                 },
               ]}
@@ -156,7 +188,7 @@ const RegisterPage = () => {
             <Form.Item
               name="confirmPassword"
               rules={[
-                { required: true, message: 'Vui lòng nhập mật khẩu!' },
+                { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
@@ -181,7 +213,7 @@ const RegisterPage = () => {
               </Radio.Group>
             </Form.Item>
             <Form.Item className="mb-0 col-span-3">
-              <Button type="primary" htmlType="submit" className="w-full">
+              <Button type="primary" htmlType="submit" className="w-full" loading={isLoading}>
                 Đăng Ký
               </Button>
             </Form.Item>
