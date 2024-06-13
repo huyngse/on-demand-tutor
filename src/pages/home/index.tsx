@@ -6,7 +6,7 @@ const HomePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   useEffect(() => {
-    if (loggedUser && loggedUser.role == "admin") {
+    if (loggedUser && loggedUser.role == "Admin") {
       navigate("/admin/");
     }
   }, [loggedUser])

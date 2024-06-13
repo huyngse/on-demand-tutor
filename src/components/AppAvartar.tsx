@@ -48,7 +48,7 @@ const AppAvartar = ({ user }: any) => {
         <Dropdown menu={{ items }} trigger={["click"]} className="cursor-pointer">
             <div className="flex gap-2 items-center">
                 <p className="font-semibold">
-                    {user.fullName ? user.fullName : "Họ và tên"}
+                    {user.fullname ? user.fullname : "Họ và tên"}
                 </p>
                 <Avatar shape="circle" className="drop-shadow" src={user.profilePicUrl} />
             </div>
