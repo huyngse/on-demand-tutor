@@ -23,9 +23,7 @@ const StudentProfilePage = () => {
   const [studentDetail, setStudentDetail] = useState<User | null>(null);
 
   useEffect(() => {
-    // Fetch student details
     const fetchStudentDetails = async () => {
-      // Fake API call, replace with actual API call
       const result = await fetch(`/api/student/${loggedUser?.id}`);
       const data = await result.json();
       setStudentDetail(data);

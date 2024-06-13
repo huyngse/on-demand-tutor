@@ -10,7 +10,7 @@ interface Address {
 interface Student {
     name: string;
     email: string;
-    birthDate: string; // Assuming the birth date will be stored as a string in ISO format (YYYY-MM-DD)
+    birthDate: string; 
     gender: string;
     phoneNumber: string;
     address: Address;
