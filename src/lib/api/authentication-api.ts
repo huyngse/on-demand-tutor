@@ -30,6 +30,20 @@ export const login = async (userName: string, password: string) => {
   }
 }
 
+export const register = async (requestBody: any) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.post("api/v1/users/register", requestBody);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
 export const checkToken = async () => {
   const response: any = { error: null, data: null, success: false };
   const cookieValue = Cookies.get('loggedUser');
