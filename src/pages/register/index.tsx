@@ -1,3 +1,4 @@
+import { Roles } from "@/constants/roles";
 import { register } from "@/lib/api/authentication-api";
 import { Button, DatePicker, Form, FormProps, Input, Radio } from "antd";
 import { useEffect, useState } from "react";
@@ -208,8 +209,8 @@ const RegisterPage = () => {
               className="col-span-2"
             >
               <Radio.Group>
-                <Radio value="Student"> Phụ huynh, học sinh </Radio>
-                <Radio value="Tutor"> Gia sư </Radio>
+                <Radio value={Roles.Student}> Phụ huynh, học sinh </Radio>
+                <Radio value={Roles.Tutor}> Gia sư </Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item className="mb-0 col-span-3">

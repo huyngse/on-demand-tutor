@@ -1,4 +1,4 @@
-// import { axiosClient } from './config/axios-client';
+import { axiosClient } from './config/axios-client';
 import { accountData } from "@/data/account";
 export const handleApiError = (error: any) => {
   try {
@@ -11,8 +11,14 @@ export const handleApiError = (error: any) => {
 };
 
 export const getAllAccounts = async () => {
+  const response: any = { error: null, data: null, success: false }
   try {
-    return { error: null, data: accountData, success: true };
+    const { data } = await axiosClient.get("/api/v1/users");
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
   } catch (error) {
     return handleApiError(error);
   }
