@@ -1,3 +1,4 @@
+import { Roles } from "@/constants/roles";
 import { useAppSelector } from "@/hooks/useRedux";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +7,7 @@ const HomePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   useEffect(() => {
-    if (loggedUser && loggedUser.role == "admin") {
+    if (loggedUser && loggedUser.role == Roles.Admin) {
       navigate("/admin/");
     }
   }, [loggedUser])

@@ -33,6 +33,7 @@ import AdminLayout from '@/layouts/AdminLayout'
 import ProtectedRoute from './ProtectedRoute';
 import TutorLayout from '@/layouts/TutorLayout';
 import StudentLayout from '@/layouts/StudentLayout';
+import { Roles } from '@/constants/roles';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -64,7 +65,7 @@ const router = createBrowserRouter([
     {
         path: '/admin',
         element: (
-            <ProtectedRoute roles={["Admin"]}>
+            <ProtectedRoute roles={[Roles.Admin]}>
                 <AdminLayout>
                     <Outlet />
                 </AdminLayout>
@@ -125,7 +126,7 @@ const router = createBrowserRouter([
     {
         path: '/tutor',
         element: (
-            <ProtectedRoute roles={["Tutor"]}>
+            <ProtectedRoute roles={[Roles.Tutor]}>
                 <TutorLayout>
                     <Outlet />
                 </TutorLayout>
@@ -198,7 +199,7 @@ const router = createBrowserRouter([
     {
         path: '/student',
         element: (
-            <ProtectedRoute roles={["Student"]}>
+            <ProtectedRoute roles={[Roles.Student]}>
                 <StudentLayout>
                     <Outlet />
                 </StudentLayout>

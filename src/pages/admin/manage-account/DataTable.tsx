@@ -1,5 +1,6 @@
 import { Table, Tag } from "antd";
 import ActionButton from "./ActionButton";
+import { Roles } from "@/constants/roles";
 
 type DataTableProps = {
     dataSource: any[];
@@ -8,13 +9,29 @@ const DataTable = ({ dataSource }: DataTableProps) => {
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'userId',
+            key: 'userId',
             sorter: {
                 compare: (a: any, b: any) => {
-                    if (a.id < b.id) {
+                    if (a.userId < b.userId) {
                         return -1;
-                    } else if (a.id > b.id) {
+                    } else if (a.userId > b.userId) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                },
+            },
+        },
+        {
+            title: 'Tên đăng nhập',
+            dataIndex: 'username',
+            key: 'username',
+            sorter: {
+                compare: (a: any, b: any) => {
+                    if (a.username < b.username) {
+                        return -1;
+                    } else if (a.username > b.username) {
                         return 1;
                     } else {
                         return 0;
@@ -24,13 +41,13 @@ const DataTable = ({ dataSource }: DataTableProps) => {
         },
         {
             title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
+            dataIndex: 'emailAddress',
+            key: 'emailAddress',
             sorter: {
                 compare: (a: any, b: any) => {
-                    if (a.email < b.email) {
+                    if (a.emailAddress < b.emailAddress) {
                         return -1;
-                    } else if (a.email > b.email) {
+                    } else if (a.emailAddress > b.emailAddress) {
                         return 1;
                     } else {
                         return 0;
@@ -38,15 +55,16 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                 },
             },
         },
+      
         {
             title: 'Họ và tên',
-            dataIndex: 'fullName',
-            key: 'fullName',
+            dataIndex: 'fullname',
+            key: 'fullname',
             sorter: {
                 compare: (a: any, b: any) => {
-                    if (a.fullName < b.fullName) {
+                    if (a.fullname < b.fullname) {
                         return -1;
-                    } else if (a.fullName > b.fullName) {
+                    } else if (a.fullname > b.fullname) {
                         return 1;
                     } else {
                         return 0;
@@ -59,7 +77,7 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             dataIndex: 'gender',
             key: 'gender',
             render: (_: any, record: any) => {
-                return record.gender == "male" ?
+                return record.gender == "Male" ?
                     <span className="text-blue-500">Nam</span>
                     :
                     <span className="text-pink-500">Nữ</span>
@@ -73,22 +91,22 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                 var roleName = "";
                 var color = "";
                 switch (record.role) {
-                    case "tutor": {
+                    case Roles.Tutor: {
                         roleName = "Gia sư";
                         color = "purple";
                         break;
                     }
-                    case "admin": {
+                    case Roles.Admin: {
                         roleName = "Admin";
                         color = "cyan";
                         break;
                     }
-                    case "student_parent": {
+                    case Roles.Student: {
                         roleName = "Phụ huynh/Học sinh";
                         color = "blue";
                         break;
                     }
-                    case "moderator": {
+                    case Roles.Moderator: {
                         roleName = "Quản trị viên";
                         color = "gold";
                         break;
@@ -115,19 +133,19 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             filters: [
                 {
                     text: 'Gia sư',
-                    value: 'tutor',
+                    value: Roles.Tutor,
                 },
                 {
                     text: 'Phụ huynh/Học sinh',
-                    value: 'student_parent',
+                    value: Roles.Student,
                 },
                 {
                     text: 'Admin',
-                    value: 'admin',
+                    value: Roles.Admin,
                 },
                 {
                     text: 'Quản trị viên',
-                    value: 'moderator',
+                    value: Roles.Moderator,
                 },
             ],
         },
@@ -156,13 +174,13 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             key: 'action',
             render: (_: any, record: any) => (
                 <div>
-                    <ActionButton id={record.id} isActive={record.isActive} />
+                    <ActionButton id={record.userId} isActive={false} />
                 </div>
             ),
         },
     ];
     return (
-        <Table dataSource={dataSource} columns={columns} rowKey="id" />
+        <Table dataSource={dataSource} columns={columns} rowKey="userId" />
     )
 }
 
