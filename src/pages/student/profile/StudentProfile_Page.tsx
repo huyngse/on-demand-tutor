@@ -77,11 +77,11 @@ const StudentProfilePage = () => {
               <tr>
                 <td className="py-2">
                   <div className="flex flex-col gap-2">
-                    <span className="block">Email: {studentDetail?.EmailAddress}</span>
-                    <span className="block">Ngày sinh: {studentDetail?.DateOfBirth}</span>
-                    <span className="block">Giới tính: {studentDetail?.Gender}</span>
-                    <span className="block">Số điện thoại: {studentDetail?.PhoneNumber}</span>
-                    <span className="block">Địa chỉ: {`${studentDetail?.Street}, ${studentDetail?.Ward}, ${studentDetail?.District}, ${studentDetail?.City}`}</span>
+                    <span className="block">Email: {loggedUser?.EmailAddress}</span>
+                    <span className="block">Ngày sinh: {loggedUser?.DateOfBirth}</span>
+                    <span className="block">Giới tính: {loggedUser?.Gender}</span>
+                    <span className="block">Số điện thoại: {loggedUser?.PhoneNumber}</span>
+                    <span className="block">Địa chỉ: {`${loggedUser?.Street}, ${loggedUser?.Ward}, ${loggedUser?.District}, ${loggedUser?.City}`}</span>
                   </div>
                 </td>
               </tr>
