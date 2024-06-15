@@ -18,7 +18,7 @@ import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
 import TutorCertification from "./tutor/profile/TutorCertification";
 import TutorUpdateProfilePage from "./tutor/profile/TutorUpdateProfilePage";
 import TutorClassPage from "./tutor/class/TutorClassPage";
-import TutorClassDetailPage from "./tutor/class/TutorClassDetailPage";
+import TutorClassDetailPage from "./tutor/class-detail/TutorClassDetailPage";
 import TutorCreateClassPage from "./tutor/class/TutorCreateClassPage";
 import TutorUpdateClassPage from "./tutor/class/TutorUpdateClassPage";
 import StudentClassPage from "./student/class/StudentClassPage";

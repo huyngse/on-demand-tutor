@@ -4,9 +4,11 @@ import { Table } from "antd";
 
 type DataTableProps = {
   dataSource: any[];
+  rerender: () => void;
 }
 
-const Datatable = ({ dataSource }: DataTableProps) => {
+const Datatable = ({ dataSource, rerender }: DataTableProps) => {
+ 
   const columns = [
     {
       title: 'ID',
@@ -129,7 +131,7 @@ const Datatable = ({ dataSource }: DataTableProps) => {
       key: 'action',
       render: (_: any, record: any) => (
         <div>
-          <ActionButton id={record.ClassId} isActive={record.active} />
+          <ActionButton id={record.classId} isActive={record.active} rerender={rerender}/>
         </div>
       ),
     },

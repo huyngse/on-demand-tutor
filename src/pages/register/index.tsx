@@ -48,7 +48,11 @@ const RegisterPage = () => {
     console.log("requestBody: ", requestBody);
     const { error } = await register(requestBody);
     if (error) {
-      toast.error("Đăng ký thất bại!");
+      if (error.includes("Username and EmailAddress already exists")) {
+        toast.error("Tên đăng nhập hoặc email đã tồn tại!");
+      } else {
+        toast.error("Đăng ký thất bại!");
+      }
     } else {
       toast.success("Đăng ký thành công!");
       setTimeout(() => {

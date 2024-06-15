@@ -34,10 +34,45 @@ export const getClassesByTutorId = async (tutorId: number) => {
 }
 
 export const getClassById = async (classId: number) => {
+  const response: any = { error: null, data: null, success: false }
   try {
-    const classResult = classesData.find((x) => x.ClassId == classId);
-    return { error: null, data: classResult, success: true };
+    const { data } = await axiosClient.get(`/api/v1/classs/${classId}`);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
   } catch (error) {
     return handleApiError(error);
   }
 }
+
+export const deactivateClass = async (classId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    console.log(`/api/v1/classs/${classId}`);
+    const { data } = await axiosClient.put(`/api/v1/classs/${classId}`);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export const createClass = async (requestBody: any) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.post("/api/v1/classs", requestBody);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
