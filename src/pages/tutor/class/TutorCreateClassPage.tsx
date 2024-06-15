@@ -18,6 +18,9 @@ type FieldType = {
   ClassMethod: string;
   ClassLevel: string;
   ClassFee: string;
+  City: string;
+  Ward: string;
+  District: string;
   Active: boolean;
   TutorId: number;
 };
@@ -69,7 +72,7 @@ const TutorCreateClassPage = () => {
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values);
     toast.success("Tạo lớp thành công!");
-    setTimeout(() => {navigate("/tutor/class")}, 1000);
+    setTimeout(() => { navigate("/tutor/class") }, 1000);
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -122,34 +125,50 @@ const TutorCreateClassPage = () => {
           >
             <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('ClassRequire', string)} />
           </Form.Item>
+          <hr className="my-2"/>
+
+          <h3 className="font-bold text-lg mb-2">Địa chỉ lớp</h3>
           <Form.Item
-            label="Địa chỉ lớp"
-            name="ClassAddress"
-            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ lớp học!' }]}
+            label="Tỉnh/thành"
+            name="City"
+            rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành!' }]}
+            wrapperCol={{ span: 8 }}
           >
-            <div className="grid grid-cols-12 gap-2">
-              <Select
-                showSearch
-                options={cityOptions}
-                placeholder="-- Chọn tỉnh/thành --"
-                onChange={onCityChange}
-                className="col-span-4"
-              />
-              <Select
-                showSearch
-                options={districtOptions}
-                placeholder="-- Chọn quận/huyện --"
-                onChange={onDistrictChange}
-                className="col-span-4"
-              />
-              <Select
-                showSearch
-                options={wardOptions}
-                placeholder="-- Chọn phường/xã --"
-                className="col-span-4"
-              />
-            </div>
+            <Select
+              showSearch
+              options={cityOptions}
+              placeholder="-- Chọn tỉnh/thành --"
+              onChange={onCityChange}
+            />
           </Form.Item>
+          <Form.Item
+            label="Quận/huyện"
+            name="District"
+            rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
+            wrapperCol={{ span: 8 }}
+          >
+            <Select
+              showSearch
+              options={districtOptions}
+              placeholder="-- Chọn quận/huyện --"
+              onChange={onDistrictChange}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Phường/xã"
+            name="Ward"
+            rules={[{ required: true, message: 'Vui lòng chọn phường/xã!' }]}
+            wrapperCol={{ span: 8 }}
+          >
+            <Select
+              showSearch
+              options={wardOptions}
+              placeholder="-- Chọn phường/xã --"
+            />
+          </Form.Item>
+
+          <hr className="my-2"/>
+
           <Form.Item
             label="Phương thức dạy"
             name="ClassMethod"
@@ -192,7 +211,7 @@ const TutorCreateClassPage = () => {
           </Form.Item>
         </div>
         <div className="flex justify-end gap-2 mt-3">
-          <Button type="default" htmlType="button" onClick={() => {navigate(-1)}}>Hủy</Button>
+          <Button type="default" htmlType="button" onClick={() => { navigate(-1) }}>Hủy</Button>
           <Button type="primary" htmlType="submit">Tạo lớp</Button>
         </div>
       </Form>

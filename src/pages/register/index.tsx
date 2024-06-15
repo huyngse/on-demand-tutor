@@ -1,23 +1,77 @@
+import { Roles } from "@/constants/roles";
+import { register } from "@/lib/api/authentication-api";
 import { Button, DatePicker, Form, FormProps, Input, Radio } from "antd";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 type FieldType = {
-  fullName: string;
-  email: string;
+  username: string;
+  fullname: string;
+  profileImage: string;
+  phoneNumber: string;
+  emailAddress: string;
   password: string;
-  confirmPassword: string;
-  dob: string;
+  confirmPassword?: string;
+  dateOfBirth: any;
   role: string;
-  gender: "male" | "female";
-};
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-  console.log('Success:', values);
+  gender: "Male" | "Female";
+  city: string;
+  district: string;
+  ward: string;
+  street: string;
+  tutorType: string;
+  school: string;
+  tutorDescription: string;
 };
 
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
 const RegisterPage = () => {
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    setIsLoading(true);
+    console.log('Success:', values);
+    const requestBody = {
+      ...values
+    };
+    delete requestBody.confirmPassword;
+    requestBody.profileImage = "";
+    requestBody.city = "";
+    requestBody.district = "";
+    requestBody.ward = "";
+    requestBody.street = "";
+    requestBody.tutorType = "";
+    requestBody.school = "";
+    requestBody.tutorDescription = "";
+    requestBody.dateOfBirth = values.dateOfBirth.toISOString();
+    console.log("requestBody: ", requestBody);
+    const { error } = await register(requestBody);
+    if (error) {
+      toast.error("Đăng ký thất bại!");
+    } else {
+      toast.success("Đăng ký thành công!");
+      setTimeout(() => {
+        navigate("/login")
+      },1000);
+    }
+    setIsLoading(false);
+  };
+  
+  const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
+  useEffect(() => {
+    form.setFieldValue("profileImage", "");
+    form.setFieldValue("city", "");
+    form.setFieldValue("district", "");
+    form.setFieldValue("ward", "");
+    form.setFieldValue("street", "");
+    form.setFieldValue("tutorType", "");
+    form.setFieldValue("school", "");
+    form.setFieldValue("tutorDescription", "");
+  }, [])
+
   return (
     <div className="h-[100vh] overflow-auto">
       <div className="rounded-lg shadow min-h-[100vh] bg-white py-16 px-20 flex flex-col justify-between">
@@ -30,32 +84,61 @@ const RegisterPage = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             className="grid grid-cols-3 gap-2"
+            form={form}
           >
-            <label htmlFor="fullName" className="font-bold">Họ và tên</label>
+            <label htmlFor="fullname" className="font-bold">Họ và tên</label>
             <Form.Item
-              name="fullName"
-              rules={[{ required: true, message: 'Vui lòng họ và tên!' }]}
+              name="fullname"
+              rules={[
+                { required: true, message: 'Vui lòng họ và tên!' },
+                { type: 'string', min: 4, max: 20, message: "Họ và tên phải chứa 4-30 ký tự" }
+
+              ]}
               className="mb-3 col-span-2"
             >
-              <Input id="fullName" placeholder="Họ và tên" />
+              <Input id="fullname" placeholder="Họ và tên" />
             </Form.Item>
-            <label htmlFor="dob" className="font-bold">Ngày sinh</label>
+            <label htmlFor="phoneNumber" className="font-bold">Số điện thoại</label>
             <Form.Item
-              name="dob"
+              name="phoneNumber"
+              rules={[
+                { required: true, message: 'Vui lòng nhập số điện thoại của bạn!' },
+                () => ({
+                  validator(_, value) {
+                    if (value) {
+                      const phoneNumber = value.replace(/\D/g, '');
+                      if (phoneNumber.length >= 10 && phoneNumber.length <= 14) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Số điện thoại không hợp lệ'));
+                    }
+                  },
+                })
+              ]}
+              className="mb-3 col-span-2"
+            >
+              <Input id="phoneNumber" placeholder="Số điện thoại" />
+            </Form.Item>
+
+            <label htmlFor="dateOfBirth" className="font-bold">Ngày sinh</label>
+            <Form.Item
+              name="dateOfBirth"
               rules={[
                 { required: true, message: 'Vui lòng nhập ngày sinh!' },
                 {
                   validator: (_, value) => {
-                    if (value && new Date().getFullYear() - value?.$y > 1) {
-                      return Promise.resolve();
+                    if (value) {
+                      if (new Date().getFullYear() - value?.$y > 1) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Ngày sinh không hợp lệ'))
                     }
-                    return Promise.reject(new Error('Ngày sinh không hợp lệ'))
                   },
                 },
               ]}
               className="mb-3 col-span-2"
             >
-              <DatePicker id="dob" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full" />
+              <DatePicker id="dateOfBirth" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full" />
             </Form.Item>
             <p className="font-bold">Giới tính</p>
             <Form.Item
@@ -65,25 +148,39 @@ const RegisterPage = () => {
               initialValue={"male"}
             >
               <Radio.Group>
-                <Radio value="male"> Nam </Radio>
-                <Radio value="female"> Nữ </Radio>
+                <Radio value="Male"> Nam </Radio>
+                <Radio value="Female"> Nữ </Radio>
               </Radio.Group>
             </Form.Item>
-            <label htmlFor="email" className="font-bold">Email</label>
+            <label htmlFor="username" className="font-bold">Tên đăng nhập</label>
             <Form.Item
-              name="email"
+              name="username"
               rules={[
-                { required: true, message: 'Vui lòng nhập email của bạn!' },
-                { type: 'email', message: 'email không hợp lệ' }
+                { required: true, message: 'Vui lòng nhập tên đăng nhập!' },
+                { type: 'string', min: 4, max: 20, message: "Tên đăng nhập phải chứa 4-20 ký tự" }
               ]}
               className="mb-3 col-span-2"
             >
-              <Input id="email" placeholder="Email" />
+              <Input id="username" placeholder="Tên đăng nhập" />
+            </Form.Item>
+            <label htmlFor="emailAddress" className="font-bold">Email</label>
+            <Form.Item
+              name="emailAddress"
+              rules={[
+                { required: true, message: 'Vui lòng nhập email của bạn!' },
+                { type: 'email', message: 'Email không hợp lệ' }
+              ]}
+              className="mb-3 col-span-2"
+            >
+              <Input id="emailAddress" placeholder="Email" />
             </Form.Item>
             <label htmlFor="password" className="font-bold">Mật khẩu</label>
             <Form.Item
               name="password"
-              rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+              rules={[
+                { required: true, message: 'Vui lòng nhập mật khẩu!' },
+                { type: 'string', min: 6, max: 30, message: "Mật khẩu phải chứa 6-30 ký tự" }
+              ]}
               className="mb-3 col-span-2"
             >
               <Input.Password id="password" autoComplete="new-password" placeholder="Mật khẩu" />
@@ -92,7 +189,7 @@ const RegisterPage = () => {
             <Form.Item
               name="confirmPassword"
               rules={[
-                { required: true, message: 'Vui lòng nhập mật khẩu!' },
+                { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
@@ -112,12 +209,12 @@ const RegisterPage = () => {
               className="col-span-2"
             >
               <Radio.Group>
-                <Radio value="student_parent"> Phụ huynh, học sinh </Radio>
-                <Radio value="tutor"> Gia sư </Radio>
+                <Radio value={Roles.Student}> Phụ huynh, học sinh </Radio>
+                <Radio value={Roles.Tutor}> Gia sư </Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item className="mb-0 col-span-3">
-              <Button type="primary" htmlType="submit" className="w-full">
+              <Button type="primary" htmlType="submit" className="w-full" loading={isLoading}>
                 Đăng Ký
               </Button>
             </Form.Item>

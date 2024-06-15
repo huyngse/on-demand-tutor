@@ -2,17 +2,19 @@ import { checkToken, login } from "@/lib/api/authentication-api";
 import { Button, Form, FormProps, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Cookies from 'js-cookie';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { getAllUsers } from "@/lib/api/user-api";
+import Cookies from "js-cookie";
 import { setLoggedUser } from "@/lib/redux/userSlice";
 type FieldType = {
-  email: string;
+  userName: string;
   password: string;
 };
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await checkToken();
@@ -25,18 +27,37 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    const { data } = await login(values.email, values.password);
-    if (data) {
+    setIsLoading(true);
+    const { data, error } = await login(values.userName, values.password);
+    if (error) {
+      if (error.includes("User does not exist")) {
+        toast.error("Sai mật khẩu hoặc tên đăng nhập!");
+      } else {
+        toast.error("Kết nối server thất bại!");
+      }
+      setIsLoading(false);
+      return;
+    } else {
+      localStorage.setItem("accessToken", data);
       toast.success("Đăng nhập thành công!");
-      Cookies.set('loggedUser', JSON.stringify(data), { expires: 7 });
-      dispatch(setLoggedUser(data));
+      const loggedUser = await getLoggedUser(values.userName);
+      Cookies.set('loggedUser', JSON.stringify(loggedUser), { expires: (3 / 24) });
+      dispatch(setLoggedUser(loggedUser));
       setTimeout(() => {
         navigate("/");
       }, 1000);
-    } else {
-      toast.error("Sai mật khẩu hoặc email!");
     }
+    setIsLoading(false);
   };
+
+  const getLoggedUser = async (userName: string) => {
+    const { data, success } = await getAllUsers();
+    if (success && data) {
+      const loggedUser = data.find((user: any) => user.username == userName);
+      return loggedUser;
+    }
+    return null;
+  }
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -55,13 +76,13 @@ const LoginPage = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <label htmlFor="email" className="font-bold">Email</label>
+          <label htmlFor="userName" className="font-bold">Tên đăng nhập</label>
           <Form.Item
-            name="email"
-            rules={[{ required: true, message: 'Vui lòng nhập email của bạn!' }]}
+            name="userName"
+            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập của bạn!' }]}
             className="mb-3"
           >
-            <Input id="email" />
+            <Input id="userName" placeholder="Tên đăng nhập" />
           </Form.Item>
           <label htmlFor="password" className="font-bold">Mật khẩu</label>
           <Form.Item
@@ -69,10 +90,10 @@ const LoginPage = () => {
             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
 
           >
-            <Input.Password id="password" />
+            <Input.Password id="password" placeholder="Mật khấu" />
           </Form.Item>
           <Form.Item className="mb-0">
-            <Button type="primary" htmlType="submit" className="w-full">
+            <Button type="primary" htmlType="submit" className="w-full" loading={isLoading}>
               Đăng Nhập
             </Button>
           </Form.Item>
