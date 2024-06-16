@@ -1,26 +1,40 @@
 import { useAppSelector } from "@/hooks/useRedux";
-import { getClassesByTutorId } from "@/lib/api/class-api";
+import { getAllClass } from "@/lib/api/class-api";
 import { useEffect, useState } from "react";
 import Datatable from "./Datatable";
 import { Button } from "antd";
 import { SquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/components/Loader";
+import { toast } from "react-toastify";
 
 const TutorClassPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [classes, setClasses] = useState<any[]>([]);
+  const [renderKey, setRenderKey] = useState(0);
+  const rerender = () => {
+    setRenderKey(renderKey + 1);
+  }
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
-      if (loggedUser) {
-        const result = await getClassesByTutorId(loggedUser.id);
-        if (result.data) {
-          setClasses(result.data);
-        }
+      setIsLoading(true);
+      const { data, error } = await getAllClass();
+      if (error) {
+        toast.error("Lấy thông tin thất bại");
+      } else {
+        const filteredListClass = data.filter((c: any) => c.tutorId == loggedUser.userId);
+        setClasses(filteredListClass);
       }
+      setIsLoading(false);
     }
-    fetchData();
-  }, [loggedUser]);
+    if (loggedUser) {
+      fetchData();
+    }
+  }, [loggedUser, renderKey]);
+
+
   const handleCreateClass = () => {
     navigate("/tutor/class/create");
   }
@@ -39,7 +53,8 @@ const TutorClassPage = () => {
         {/* <CreateAccountButton /> */}
       </div>
       {
-        classes && <Datatable dataSource={classes} />
+        !isLoading &&
+          classes ? <Datatable dataSource={classes} rerender={rerender}/> : <Loader />
       }
     </div>
   )

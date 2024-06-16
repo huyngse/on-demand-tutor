@@ -4,14 +4,16 @@ import { Table } from "antd";
 
 type DataTableProps = {
   dataSource: any[];
+  rerender: () => void;
 }
 
-const Datatable = ({ dataSource }: DataTableProps) => {
+const Datatable = ({ dataSource, rerender }: DataTableProps) => {
+ 
   const columns = [
     {
       title: 'ID',
-      dataIndex: 'ClassId',
-      key: 'ClassId',
+      dataIndex: 'classId',
+      key: 'classId',
       sorter: {
         compare: (a: any, b: any) => {
           if (a.classId < b.classId) {
@@ -26,13 +28,13 @@ const Datatable = ({ dataSource }: DataTableProps) => {
     },
     {
       title: 'Tên lớp',
-      dataIndex: 'ClassName',
-      key: 'ClassName',
+      dataIndex: 'className',
+      key: 'className',
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.ClassName < b.ClassName) {
+          if (a.className < b.className) {
             return -1;
-          } else if (a.ClassName > b.ClassName) {
+          } else if (a.className > b.className) {
             return 1;
           } else {
             return 0;
@@ -43,13 +45,13 @@ const Datatable = ({ dataSource }: DataTableProps) => {
 
     {
       title: 'Trình độ',
-      dataIndex: 'ClassLevel',
-      key: 'ClassLevel',
+      dataIndex: 'classLevel',
+      key: 'classLevel',
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.ClassLevel < b.ClassLevel) {
+          if (a.classLevel < b.classLevel) {
             return -1;
-          } else if (a.ClassLevel > b.ClassLevel) {
+          } else if (a.classLevel > b.classLevel) {
             return 1;
           } else {
             return 0;
@@ -60,19 +62,19 @@ const Datatable = ({ dataSource }: DataTableProps) => {
     },
     {
       title: 'Hình thức dạy',
-      dataIndex: 'ClassMethod',
-      key: 'ClassMethod',
+      dataIndex: 'classMethod',
+      key: 'classMethod',
       render: (_: any, record: any) => {
-        return record.ClassMethod == "In-person" ?
+        return record.classMethod == "In-person" ?
           <span className="text-pink-500">Trực tiếp</span>
           :
           <span className="text-blue-500">Online</span>
       },
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.ClassMethod < b.ClassMethod) {
+          if (a.classMethod < b.classMethod) {
             return -1;
-          } else if (a.ClassMethod > b.ClassMethod) {
+          } else if (a.classMethod > b.classMethod) {
             return 1;
           } else {
             return 0;
@@ -82,20 +84,20 @@ const Datatable = ({ dataSource }: DataTableProps) => {
     },
     {
       title: 'Học phí',
-      dataIndex: 'ClassFee',
-      key: 'ClassFee',
+      dataIndex: 'classFee',
+      key: 'classFee',
       render: (_: any, record: any) => {
         return (
           <span>
-            {formatNumberWithCommas(record.ClassFee)}₫
+            {formatNumberWithCommas(record.classFee)}₫
           </span>
         )
       },
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.ClassFee < b.ClassFee) {
+          if (a.classFee < b.classFee) {
             return -1;
-          } else if (a.ClassFee > b.ClassFee) {
+          } else if (a.classFee > b.classFee) {
             return 1;
           } else {
             return 0;
@@ -106,17 +108,17 @@ const Datatable = ({ dataSource }: DataTableProps) => {
 
     {
       title: 'Trạng thái',
-      key: 'Active',
+      key: 'active',
       render: (_: any, record: any) => (
         <div>
-          <div className={`${record.Active ? "bg-green-500" : "bg-red-500"} p-1 inline-block rounded-full`}></div>
+          <div className={`${record.active ? "bg-green-500" : "bg-red-500"} p-1 inline-block rounded-full`}></div>
         </div>
       ),
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.Active === b.Active) {
+          if (a.active === b.active) {
             return 0;
-          } else if (a.Active) {
+          } else if (a.active) {
             return 1;
           } else {
             return -1;
@@ -129,13 +131,13 @@ const Datatable = ({ dataSource }: DataTableProps) => {
       key: 'action',
       render: (_: any, record: any) => (
         <div>
-          <ActionButton id={record.ClassId} isActive={record.Active} />
+          <ActionButton id={record.classId} isActive={record.active} rerender={rerender}/>
         </div>
       ),
     },
   ];
   return (
-    <Table dataSource={dataSource} columns={columns} rowKey="ClassId" />
+    <Table dataSource={dataSource} columns={columns} rowKey="classId" />
   )
 }
 

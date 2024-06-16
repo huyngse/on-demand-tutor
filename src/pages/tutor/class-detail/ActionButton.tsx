@@ -1,6 +1,6 @@
 import { deactivateClass } from "@/lib/api/class-api";
 import { Button, Dropdown, MenuProps } from "antd";
-import { EllipsisVertical, Eye, EyeOff, Info, Pencil, Trash2 } from "lucide-react";
+import { EllipsisVertical, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -26,12 +26,6 @@ const ActionButton = ({ id, isActive, rerender }: ActionButtonProps) => {
     }
   }
   const items: MenuProps['items'] = [
-    {
-      label: "Xem chi tiết",
-      key: '0',
-      icon: <Info width={15} />,
-      onClick: () => { navigate(`/tutor/class/${id}`) }
-    },
     {
       label: "Chỉnh sửa",
       key: '1',
