@@ -92,7 +92,6 @@ const TutorListPage = () => {
       <Form
         name="basic"
         form={form}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"

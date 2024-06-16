@@ -77,8 +77,12 @@ const TutorUpdateClassPage = () => {
     setWards(selectedDistrict.Wards);
   }
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    // console.log('Success:', values);
-    const { error } = await updateClass(values, classDetail.classId);
+    console.log('Success:', values);
+    const requestBody = {
+      ...values
+    }
+    requestBody.classAddress = classDetail.classAddress;
+    const { error } = await updateClass(requestBody, classDetail.classId);
     if (error) {
       toast.error("Lưu thay đổi thất bại");
     } else {

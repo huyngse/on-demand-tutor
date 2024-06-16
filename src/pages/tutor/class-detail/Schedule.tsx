@@ -1,6 +1,6 @@
 import { getTimeString } from "@/utils/dateUtil";
 import { Button } from "antd";
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import UpdateScheduleButton from "./UpdateScheduleButton";
 
 type ScheduleProps = {
