@@ -76,3 +76,17 @@ export const createClass = async (requestBody: any) => {
   }
 }
 
+export const updateClass = async (requestBody: any, classId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.put(`/api/v1/classs/class/${classId}`, requestBody);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+

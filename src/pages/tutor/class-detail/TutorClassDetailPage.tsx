@@ -9,8 +9,7 @@ import { toast } from "react-toastify";
 import ActionButton from "./ActionButton";
 import BackButton from "@/components/BackButton";
 import Schedule from "./Schedule";
-import { Button } from "antd";
-import { CirclePlus } from "lucide-react";
+import CreateScheduleButton from "./CreateScheduleButton";
 
 const TutorClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +71,7 @@ const TutorClassDetailPage = () => {
       </div>
       <div className="flex justify-between  items-center my-2">
         <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
-        <Button type="primary" icon={<CirclePlus  width={15} height={15} className="m-0" />}>Tạo lịch dạy</Button>
+        <CreateScheduleButton classId={classDetail.classId} />
       </div>
       {
         classDetail.schedules.length == 0 && (

@@ -66,12 +66,15 @@ const TutorCreateClassPage = () => {
     const selectedCity = addresses.find(addr => addr.Name == e);
     if (selectedCity == null) return;
     setDistricts(selectedCity.Districts);
+    form.setFieldValue("district", null);
+    form.setFieldValue("ward", null);
     setWards([]);
   }
   const onDistrictChange = (e: any) => {
     const selectedDistrict = districts.find(addr => addr.Name == e);
     if (selectedDistrict == null) return;
     setWards(selectedDistrict.Wards);
+    form.setFieldValue("ward", null);
   }
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const requestBody = {

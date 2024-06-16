@@ -54,7 +54,7 @@ const TutorClassPage = () => {
       </div>
       {
         !isLoading &&
-          classes ? <Datatable dataSource={classes} rerender={rerender} /> : <Loader />
+          classes ? <Datatable dataSource={classes} rerender={rerender}/> : <Loader />
       }
     </div>
   )
