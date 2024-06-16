@@ -1,6 +1,7 @@
 import { getTimeString } from "@/utils/dateUtil";
 import { Button } from "antd";
 import { Pencil, Trash2 } from "lucide-react";
+import UpdateScheduleButton from "./UpdateScheduleButton";
 
 type ScheduleProps = {
   data: any;
@@ -15,8 +16,8 @@ const Schedule = ({ data }: ScheduleProps) => {
           {data.title}
         </p>
         <div className="flex gap-2">
-          <Button type="default" danger shape="circle" icon={<Trash2 width={15}/>}/>
-          <Button type="default" shape="circle" icon={<Pencil width={15}/>}/>
+          <Button type="default" danger shape="circle" icon={<Trash2 width={15} />} />
+          <UpdateScheduleButton classId={0} scheduleId={data.scheduleID}/>
         </div>
       </div>
       <hr className="my-2" />

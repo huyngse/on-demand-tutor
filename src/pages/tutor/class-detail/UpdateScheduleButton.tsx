@@ -1,8 +1,10 @@
+import { getScheduleById } from "@/lib/api/schedule-api";
 import { Button, Form, FormProps, Input, Modal, Select, TimePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Dayjs } from "dayjs";
-import { CirclePlus } from "lucide-react";
-import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import { Pencil } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 type FieldType = {
     title: string;
@@ -10,11 +12,12 @@ type FieldType = {
     dateOfWeek: number;
     classTime: Dayjs[];
 };
-type CreateScheduleButtonProps = {
+type UpdateScheduleButtonProps = {
+    scheduleId: number;
     classId: number;
 }
 const format = 'HH:mm';
-const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
+const UpdateScheduleButton = ({ scheduleId, classId }: UpdateScheduleButtonProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,7 +41,7 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
         delete requestBody.classTime;
         requestBody.classId = classId
         requestBody.startTime = values.classTime[0].toISOString();
-        requestBody.endTime =  values.classTime[1].toISOString();
+        requestBody.endTime = values.classTime[1].toISOString();
         console.log(requestBody);
         handleOk();
     };
@@ -46,25 +49,35 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            const { data, error } = await getScheduleById(scheduleId);
+            if (error) {
+                toast.error("Lấy thông tin thất bại");
+            } else {
+                form.setFieldValue("title", data.title);
+                form.setFieldValue("description", data.description);
+                form.setFieldValue("dateOfWeek", data.dateOfWeek);
+                form.setFieldValue("classTime",
+                    [
+                        dayjs(data.startTime),
+                        dayjs(data.endTime),
+                    ]);
+            }
+        }
+        fetchData();
+    }, [])
 
     return (
         <>
             <Button
-                type="primary"
-                icon={
-                    <CirclePlus
-                        width={15}
-                        height={15}
-                        className="m-0"
-                    />
-                }
+                type="default"
+                shape="circle"
+                icon={<Pencil width={15} />}
                 onClick={showModal}
-                className="flex items-center"
-            >
-                Tạo lịch dạy
-            </Button>
+            />
             <Modal
-                title="Tạo lịch dạy mới"
+                title="Chỉnh sửa thông tin lịch dạy"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -121,7 +134,7 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
                         </Button>
                         <Form.Item className="m-0">
                             <Button type="primary" htmlType="submit">
-                                Tạo lịch
+                                Lưu thay đổi
                             </Button>
                         </Form.Item>
                     </div>
@@ -131,4 +144,4 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
     )
 }
 
-export default CreateScheduleButton
+export default UpdateScheduleButton
