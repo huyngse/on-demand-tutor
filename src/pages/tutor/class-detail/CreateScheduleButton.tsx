@@ -1,20 +1,23 @@
+import { createSchedule } from "@/lib/api/schedule-api";
 import { Button, Form, FormProps, Input, Modal, Select, TimePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { Dayjs } from "dayjs";
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 type FieldType = {
     title: string;
-    description: string;
+    description?: string;
     dateOfWeek: number;
     classTime: Dayjs[];
 };
 type CreateScheduleButtonProps = {
     classId: number;
+    rerender: () => void;
 }
 const format = 'HH:mm';
-const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
+const CreateScheduleButton = ({ classId, rerender }: CreateScheduleButtonProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,16 +33,26 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
         setIsModalOpen(false);
     };
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const requestBody: any = {
             ...values
         };
         delete requestBody.classTime;
-        requestBody.classId = classId
-        requestBody.startTime = values.classTime[0].toISOString();
-        requestBody.endTime =  values.classTime[1].toISOString();
-        console.log(requestBody);
+        requestBody.classID = classId
+        requestBody.startTime = values.classTime[0].add(7, 'hour').toISOString();
+        requestBody.endTime = values.classTime[1].add(7, 'hour').toISOString();
+        if (requestBody.description == null) {
+            requestBody.description = "";
+        }
+        const { error } = await createSchedule(requestBody);
+        if (error) {
+            toast.error("Tạo lịch thất bại!");
+        } else {
+            toast.success("Tạo lịch thành công");
+            setTimeout(() => {
+                rerender();
+            }, 1000);
+        }
         handleOk();
     };
 
@@ -96,10 +109,10 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
                     >
                         <TextArea placeholder="Mô tả" />
                     </Form.Item>
-
                     <Form.Item
                         label="Ngày trong tuần"
                         name="dateOfWeek"
+                        rules={[{ required: true, message: 'Vui lòng chọn ngày trong tuần!' }]}
                     >
                         <Select
                             placeholder="Ngày trong tuần"
@@ -112,6 +125,7 @@ const CreateScheduleButton = ({ classId }: CreateScheduleButtonProps) => {
                     <Form.Item
                         label="Thời gian học"
                         name="classTime"
+                        rules={[{ required: true, message: 'Vui lòng chọn thời gian học!' }]}
                     >
                         <TimePicker.RangePicker minuteStep={15} format={format} />
                     </Form.Item>

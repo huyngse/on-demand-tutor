@@ -2,11 +2,25 @@ import { getTimeString } from "@/utils/dateUtil";
 import { Button } from "antd";
 import { Trash2 } from "lucide-react";
 import UpdateScheduleButton from "./UpdateScheduleButton";
+import { deleteSchedule } from "@/lib/api/schedule-api";
+import { toast } from "react-toastify";
 
 type ScheduleProps = {
   data: any;
+  rerender: () => void;
 }
-const Schedule = ({ data }: ScheduleProps) => {
+const Schedule = ({ data, rerender }: ScheduleProps) => {
+  const handleDeleteSchedule = async () => {
+    const { error } = await deleteSchedule(data.scheduleID);
+    if (error) {
+      toast.error("Xóa lịch thất bại!");
+    } else {
+      toast.success("Xóa lịch thành công!");
+      setTimeout(() => {
+        rerender();
+      }, 1000);
+    }
+  }
   if (!data) return;
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
@@ -16,8 +30,18 @@ const Schedule = ({ data }: ScheduleProps) => {
           {data.title}
         </p>
         <div className="flex gap-2">
-          <Button type="default" danger shape="circle" icon={<Trash2 width={15} />} />
-          <UpdateScheduleButton classId={0} scheduleId={data.scheduleID}/>
+          <Button
+            type="default"
+            danger
+            shape="circle"
+            icon={<Trash2 width={15} />}
+            onClick={handleDeleteSchedule}
+          />
+          <UpdateScheduleButton
+            classId={0}
+            scheduleId={data.scheduleID}
+            rerender={rerender}
+          />
         </div>
       </div>
       <hr className="my-2" />
@@ -36,12 +60,19 @@ const Schedule = ({ data }: ScheduleProps) => {
       <p className="text-lg mt-2">
         <span className="font-semibold">Thời gian học: </span>  {getTimeString(new Date(data.startTime))} - {getTimeString(new Date(data.endTime))}
       </p>
-      <h4 className="font-semibold text-lg">
-        Mô tả
-      </h4>
-      <p>
-        {data.description}
-      </p>
+      {
+        data.description && data.description.length > 0 && (
+          <>
+            <h4 className="font-semibold text-lg">
+              Mô tả
+            </h4>
+            <p>
+              {data.description}
+            </p>
+          </>
+        )
+      }
+
     </div>
   )
 }

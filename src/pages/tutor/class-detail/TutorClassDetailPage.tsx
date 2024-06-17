@@ -71,7 +71,7 @@ const TutorClassDetailPage = () => {
       </div>
       <div className="flex justify-between  items-center my-2">
         <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
-        <CreateScheduleButton classId={classDetail.classId} />
+        <CreateScheduleButton classId={classDetail.classId} rerender={rerender}/>
       </div>
       {
         classDetail.schedules.length == 0 && (
@@ -81,8 +81,13 @@ const TutorClassDetailPage = () => {
         )
       }
       {
-        classDetail.schedules.length != 0 && classDetail.schedules.map((schedule: any) => <Schedule data={schedule} />)
+        classDetail.schedules.length != 0 && (
+          <div className="flex flex-col gap-3">
+            {classDetail.schedules.map((schedule: any) => <Schedule data={schedule} rerender={rerender}/>)}
+          </div>
+        )
       }
+
     </div>
   )
 }

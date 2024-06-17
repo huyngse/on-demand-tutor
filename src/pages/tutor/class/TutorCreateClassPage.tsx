@@ -209,7 +209,21 @@ const TutorCreateClassPage = () => {
           <Form.Item
             label="Phí dạy học"
             name="classFee"
-            rules={[{ required: true, message: 'Vui lòng nhập phí dạy học' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập phí dạy học' },
+              {
+                validator: (_, value) => {
+                  if (value) {
+                    if (value < 10000) {
+                      return Promise.reject(new Error('Phí dạy học phải ít nhất 10.000₫'))
+                    } else if (value > 1000000000) {
+                      return Promise.reject(new Error('Phí dạy học tối đa 1.000.000.000₫'))
+                    }
+                    return Promise.resolve();
+                  }
+                },
+              },
+            ]}
           >
             <InputNumber
               placeholder="Phí dạy học"
