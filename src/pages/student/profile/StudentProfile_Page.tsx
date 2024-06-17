@@ -1,166 +1,95 @@
-// src/components/StudentProfilePage.tsx
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './StudentProfile_Page.css';
+import { useAppSelector } from "@/hooks/useRedux";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Dropdown, MenuProps } from "antd";
+import { Pencil, EllipsisVertical, ImageUp } from "lucide-react";
 
-interface FormData {
-  username: string;
-  email: string;
-  fullName: string;
-  dob: string;
-  gender: string;
-  phone: string;
-  city: string;
-  district: string;
-  ward: string;
-  address: string;
+interface User {
+  ProfileImage: string;
+  PhoneNumber: number;
+  EmailAddress: string;
+  DateOfBirth: string;
+  Gender: string;
+  Role: string;
+  City: string;
+  District: string;
+  Ward: string;
+  Street: string;
 }
 
-const StudentProfilePage: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    username: '',
-    email: '',
-    fullName: '',
-    dob: '',
-    gender: '',
-    phone: '',
-    city: '',
-    district: '',
-    ward: '',
-    address: ''
-  });
+const StudentProfilePage = () => {
+  const loggedUser = useAppSelector(state => state.user.loggedUser);
+  const navigate = useNavigate();
+  const [studentDetail, setStudentDetail] = useState<User | null>(null);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  useEffect(() => {
+    const fetchStudentDetails = async () => {
+      const result = await fetch(`/api/student/${loggedUser?.id}`);
+      const data = await result.json();
+      setStudentDetail(data);
+    };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+    fetchStudentDetails();
+  }, [loggedUser]);
+
+  const items: MenuProps['items'] = [
+    {
+      label: "Cập nhật ảnh đại diện",
+      key: 'update-pfp',
+      icon: <ImageUp width={15} />,
+    },
+    {
+      label: "Chỉnh sửa thông tin cá nhân",
+      key: 'update-profile',
+      icon: <Pencil width={15} />,
+      onClick: () => { navigate("/student/profile/edit") }
+    }
+  ];
+  if(loggedUser == null) return;
 
   return (
-    <form className="student-profile-form" onSubmit={handleSubmit}>
-      <h2>Thông tin tài khoản</h2>
-      <div className="form-row">
-        <div className="form-column">
-          <div className="form-group">
-            <label>Tên đăng nhập *</label>
-            <input 
-              type="text" 
-              name="username" 
-              value={formData.username} 
-              onChange={handleChange} 
-              placeholder="Tên đăng nhập" 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Họ và tên</label>
-            <input 
-              type="text" 
-              name="fullName" 
-              value={formData.fullName} 
-              onChange={handleChange} 
-              placeholder="Họ và tên" 
-            />
-          </div>
-          <div className="form-group">
-            <label>Giới tính</label>
-            <div>
-              <input 
-                type="radio" 
-                name="gender" 
-                value="male" 
-                checked={formData.gender === 'male'} 
-                onChange={handleChange} 
-              /> Nam
-              <input 
-                type="radio" 
-                name="gender" 
-                value="female" 
-                checked={formData.gender === 'female'} 
-                onChange={handleChange} 
-              /> Nữ
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Tỉnh/thành</label>
-            <input 
-              type="text" 
-              name="city" 
-              value={formData.city} 
-              onChange={handleChange} 
-              placeholder="Tỉnh/thành" 
-            />
-          </div>
-          <div className="form-group">
-            <label>Phường/xã</label>
-            <input 
-              type="text" 
-              name="ward" 
-              value={formData.ward} 
-              onChange={handleChange} 
-              placeholder="Phường/xã" 
-            />
-          </div>
+    <div>
+      <div className="bg-white drop-shadow p-3 rounded-lg flex gap-2 mb-2">
+        <div className="overflow-hidden drop-shadow rounded-lg aspect-square w-[150px]">
+          <img src={studentDetail?.ProfileImage} alt="" className="w-full h-full object-cover" />
         </div>
-        <div className="form-column">
-          <div className="form-group">
-            <label>Email *</label>
-            <input 
-              type="email" 
-              name="email" 
-              value={formData.email} 
-              onChange={handleChange} 
-              placeholder="Email" 
-              required 
-            />
+        <div className="flex-1 flex flex-col justify-center gap-2">
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold">
+              {loggedUser.fullName}
+            </h2>
+            <Dropdown menu={{ items }} trigger={['click']}>
+              <Button type="default" shape="circle" icon={<EllipsisVertical width={15} />} className="me-3" />
+            </Dropdown>
           </div>
-          <div className="form-group">
-            <label>Ngày sinh *</label>
-            <input 
-              type="date" 
-              name="dob" 
-              value={formData.dob} 
-              onChange={handleChange} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Số điện thoại</label>
-            <input 
-              type="text" 
-              name="phone" 
-              value={formData.phone} 
-              onChange={handleChange} 
-              placeholder="Số điện thoại" 
-            />
-          </div>
-          <div className="form-group">
-            <label>Quận/huyện</label>
-            <input 
-              type="text" 
-              name="district" 
-              value={formData.district} 
-              onChange={handleChange} 
-              placeholder="Quận/huyện" 
-            />
-          </div>
-          <div className="form-group">
-            <label>Đường, phố, số nhà</label>
-            <input 
-              type="text" 
-              name="address" 
-              value={formData.address} 
-              onChange={handleChange} 
-              placeholder="Đường, phố, số nhà" 
-            />
-          </div>
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th>
+                  <p className="flex gap-1">
+                    <Pencil />
+                    Thông tin
+                  </p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="py-2">
+                  <div className="flex flex-col gap-2">
+                    <span className="block">Email: {loggedUser?.EmailAddress}</span>
+                    <span className="block">Ngày sinh: {loggedUser?.DateOfBirth}</span>
+                    <span className="block">Giới tính: {loggedUser?.Gender}</span>
+                    <span className="block">Số điện thoại: {loggedUser?.PhoneNumber}</span>
+                    <span className="block">Địa chỉ: {`${loggedUser?.Street}, ${loggedUser?.Ward}, ${loggedUser?.District}, ${loggedUser?.City}`}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <button type="submit">Submit</button>
-    </form>
+    </div>
   );
 };
 
