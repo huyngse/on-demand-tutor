@@ -50,7 +50,11 @@ const AppAvartar = ({ user }: any) => {
                 <p className="font-semibold">
                     {user.fullname ? user.fullname : "Họ và tên"}
                 </p>
-                <Avatar shape="circle" className="drop-shadow" src={user.profilePicUrl}>
+                <Avatar
+                    shape="circle"
+                    className="drop-shadow"
+                    src={user.profilePicUrl}
+                >
                     {user.fullname ? user.fullname : "Họ và tên"}
                 </Avatar>
             </div>

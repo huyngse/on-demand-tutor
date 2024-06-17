@@ -118,7 +118,7 @@ const TutorListPage = () => {
             <div className="bg-white drop-shadow p-5  rounded-lg">
               <h2 className="font-bold flex gap-2 items-center mb-5 text-lg">
                 <ListFilter />
-                Lọc kết quả tiềm kiếm
+                Lọc kết quả tìm kiếm
               </h2>
               <p className="font-bold mb-1">Tỉnh/thành</p>
               <Form.Item name="city" className="mb-3">
