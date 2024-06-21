@@ -1,4 +1,4 @@
-import { getScheduleById } from "@/lib/api/schedule-api";
+import { getScheduleById, updateSchedule } from "@/lib/api/schedule-api";
 import { Button, Form, FormProps, Input, Modal, Select, TimePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
@@ -15,9 +15,10 @@ type FieldType = {
 type UpdateScheduleButtonProps = {
     scheduleId: number;
     classId: number;
+    rerender: () => void;
 }
 const format = 'HH:mm';
-const UpdateScheduleButton = ({ scheduleId, classId }: UpdateScheduleButtonProps) => {
+const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleButtonProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -33,7 +34,7 @@ const UpdateScheduleButton = ({ scheduleId, classId }: UpdateScheduleButtonProps
         setIsModalOpen(false);
     };
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         console.log('Success:', values);
         const requestBody: any = {
             ...values
@@ -42,7 +43,18 @@ const UpdateScheduleButton = ({ scheduleId, classId }: UpdateScheduleButtonProps
         requestBody.classId = classId
         requestBody.startTime = values.classTime[0].toISOString();
         requestBody.endTime = values.classTime[1].toISOString();
-        console.log(requestBody);
+        if (requestBody.description == null) {
+            requestBody.description = "";
+        }
+        const { error } = await updateSchedule(requestBody, scheduleId);
+        if (error) {
+            toast.error("Tạo lịch thất bại!");
+        } else {
+            toast.success("Tạo lịch thành công");
+            setTimeout(() => {
+                rerender();
+            }, 1000);
+        }
         handleOk();
     };
 

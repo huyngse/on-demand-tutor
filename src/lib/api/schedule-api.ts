@@ -49,3 +49,16 @@ export const getScheduleById = async (scheduleId: number) => {
     }
 }
 
+export const deleteSchedule = async (scheduleId: number) => {
+    const response: any = { error: null, data: null, success: false }
+    try {
+        const { data } = await axiosClient.delete(`/api/v1/schedules?id=${scheduleId}`);
+        if (data) {
+            response.data = data;
+            response.success = true;
+        }
+        return response;
+    } catch (error) {
+        return handleApiError(error);
+    }
+}

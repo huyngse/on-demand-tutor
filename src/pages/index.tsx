@@ -7,6 +7,7 @@ import RegisterPage from "./register";
 import TutorListPage from "./home/tutor-list";
 import ClassListPage from "./home/class-list";
 import TutorDetailPage from "./home/tutor-detail";
+import ClassDetailPage from "./home/class-detail/ClassDetailPage";
 import AdminDashboardPage from "./admin/dashboard";
 import AdminManageAccountPage from "./admin/manage-account";
 import AdminUpdateAccountPage from "./admin/manage-account/UpdateAccountPage";
@@ -35,6 +36,7 @@ export {
     TutorListPage,
     ClassListPage,
     TutorDetailPage,
+    ClassDetailPage,
     AdminDashboardPage,
     AdminManageAccountPage,
     AdminUpdateAccountPage,

@@ -1,9 +1,13 @@
 import { Roles } from "@/constants/roles";
 import { useAppSelector } from "@/hooks/useRedux";
+import { createBooking } from "@/lib/api/booking-api";
 import { getTimeString } from "@/utils/dateUtil";
 import { Button, Form, FormProps, Input, Modal, Radio } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import Cookies from "js-cookie";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 type ScheduleProps = {
   data: any;
 }
@@ -16,12 +20,21 @@ type FieldType = {
   address: string;
 };
 const Schedule = ({ data }: ScheduleProps) => {
+  const navigate = useNavigate();
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    setIsModalOpen(true);
+    if (!loggedUser) {
+      toast.error("Vui lòng đăng nhập để đặt học!");
+      Cookies.set('waitingUrl', `/class/${data.classID}`, { expires: 1 })
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   const handleOk = () => {
@@ -33,14 +46,22 @@ const Schedule = ({ data }: ScheduleProps) => {
   };
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    // if (error) {
-    //     toast.error("Tạo lịch thất bại!");
-    // } else {
-    //     toast.success("Tạo lịch thành công");
-    //     setTimeout(() => {
-    //         rerender();
-    //     }, 1000);
-    // }
+    const requestBody = {
+      ...values
+    };
+    requestBody.userId = loggedUser.userId;
+    requestBody.scheduleId = data.scheduleID;
+    requestBody.createDate = new Date().toISOString();
+    requestBody.status = "pending";
+    const { error } = await createBooking(requestBody);
+    if (error) {
+      toast.error("Đặt lịch thất bại!");
+    } else {
+      toast.success("Đặt lịch thành công");
+      setTimeout(() => {
+        navigate("/student/class");
+      }, 1000);
+    }
     handleOk();
   };
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
