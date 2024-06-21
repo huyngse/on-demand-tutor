@@ -19,6 +19,7 @@ const LoginPage = () => {
     const fetchData = async () => {
       const { data } = await checkToken();
       if (data) {
+
         navigate("/");
       }
     }
@@ -44,7 +45,13 @@ const LoginPage = () => {
       Cookies.set('loggedUser', JSON.stringify(loggedUser), { expires: (3 / 24) });
       dispatch(setLoggedUser(loggedUser));
       setTimeout(() => {
-        navigate("/");
+        const waitingUrl = Cookies.get('waitingUrl');
+        if (waitingUrl) {
+          Cookies.remove('waitingUrl');
+          navigate(waitingUrl);
+        } else {
+          navigate("/");
+        }
       }, 1000);
     }
     setIsLoading(false);

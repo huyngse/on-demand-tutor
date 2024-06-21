@@ -22,7 +22,9 @@ const ClassDetailPage = () => {
         setIsLoading(true);
         const { data, error } = await getClassById(parseInt(classId));
         if (error) {
-          toast.error("Lấy thông tin thất bại");
+          toast.error("Lấy thông tin thất bại", {
+            toastId: 'error_classDetail',
+          });
         } else {
           setClassDetail(data);
           setPfp(data.tutor.profileImage);

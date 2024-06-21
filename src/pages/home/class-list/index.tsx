@@ -93,7 +93,9 @@ const ClassListPage = () => {
       setIsLoading(true);
       const { data, error } = await getAllClass();
       if (error) {
-        toast.error("Lấy thông tin thất bại!");
+        toast.error("Lấy thông tin thất bại!", {
+          toastId: 'error_classList',
+        });
       } else {
         const filteredClassList = data.filter((c: any) => c.active == true);
         setClasses(sortClassByDate(filteredClassList));
