@@ -26,6 +26,7 @@ import StudentClassPage from "./student/class/StudentClassPage";
 import StudentProfilePage from "./student/profile/StudentProfile_Page";
 import StudentTimetable from "./student/timetable/StudentTimetable";
 import StudentUpdateProfilePage from "./student/profile/UpdateStudentProfile_Page";
+import StudentClassDetailPage from "./student/class-detail/StudentClassDetailPage";
 export {
     LoginPage,
     HomePage,
@@ -42,6 +43,7 @@ export {
     AdminUpdateAccountPage,
     AdminManageTutorPage,
     AdminUpdateTutorPage,
+    AdminTutorDetailPage,
     TutorProfilePage,
     TutorDashboardPage,
     TutorCertification,
@@ -50,9 +52,9 @@ export {
     TutorClassDetailPage,
     TutorCreateClassPage,
     TutorUpdateClassPage,
-    AdminTutorDetailPage,
     StudentClassPage,
     StudentProfilePage,
     StudentTimetable,
     StudentUpdateProfilePage,
+    StudentClassDetailPage,
 };
