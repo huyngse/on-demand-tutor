@@ -112,10 +112,10 @@ const StudentLayout = ({ children }: StudentLayoutProps) => {
             <Layout className="bg-blue-50">
                 <Header className='px-3 bg-white flex justify-end items-center gap-2'>
                     <p className='font-bold'>
-                        {loggedUser?.fullname ? loggedUser.fullname : "Họ và tên"}
+                        {loggedUser?.fullName ? loggedUser.fullName : "Họ và tên"}
                     </p>
                     <Avatar shape="circle" className="drop-shadow" src={loggedUser?.profilePicUrl}>
-                        {loggedUser?.fullname ? loggedUser.fullname : "Họ và tên"}
+                        {loggedUser?.fullName ? loggedUser.fullName : "Họ và tên"}
                     </Avatar>
                 </Header>
                 <Content style={{ margin: '0 16px' }} >

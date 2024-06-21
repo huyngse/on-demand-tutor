@@ -12,8 +12,10 @@ const ClassCard = ({ classData }: ClassCardProps) => {
     return (
         <div className="bg-white flex rounded-lg drop-shadow overflow-hidden">
             <div className="w-[175px] p-5 bg-blue-500 text-white font-semibold flex flex-col justify-center items-center">
-                <Avatar src={DefaultAvatar} size="large" />
-                <p>Họ và tên</p>
+                <Avatar src={classData.tutor.profileImage ? classData.tutor.profileImage : DefaultAvatar} size="large" >
+                    <p>{classData.tutor.fullName}</p>
+                </Avatar>
+                <p>{classData.tutor.fullName}</p>
                 <p>{formatDate(new Date(classData.createdDate))}</p>
             </div>
             <div className="p-3 flex-1">
