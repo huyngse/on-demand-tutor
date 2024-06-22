@@ -86,10 +86,10 @@ const StudentProfilePage = () => {
                     <span className="block">Email: {studentDetail.emailAddress}</span>
                     <span className="block">Ngày sinh: {studentDetail.dateOfBirth}</span>
                     <span className="block">Giới tính: {studentDetail.gender}</span>
-                    <span className="block">Địa chỉ: {`${studentDetail.city}, 
-                    ${studentDetail.district}, 
+                    <span className="block">Địa chỉ: {`${studentDetail.street}, 
                     ${studentDetail.ward}, 
-                    ${studentDetail.street}`}</span>
+                    ${studentDetail.district}, 
+                    ${studentDetail.city}`}</span>
                   </div>
                 </td>
               </tr>
