@@ -2,6 +2,7 @@ import BackButton from "@/components/BackButton"
 import TiptapInput from "@/components/tiptap/TiptapInput";
 import { useAppSelector } from "@/hooks/useRedux";
 import { getVietnamAddress } from "@/lib/api/address-api";
+import { createClass } from "@/lib/api/class-api";
 import { setAddress } from "@/lib/redux/addressSlice";
 import { CityType, DistrictType, WardType } from "@/types/address";
 import { SelectOptionType } from "@/types/antd-types";
@@ -11,20 +12,23 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 type FieldType = {
-  ClassName: string;
-  ClassInfo: string;
-  ClassRequire: string;
-  ClassAddress: string;
-  ClassMethod: string;
-  ClassLevel: string;
-  ClassFee: string;
-  City: string;
-  Ward: string;
-  District: string;
-  Active: boolean;
-  TutorId: number;
+  className: string;
+  classTime: string;
+  classInfo: string;
+  classRequire: string;
+  classAddress: string;
+  classMethod: string;
+  classLevel: string;
+  createdDate: string;
+  city: string;
+  ward: string;
+  classFee: number;
+  district: string;
+  tutorId: number;
+  active: boolean
 };
 const TutorCreateClassPage = () => {
+  const loggedUser = useAppSelector(state => state.user.loggedUser);
   const addresses: CityType[] = useAppSelector(state => state.address.value);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
   const [wards, setWards] = useState<WardType[]>([]);
@@ -62,34 +66,50 @@ const TutorCreateClassPage = () => {
     const selectedCity = addresses.find(addr => addr.Name == e);
     if (selectedCity == null) return;
     setDistricts(selectedCity.Districts);
+    form.setFieldValue("district", null);
+    form.setFieldValue("ward", null);
     setWards([]);
   }
   const onDistrictChange = (e: any) => {
     const selectedDistrict = districts.find(addr => addr.Name == e);
     if (selectedDistrict == null) return;
     setWards(selectedDistrict.Wards);
+    form.setFieldValue("ward", null);
   }
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-    toast.success("Tạo lớp thành công!");
-    setTimeout(() => { navigate("/tutor/class") }, 1000);
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const requestBody = {
+      ...values
+    }
+    requestBody.createdDate = new Date().toISOString();
+    requestBody.classTime = new Date().toISOString();
+    requestBody.classAddress = "";
+    requestBody.tutorId = loggedUser?.userId;
+    console.log(requestBody);
+    const { error } = await createClass(requestBody);
+    if (error) {
+      toast.error("Tạo lớp tạo lớp thất bại!");
+    } else {
+      toast.success("Tạo lớp thành công!");
+      setTimeout(() => { navigate("/tutor/class") }, 1000);
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       const addressResult = await getVietnamAddress();
       if (addressResult.data != null) {
         dispatch(setAddress(addressResult.data));
       }
-      form.setFieldValue("Active", true);
-      form.setFieldValue("ClassAddress", "a");
-      form.setFieldValue("ClassFee", 10000);
     }
     fetchData();
+    form.setFieldValue("active", true);
+    form.setFieldValue("classFee", 10000);
   }, []);
+
   return (
     <div>
       <BackButton title="Quay về" iconWidth={15} />
@@ -106,31 +126,31 @@ const TutorCreateClassPage = () => {
         <div className="p-5 rounded drop-shadow bg-white">
           <Form.Item
             label="Tên lớp"
-            name="ClassName"
+            name="className"
             rules={[{ required: true, message: 'Vui lòng nhập tên lớp!' }]}
           >
             <Input placeholder="Tên lớp" />
           </Form.Item>
           <Form.Item
             label="Thông tin lớp"
-            name="ClassInfo"
+            name="classInfo"
             rules={[{ required: true, message: 'Vui lòng nhập thông tin lớp học!' }]}
           >
-            <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('ClassInfo', string)} />
+            <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('classInfo', string)} />
           </Form.Item>
           <Form.Item
             label="Yêu cầu lớp học"
-            name="ClassRequire"
+            name="classRequire"
             rules={[{ required: true, message: 'Vui lòng nhập yêu cầu lớp học!' }]}
           >
-            <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('ClassRequire', string)} />
+            <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('classRequire', string)} />
           </Form.Item>
-          <hr className="my-2"/>
+          <hr className="my-2" />
 
           <h3 className="font-bold text-lg mb-2">Địa chỉ lớp</h3>
           <Form.Item
             label="Tỉnh/thành"
-            name="City"
+            name="city"
             rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành!' }]}
             wrapperCol={{ span: 8 }}
           >
@@ -143,7 +163,7 @@ const TutorCreateClassPage = () => {
           </Form.Item>
           <Form.Item
             label="Quận/huyện"
-            name="District"
+            name="district"
             rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
             wrapperCol={{ span: 8 }}
           >
@@ -155,8 +175,8 @@ const TutorCreateClassPage = () => {
             />
           </Form.Item>
           <Form.Item
-            label="Phường/xã"
-            name="Ward"
+            label="phường/xã"
+            name="ward"
             rules={[{ required: true, message: 'Vui lòng chọn phường/xã!' }]}
             wrapperCol={{ span: 8 }}
           >
@@ -167,11 +187,11 @@ const TutorCreateClassPage = () => {
             />
           </Form.Item>
 
-          <hr className="my-2"/>
+          <hr className="my-2" />
 
           <Form.Item
             label="Phương thức dạy"
-            name="ClassMethod"
+            name="classMethod"
             rules={[{ required: true, message: 'Vui lòng chọn phương thức dạy học!' }]}
           >
             <Radio.Group>
@@ -181,15 +201,29 @@ const TutorCreateClassPage = () => {
           </Form.Item>
           <Form.Item
             label="Trình độ lớp học"
-            name="ClassLevel"
+            name="classLevel"
             rules={[{ required: true, message: 'Vui lòng nhập trình độ lớp học!' }]}
           >
             <Input placeholder="Trình độ lớp học" />
           </Form.Item>
           <Form.Item
             label="Phí dạy học"
-            name="ClassFee"
-            rules={[{ required: true, message: 'Vui lòng nhập phí dạy học' }]}
+            name="classFee"
+            rules={[
+              { required: true, message: 'Vui lòng nhập phí dạy học' },
+              {
+                validator: (_, value) => {
+                  if (value) {
+                    if (value < 10000) {
+                      return Promise.reject(new Error('Phí dạy học phải ít nhất 10.000₫'))
+                    } else if (value > 1000000000) {
+                      return Promise.reject(new Error('Phí dạy học tối đa 1.000.000.000₫'))
+                    }
+                    return Promise.resolve();
+                  }
+                },
+              },
+            ]}
           >
             <InputNumber
               placeholder="Phí dạy học"
@@ -201,7 +235,7 @@ const TutorCreateClassPage = () => {
           </Form.Item>
           <Form.Item
             label="Trạng thái lớp"
-            name="Active"
+            name="active"
             rules={[{ required: true, message: 'Vui lòng chọn trạng thái lớp học!' }]}
           >
             <Radio.Group>

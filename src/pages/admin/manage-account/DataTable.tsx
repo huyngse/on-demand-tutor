@@ -174,7 +174,7 @@ const DataTable = ({ dataSource }: DataTableProps) => {
             key: 'action',
             render: (_: any, record: any) => (
                 <div>
-                    <ActionButton id={record.userId} isActive={false} />
+                    <ActionButton id={record.userId} isActive={record.isActive} />
                 </div>
             ),
         },
