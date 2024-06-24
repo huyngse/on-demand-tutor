@@ -31,11 +31,7 @@ const LoginPage = () => {
     setIsLoading(true);
     const { data, error } = await login(values.userName, values.password);
     if (error) {
-      if (error.includes("User does not exist")) {
-        toast.error("Sai mật khẩu hoặc tên đăng nhập!");
-      } else {
-        toast.error("Kết nối server thất bại!");
-      }
+      toast.error("Đăng nhập thất bại thất bại!");
       setIsLoading(false);
       return;
     } else {

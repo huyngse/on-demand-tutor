@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { axiosClient } from './config/axios-client';
 export const handleApiError = (error: any) => {
   try {
-    const errorMessage = error.response?.data || 'An unexpected error occurred.';
+    const errorMessage = error.Errors?.ErrorMessage || 'An unexpected error occurred.';
     const data = null;
     return { error: errorMessage, data };
   } catch (err) {
@@ -19,8 +19,9 @@ export const login = async (userName: string, password: string) => {
   }
   try {
     const { data } = await axiosClient.post("api/v1/users/login", requestBody);
-
-    if (data) {
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
       response.data = data;
       response.success = true;
     }
@@ -34,11 +35,12 @@ export const register = async (requestBody: any) => {
   const response: any = { error: null, data: null, success: false }
   try {
     const { data } = await axiosClient.post("api/v1/users/register", requestBody);
-    if (data) {
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
       response.data = data;
       response.success = true;
     }
-    return response;
   } catch (error) {
     return handleApiError(error);
   }
