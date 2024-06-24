@@ -83,7 +83,7 @@ const TutorProfilePage = () => {
                   <span className="font-semibold">Giới tính: </span> {loggedUser.gender == "Male" ? "Nam" : "Nữ"}
                 </p>
                 <p>
-                  <span className="font-semibold">Địa chỉ: </span>  {tutorDetail?.street}, {tutorDetail?.ward}, {tutorDetail?.district}, {tutorDetail?.city}
+                  <span className="font-semibold">Địa chỉ: </span>  {tutorDetail?.street && tutorDetail?.street + ", "} {tutorDetail?.ward}, {tutorDetail?.district}, {tutorDetail?.city}
                 </p>
                 <p>
                   <span className="font-semibold">Nghề nghiệp: </span>  {tutorDetail?.tutorType}

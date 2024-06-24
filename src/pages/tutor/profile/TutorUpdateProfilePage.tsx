@@ -4,15 +4,14 @@ import { getVietnamAddress } from "@/lib/api/address-api";
 import { setAddress } from "@/lib/redux/addressSlice";
 import { CityType, DistrictType, WardType } from "@/types/address";
 import { SelectOptionType } from "@/types/antd-types";
-import { Button, DatePicker, Form, FormProps, Input, InputNumber, Radio, Select } from "antd"
+import { Button, DatePicker, Form, FormProps, Input, Radio, Select } from "antd"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import tutorTypesData from "@/data/tutorTypes.json";
-import subjectsData from "@/data/subjects.json";
-import { getTutorByAccountId } from "@/lib/api/tutor-api";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import { getAccountById } from "@/lib/api/account-api";
 type FieldType = {
   fullName: string;
   gender: string;
@@ -21,18 +20,11 @@ type FieldType = {
   ward: string;
   street: string;
   tutorType: string;
-  subjects: any[];
   school: string;
   basicInfo: string;
-  experimentInfo: string;
-  achievementInfo: string;
-  teachingTopic: string;
-  teachingArea: string;
   dob: string;
-  teachingMethod: string;
   phoneNumber: string;
-  email: string;
-  pricePerSession: number;
+  emailAddress: string;
 };
 const TutorUpdateProfilePage = () => {
   const [form] = Form.useForm();
@@ -78,13 +70,6 @@ const TutorUpdateProfilePage = () => {
       label: tutorType.name
     }
   });
-  var subjectOptions: SelectOptionType[] = [];
-  subjectOptions = subjectsData.map(subject => {
-    return {
-      value: subject.id + "",
-      label: subject.name
-    }
-  });
   const onCityChange = (e: any) => {
     const selectedCity = addresses.find(addr => addr.Name == e);
     if (selectedCity == null) return;
@@ -103,7 +88,7 @@ const TutorUpdateProfilePage = () => {
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values);
     toast.success("Cập nhật thông tin thành công!");
-    setTimeout(() => {navigate("/tutor/profile")}, 1000);
+    setTimeout(() => { navigate("/tutor/profile") }, 1000);
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -118,14 +103,14 @@ const TutorUpdateProfilePage = () => {
         dispatch(setAddress(addressResult.data));
       }
       if (loggedUser) {
-        const tutorResult = await getTutorByAccountId(loggedUser.id);
-        if (tutorResult.data) {
+        const tutorResult = await getAccountById(loggedUser.userId);
+        if (tutorResult) {
           setTutorDetail(tutorResult.data);
           form.setFieldValue("username", loggedUser.username);
-          form.setFieldValue("email", loggedUser.email);
+          form.setFieldValue("emailAddress", loggedUser.emailAddress);
           form.setFieldValue("fullName", loggedUser.fullName);
           form.setFieldValue("gender", loggedUser.gender);
-          form.setFieldValue("phone", loggedUser.phone);
+          form.setFieldValue("phoneNumber", loggedUser.phoneNumber);
           form.setFieldValue("city", tutorResult.data.city);
           form.setFieldValue("district", tutorResult.data.district);
           form.setFieldValue("ward", tutorResult.data.ward);
@@ -134,12 +119,6 @@ const TutorUpdateProfilePage = () => {
           form.setFieldValue("tutorType", tutorResult.data.tutorType);
           form.setFieldValue("school", tutorResult.data.school);
           form.setFieldValue("basicInfo", tutorResult.data.basicInfo);
-          form.setFieldValue("experimentInfo", tutorResult.data.experimentInfo);
-          form.setFieldValue("achievementInfo", tutorResult.data.achievementInfo);
-          form.setFieldValue("teachingTopic", tutorResult.data.teachingTopic);
-          form.setFieldValue("teachingArea", tutorResult.data.teachingArea);
-          form.setFieldValue("pricePerSession", tutorResult.data.pricePerSession);
-          form.setFieldValue("subjects", tutorResult.data.subjects.map(subject => subject.id + ""));
         }
       }
     }
@@ -169,11 +148,11 @@ const TutorUpdateProfilePage = () => {
           rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
           className="col-span-6 mb-0"
         >
-          <Input placeholder="Tên đăng nhập" />
+          <Input placeholder="Tên đăng nhập" disabled/>
         </Form.Item>
         <Form.Item
           label="Email"
-          name="email"
+          name="emailAddress"
           rules={[{ required: true, message: 'Vui lòng nhập email' }]}
           className="col-span-6 mb-0"
 
@@ -220,14 +199,14 @@ const TutorUpdateProfilePage = () => {
             className="mb-0"
           >
             <Radio.Group>
-              <Radio value="male"> Nam </Radio>
-              <Radio value="female"> Nữ </Radio>
+              <Radio value="Male"> Nam </Radio>
+              <Radio value="Female"> Nữ </Radio>
             </Radio.Group>
           </Form.Item>
         </div>
         <Form.Item
           label="Số điện thoại"
-          name="phone"
+          name="phoneNumber"
           className="col-span-6 mb-0"
         >
           <Input placeholder="Số điện thoại" />
@@ -268,19 +247,6 @@ const TutorUpdateProfilePage = () => {
                 Thông tin gia sư
               </h2>
               <Form.Item
-                label="Phí dạy học (vnd/buổi)"
-                name="pricePerSession"
-                className="m-0 col-span-6"
-                rules={[{ required: true, message: 'Vui lòng nhập phí dạy học!' }]}
-              >
-                <InputNumber
-                  placeholder="Phí dạy học (vnd/buổi)"
-                  min={10000}
-                  max={1000000000}
-                  className="w-full"
-                />
-              </Form.Item>
-              <Form.Item
                 label="Nghề nghiệp"
                 name="tutorType"
                 className="m-0 col-span-6"
@@ -291,20 +257,12 @@ const TutorUpdateProfilePage = () => {
               <Form.Item
                 label="Trường đang học/đã tốt nghiệp"
                 name="school"
-                className="m-0 col-span-12"
+                className="m-0 col-span-6"
                 rules={[{ required: true, message: 'Vui lòng nhập trường học!' }]}
               >
                 <Input placeholder="Trường đang học/đã tốt nghiệp" />
               </Form.Item>
-              <Form.Item label="Nhận dạy môn học" name="subjects" className="m-0 col-span-12">
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: '100%' }}
-                  placeholder="Chọn môn dạy học"
-                  options={subjectOptions}
-                />
-              </Form.Item>
+            
               <div className="col-span-12">
                 <div className="mb-2 font-semibold text-lg">
                   Thông tin cơ bản
@@ -314,50 +272,6 @@ const TutorUpdateProfilePage = () => {
                   className="mb-0"
                 >
                   <TiptapInput content={tutorDetail.basicInfo} handleUpdate={(string: string) => form.setFieldValue('basicInfo', string)} />
-                </Form.Item>
-              </div>
-              <div className="col-span-12">
-                <div className="mb-2 font-semibold text-lg">
-                  Kinh nghiệm gia sư, giảng dạy
-                </div>
-                <Form.Item
-                  name="experimentInfo"
-                  className="mb-0"
-                >
-                  <TiptapInput content={tutorDetail.experimentInfo} handleUpdate={(string: string) => form.setFieldValue('experimentInfo', string)} />
-                </Form.Item>
-              </div>
-              <div className="col-span-12">
-                <div className="mb-2 font-semibold text-lg">
-                  Thành tích trong học tập và dạy học
-                </div>
-                <Form.Item
-                  name="achievementInfo"
-                  className="mb-0"
-                >
-                  <TiptapInput content={tutorDetail.achievementInfo} handleUpdate={(string: string) => form.setFieldValue('achievementInfo', string)} />
-                </Form.Item>
-              </div>
-              <div className="col-span-12">
-                <div className="mb-2 font-semibold text-lg">
-                  Chủ đề dạy
-                </div>
-                <Form.Item
-                  name="teachingTopic"
-                  className="mb-0"
-                >
-                  <TiptapInput content={tutorDetail.teachingTopic} handleUpdate={(string: string) => form.setFieldValue('teachingTopic', string)} />
-                </Form.Item>
-              </div>
-              <div className="col-span-12">
-                <div className="mb-2 font-semibold text-lg">
-                  Khu vực dạy
-                </div>
-                <Form.Item
-                  name="teachingArea"
-                  className="col-span-6 mb-0"
-                >
-                  <TiptapInput content={tutorDetail.teachingArea} handleUpdate={(string: string) => form.setFieldValue('teachingArea', string)} />
                 </Form.Item>
               </div>
             </>
