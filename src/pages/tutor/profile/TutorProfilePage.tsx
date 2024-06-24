@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
+import { formatDate } from "@/utils/dateUtil";
 
 const TutorProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
@@ -58,9 +59,38 @@ const TutorProfilePage = () => {
           <img src={pfp} alt="" className="w-full h-full object-cover" onError={() => { setPfp(DefaultPfp) }} />
         </div>
         <div className="flex justify-between flex-1">
-          <h2 className="text-3xl font-bold">
-            {loggedUser.fullName}
-          </h2>
+          <div className="flex-1">
+            <h2 className="text-3xl font-bold mb-2">
+              {loggedUser.fullName}
+            </h2>
+            <div className="flex">
+              <div className="flex-1 flex flex-col gap-2">
+                <p>
+                  <span className="font-semibold">Tên đăng nhập: </span> {loggedUser.username}
+                </p>
+                <p>
+                  <span className="font-semibold">Số điện thoại: </span> {loggedUser.phoneNumber}
+                </p>
+                <p>
+                  <span className="font-semibold">Email: </span> {loggedUser.emailAddress}
+                </p>
+                <p>
+                  <span className="font-semibold">Ngày sinh: </span> {formatDate(new Date(loggedUser.dateOfBirth))}
+                </p>
+              </div>
+              <div className="flex-1 flex flex-col gap-2">
+                <p>
+                  <span className="font-semibold">Giới tính: </span> {loggedUser.gender == "Male" ? "Nam" : "Nữ"}
+                </p>
+                <p>
+                  <span className="font-semibold">Địa chỉ: </span>  {tutorDetail?.street}, {tutorDetail?.ward}, {tutorDetail?.district}, {tutorDetail?.city}
+                </p>
+                <p>
+                  <span className="font-semibold">Nghề nghiệp: </span>  {tutorDetail?.tutorType}
+                </p>
+              </div>
+            </div>
+          </div>
           <Dropdown menu={{ items }} trigger={['click']}>
             <Button type="default" shape="circle" icon={<EllipsisVertical width={15} />} className="me-3" />
           </Dropdown>
@@ -73,20 +103,6 @@ const TutorProfilePage = () => {
         {
           tutorDetail && <TiptapView content={tutorDetail?.basicInfo} />
         }
-        <h4 className="font-semibold  text-2xl mt-3 mb-1">
-          Gia sư đang là
-        </h4>
-        <span className="bg-gray-300 px-3 py-1 rounded-full">
-          {
-            tutorDetail?.tutorType
-          }
-        </span>
-        <h4 className="font-semibold  text-2xl mt-3 mb-1">
-          Địa chỉ
-        </h4>
-        <p>
-          {tutorDetail?.street}, {tutorDetail?.ward}, {tutorDetail?.district}, {tutorDetail?.city}
-        </p>
       </div>
       <div className="bg-white drop-shadow p-3 rounded-lg mb-2">
         <h4 className="font-semibold  text-2xl mb-2">
