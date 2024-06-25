@@ -3,33 +3,37 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Dropdown, MenuProps } from "antd";
 import { Pencil, EllipsisVertical, ImageUp } from "lucide-react";
+import { getUserById } from "@/lib/api/user-api";
+import { toast } from "react-toastify";
 
-interface User {
-  ProfileImage: string;
-  PhoneNumber: number;
-  EmailAddress: string;
-  DateOfBirth: string;
-  Gender: string;
-  Role: string;
-  City: string;
-  District: string;
-  Ward: string;
-  Street: string;
-}
 
 const StudentProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
-  const [studentDetail, setStudentDetail] = useState<User | null>(null);
+  const [studentDetail, setStudentDetail] = useState<any>();
+
+  // useEffect(() => {
+  //   const fetchStudentDetails = async () => {
+  //     const result = await fetch(`/api/student/${loggedUser?.id}`);
+  //     const data = await result.json();
+  //     setStudentDetail(data);
+  //   };
+
+  //   fetchStudentDetails();
+  // }, [loggedUser]);
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
-      const result = await fetch(`/api/student/${loggedUser?.id}`);
-      const data = await result.json();
-      setStudentDetail(data);
+      const { error, data } = await getUserById(loggedUser.userId);
+      if (error) {
+        toast.error("loi");
+      } else {
+        setStudentDetail(data);
+      }
     };
-
-    fetchStudentDetails();
+    if (loggedUser) {
+      fetchStudentDetails();
+    }
   }, [loggedUser]);
 
   const items: MenuProps['items'] = [
@@ -45,13 +49,13 @@ const StudentProfilePage = () => {
       onClick: () => { navigate("/student/profile/edit") }
     }
   ];
-  if(loggedUser == null) return;
-
+  if (loggedUser == null) return;
+  if (studentDetail == null) return;
   return (
     <div>
       <div className="bg-white drop-shadow p-3 rounded-lg flex gap-2 mb-2">
         <div className="overflow-hidden drop-shadow rounded-lg aspect-square w-[150px]">
-          <img src={studentDetail?.ProfileImage} alt="" className="w-full h-full object-cover" />
+          <img src={studentDetail.profileImage} alt="" className="w-full h-full object-cover" />
         </div>
         <div className="flex-1 flex flex-col justify-center gap-2">
           <div className="flex justify-between">
@@ -77,11 +81,15 @@ const StudentProfilePage = () => {
               <tr>
                 <td className="py-2">
                   <div className="flex flex-col gap-2">
-                    <span className="block">Email: {loggedUser?.EmailAddress}</span>
-                    <span className="block">Ngày sinh: {loggedUser?.DateOfBirth}</span>
-                    <span className="block">Giới tính: {loggedUser?.Gender}</span>
-                    <span className="block">Số điện thoại: {loggedUser?.PhoneNumber}</span>
-                    <span className="block">Địa chỉ: {`${loggedUser?.Street}, ${loggedUser?.Ward}, ${loggedUser?.District}, ${loggedUser?.City}`}</span>
+                    <span className="block">Họ và tên: {studentDetail.fullname}</span>
+                    <span className="block">Số điện thoại: {studentDetail.phoneNumber}</span>
+                    <span className="block">Email: {studentDetail.emailAddress}</span>
+                    <span className="block">Ngày sinh: {studentDetail.dateOfBirth}</span>
+                    <span className="block">Giới tính: {studentDetail.gender == "Male" ? "Nam" : "Nữ"}</span>
+                    <span className="block">Địa chỉ: {`${studentDetail.street}, 
+                    ${studentDetail.ward}, 
+                    ${studentDetail.district}, 
+                    ${studentDetail.city}`}</span>
                   </div>
                 </td>
               </tr>
