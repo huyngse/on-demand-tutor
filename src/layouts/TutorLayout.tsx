@@ -1,9 +1,11 @@
 import useAuthentication from "@/hooks/useAuthentication";
 import { useAppSelector } from "@/hooks/useRedux";
-import { Avatar, Layout, Menu, MenuProps } from "antd";
+import { getTutorBooking } from "@/lib/api/booking-api";
+import { Avatar, Badge, Layout, Menu, MenuProps } from "antd";
 import { ArrowBigLeft, Bell, CalendarClock, CircleUserRound, DoorOpen, LayoutDashboard, Shapes } from "lucide-react";
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -15,6 +17,23 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
     const loggedUser = useAppSelector(state => state.user.loggedUser);
     const navigate = useNavigate();
     const { logout } = useAuthentication();
+    const [bookings, setBookings] = useState<any[]>([]);
+    useEffect(() => {
+        const fetchTutorBooking = async () => {
+            const { error, data } = await getTutorBooking(loggedUser.userId);
+            if (error) {
+                toast.error("Lấy thông tin đặt lớp thất bại!", {
+                    toastId: 'error_tutorAvatarBooking',
+                });
+            } else {
+                const filteredBookings = data.filter((booking: any) => booking.status == "Pending");
+                setBookings(filteredBookings);
+            }
+        }
+        if (loggedUser) {
+            fetchTutorBooking();
+        }
+    }, [loggedUser]);
     const items: MenuItem[] = [
         {
             label: "Dashboard",
@@ -27,7 +46,11 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
             icon: <CircleUserRound />,
         },
         {
-            label: "Danh sách lớp học",
+            label: <Badge count={bookings.length}>
+                <div className="pe-3">
+                    Danh sách lớp học
+                </div>
+            </Badge>,
             key: "class",
             icon: <Shapes />,
         },

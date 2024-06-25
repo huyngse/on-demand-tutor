@@ -1,11 +1,33 @@
+import { Roles } from "@/constants/roles";
 import useAuthentication from "@/hooks/useAuthentication";
 import { useAppSelector } from "@/hooks/useRedux";
-import { Avatar, Dropdown, MenuProps } from "antd"
+import { getTutorBooking } from "@/lib/api/booking-api";
+import { Avatar, Badge, Dropdown, MenuProps } from "antd"
 import { CircleUser, DoorOpen } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const AppAvartar = ({ user }: any) => {
+const AppAvartar = () => {
     const loggedUser = useAppSelector(state => state.user.loggedUser);
     const { logout } = useAuthentication();
+    const [bookings, setBookings] = useState<any[]>([]);
+    useEffect(() => {
+        const fetchTutorBooking = async () => {
+            const { error, data } = await getTutorBooking(loggedUser.userId);
+            if (error) {
+                toast.error("Lấy thông tin đặt lớp thất bại!", {
+                    toastId: 'error_tutorAvatarBooking',
+                });
+            } else {
+                const filteredBookings = data.filter((booking: any) => booking.status == "Pending");
+                setBookings(filteredBookings);
+            }
+        }
+        if (loggedUser.role == Roles.Tutor) {
+            fetchTutorBooking();
+        }
+    }, [])
+
     var profileUrl: string;
     switch (loggedUser.role) {
         case "Admin": {
@@ -50,13 +72,30 @@ const AppAvartar = ({ user }: any) => {
                 <p className="font-semibold">
                     {loggedUser.fullName ? loggedUser.fullName : "Họ và tên"}
                 </p>
-                <Avatar
-                    shape="circle"
-                    className="drop-shadow"
-                    src={loggedUser.profileImage}
-                >
-                    {loggedUser.fullName ? loggedUser.fullName : "Họ và tên"}
-                </Avatar>
+                {
+                    (loggedUser.role == Roles.Tutor || loggedUser.role == Roles.Student) && (
+                        <Badge count={bookings.length}>
+                            <Avatar
+                                shape="circle"
+                                className="drop-shadow"
+                                src={loggedUser.profileImage}
+                            >
+                                {loggedUser.fullName ? loggedUser.fullName : "Họ và tên"}
+                            </Avatar>
+                        </Badge>
+                    )
+                }
+                {
+                    loggedUser.role != Roles.Tutor && loggedUser.role != Roles.Student && (
+                        <Avatar
+                            shape="circle"
+                            className="drop-shadow"
+                            src={loggedUser.profileImage}
+                        >
+                            {loggedUser.fullName ? loggedUser.fullName : "Họ và tên"}
+                        </Avatar>
+                    )
+                }
             </div>
         </Dropdown>
     )

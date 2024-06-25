@@ -24,10 +24,6 @@ export const getAllUsers = async () => {
     } catch (error) {
       return handleApiError(error);
     }
-    return response;
-  } catch (error) {
-    return handleApiError(error);
-  }
 }
 
 export const getUserById = async (userId: number) => {

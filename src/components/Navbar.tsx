@@ -5,8 +5,6 @@ import { useAppSelector } from "@/hooks/useRedux";
 
 const Navbar = () => {
     const loggedUser = useAppSelector(state => state.user.loggedUser);;
- 
-
     return (
         <div className="flex justify-between px-5 py-3 shadow">
             <div className="flex items-center gap-5">
@@ -29,7 +27,7 @@ const Navbar = () => {
             <div className="flex gap-3 items-center">
                 {
                     loggedUser ? (
-                        <AppAvartar user={loggedUser} />
+                        <AppAvartar />
                     ) : (
                         <>
                             <Link to="/login">
