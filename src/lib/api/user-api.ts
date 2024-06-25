@@ -24,5 +24,22 @@ export const getAllUsers = async () => {
     } catch (error) {
       return handleApiError(error);
     }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
   }
-  
+}
+
+export const getUserById = async (userId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`/api/v1/users/idTmp?idTmp=${userId}`);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
