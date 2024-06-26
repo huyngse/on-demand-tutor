@@ -26,6 +26,7 @@ import StudentClassPage from "./student/class/StudentClassPage";
 import StudentProfilePage from "./student/profile/StudentProfile_Page";
 import StudentTimetable from "./student/timetable/StudentTimetable";
 import StudentUpdateProfilePage from "./student/profile/UpdateStudentProfile_Page";
+import AdminManageClassPage from "./admin/manage-class/ManageClassPage";
 export {
     LoginPage,
     HomePage,
@@ -55,4 +56,5 @@ export {
     StudentProfilePage,
     StudentTimetable,
     StudentUpdateProfilePage,
+    AdminManageClassPage
 };

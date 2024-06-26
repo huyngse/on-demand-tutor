@@ -26,6 +26,7 @@ import {
     TutorClassDetailPage,
     TutorUpdateClassPage,
     ClassDetailPage,
+    AdminManageClassPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -119,6 +120,12 @@ const router = createBrowserRouter([
                 path: '/admin/tutor/:tutorId/edit',
                 element: (
                     <AdminUpdateTutorPage />
+                ),
+            },
+            {
+                path: '/admin/manage-class',
+                element: (
+                    <AdminManageClassPage />
                 ),
             },
         ],
