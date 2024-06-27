@@ -52,7 +52,6 @@ const TutorClassPage = () => {
               numOfBooking: numOfBooking
             }
           })
-          console.log(tableData);
           setClasses(tableData);
         }
       }

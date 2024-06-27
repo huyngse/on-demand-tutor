@@ -39,10 +39,26 @@ export const updateSchedule = async (requestBody: any, scheduleId: number) => {
         return handleApiError(error);
     }
 }
-export const getScheduleById = async (scheduleId: number) => {
+// export const getScheduleById = async (scheduleId: number) => {
+//     const response: any = { error: null, data: null, success: false }
+//     try {
+//         const { data } = await axiosClient.get(`/api/v1/schedules/idTmp?id=${scheduleId}`);
+//         if (data && data.Errors) {
+//             response.error = data.Errors
+//         } else {
+//             response.data = data;
+//             response.success = true;
+//         }
+//         return response;
+//     } catch (error) {
+//         return handleApiError(error);
+//     }
+// }
+
+export const deleteSchedule = async (scheduleId: number) => {
     const response: any = { error: null, data: null, success: false }
     try {
-        const { data } = await axiosClient.get(`/api/v1/schedules/idTmp?id=${scheduleId}`);
+        const { data } = await axiosClient.delete(`/api/v1/schedules/${scheduleId}`);
         if (data && data.Errors) {
             response.error = data.Errors
         } else {
@@ -55,10 +71,10 @@ export const getScheduleById = async (scheduleId: number) => {
     }
 }
 
-export const deleteSchedule = async (scheduleId: number) => {
+export const getSchedulesByClassId = async (classId: number) => {
     const response: any = { error: null, data: null, success: false }
     try {
-        const { data } = await axiosClient.delete(`/api/v1/schedules?id=${scheduleId}`);
+        const { data } = await axiosClient.get(`/api/v1/schedules/class/${classId}`);
         if (data && data.Errors) {
             response.error = data.Errors
         } else {
