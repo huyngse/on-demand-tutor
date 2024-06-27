@@ -101,7 +101,7 @@ const TutorProfilePage = () => {
           Thông tin cơ bản
         </h4>
         {
-          tutorDetail && <TiptapView content={tutorDetail?.basicInfo} />
+          tutorDetail && <TiptapView content={tutorDetail?.tutorDescription} />
         }
       </div>
       <div className="bg-white drop-shadow p-3 rounded-lg mb-2">

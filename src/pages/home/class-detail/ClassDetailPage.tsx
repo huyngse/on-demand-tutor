@@ -38,7 +38,7 @@ const ClassDetailPage = () => {
   if (!classDetail) return;
   return (
     <div className="bg-gray-50">
-      <div className="mx-5 mt-3">
+      <div className="mx-5 pt-3">
         <BackButton title="Quay về" iconWidth={15} />
       </div>
       <div className="grid grid-cols-12">

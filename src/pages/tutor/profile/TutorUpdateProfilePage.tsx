@@ -21,8 +21,8 @@ type FieldType = {
   street: string;
   tutorType: string;
   school: string;
-  basicInfo: string;
-  dob: string;
+  tutorDescription: string;
+  dateOfBirth: string;
   phoneNumber: string;
   emailAddress: string;
 };
@@ -115,10 +115,10 @@ const TutorUpdateProfilePage = () => {
           form.setFieldValue("district", tutorResult.data.district);
           form.setFieldValue("ward", tutorResult.data.ward);
           form.setFieldValue("street", tutorResult.data.street);
-          form.setFieldValue("dob", dayjs(loggedUser.dob));
+          form.setFieldValue("dateOfBirth", dayjs(loggedUser.dateOfBirth));
           form.setFieldValue("tutorType", tutorResult.data.tutorType);
           form.setFieldValue("school", tutorResult.data.school);
-          form.setFieldValue("basicInfo", tutorResult.data.basicInfo);
+          form.setFieldValue("tutorDescription", tutorResult.data.tutorDescription);
         }
       }
     }
@@ -169,10 +169,10 @@ const TutorUpdateProfilePage = () => {
         </Form.Item>
         <div className="col-span-6">
           <div className="mb-2 flex items-center gap-1">
-            <span className="text-[1.2rem] text-red-400">*</span><label htmlFor="dob">Ngày sinh</label>
+            <span className="text-[1.2rem] text-red-400">*</span><label htmlFor="dateOfBirth">Ngày sinh</label>
           </div>
           <Form.Item
-            name="dob"
+            name="dateOfBirth"
             rules={[
               { required: true, message: 'Vui lòng nhập ngày sinh!' },
               {
@@ -186,7 +186,7 @@ const TutorUpdateProfilePage = () => {
             ]}
             className="mb-0"
           >
-            <DatePicker id="dob" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full" />
+            <DatePicker id="dateOfBirth" format={'DD/MM/YYYY'} placeholder="Ngày sinh" className="w-full" />
           </Form.Item>
         </div>
         <div className="col-span-6">
@@ -268,10 +268,10 @@ const TutorUpdateProfilePage = () => {
                   Thông tin cơ bản
                 </div>
                 <Form.Item
-                  name="basicInfo"
+                  name="tutorDescription"
                   className="mb-0"
                 >
-                  <TiptapInput content={tutorDetail.basicInfo} handleUpdate={(string: string) => form.setFieldValue('basicInfo', string)} />
+                  <TiptapInput content={tutorDetail.tutorDescription} handleUpdate={(string: string) => form.setFieldValue('tutorDescription', string)} />
                 </Form.Item>
               </div>
             </>
