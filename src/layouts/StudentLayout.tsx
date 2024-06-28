@@ -31,11 +31,13 @@ const StudentLayout = ({ children }: StudentLayoutProps) => {
             label: "Thời gian biểu",
             key: "timetable",
             icon: <CalendarClock />,
+            disabled: true,
         },
         {
             label: "Thông báo",
             key: "notification",
             icon: <Bell />,
+            disabled: true,
         },
         {
             type: 'divider',

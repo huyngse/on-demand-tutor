@@ -42,6 +42,23 @@ export const getTutorBooking = async (tutorId: number) => {
   }
 }
 
+export const getStudentBooking = async (studentId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/bookings/student/${studentId}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+
 type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended";
 export const changeBookingStatus = async (
   bookingId: number,

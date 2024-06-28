@@ -1,4 +1,4 @@
-import { formatNumberWithCommas } from "@/utils/numberUtil";
+import { formatDate } from "@/utils/dateUtil";
 import ActionButton from "./ActionButton";
 import { Table, Tag } from "antd";
 
@@ -12,13 +12,13 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
   const columns = [
     {
       title: 'ID',
-      dataIndex: 'classId',
-      key: 'classId',
+      dataIndex: 'bookingId',
+      key: 'bookingId',
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.classId < b.classId) {
+          if (a.bookingId < b.bookingId) {
             return -1;
-          } else if (a.classId > b.classId) {
+          } else if (a.bookingId > b.bookingId) {
             return 1;
           } else {
             return 0;
@@ -42,23 +42,15 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
         },
       },
     },
-
     {
-      title: 'Học phí',
-      dataIndex: 'classFee',
-      key: 'classFee',
-      render: (_: any, record: any) => {
-        return (
-          <span>
-            {formatNumberWithCommas(record.classFee)}₫
-          </span>
-        )
-      },
+      title: 'Gia sư',
+      dataIndex: 'tutorName',
+      key: 'tutorName',
       sorter: {
         compare: (a: any, b: any) => {
-          if (a.classFee < b.classFee) {
+          if (a.tutorName < b.tutorName) {
             return -1;
-          } else if (a.classFee > b.classFee) {
+          } else if (a.tutorName > b.tutorName) {
             return 1;
           } else {
             return 0;
@@ -66,7 +58,21 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
         },
       },
     },
-
+    {
+      title: 'Ngày đặt',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: {
+        compare: (a: any, b: any) => {
+          const dateA = new Date(a.createDate);
+          const dateB = new Date(b.createDate);
+          return dateB.getTime() - dateA.getTime()
+        },
+      },
+      render: (_: any, record: any) => {
+        return formatDate(new Date(record.createDate));
+      }
+    },
     {
       title: 'Trạng thái',
       key: 'status',
@@ -74,27 +80,37 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
         var color = "";
         var label = "";
         switch (record.status) {
-          case "pending": {
-            color = "default";
+          case "Pending": {
+            color = "blue";
             label = "Đợi xác nhận";
             break;
           }
-          case "accepted": {
+          case "Accepted": {
             color = "green";
             label = "Đã chấp nhận";
             break;
           }
-          case "denied": {
+          case "Started": {
+            color = "cyan";
+            label = "Đang học";
+            break;
+          }
+          case "Ended": {
+            color = "gold";
+            label = "Đã kết thúc";
+            break;
+          }
+          case "Denied": {
             color = "red";
             label = "Đã từ chối";
             break;
           }
-          case "cancelled": {
-            color = "volcano";
+          case "Cancelled": {
+            color = "default";
             label = "Đã hủy";
             break;
           }
-          case "request_change": {
+          case "Request_change": {
             color = "purple";
             label = "Yêu cầu đổi lịch";
             break;
@@ -127,7 +143,7 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
     },
   ];
   return (
-    <Table dataSource={dataSource} columns={columns} rowKey="classId" />
+    <Table dataSource={dataSource} columns={columns} rowKey="bookingId" />
   )
 }
 
