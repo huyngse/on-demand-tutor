@@ -27,7 +27,7 @@ export const createSchedule = async (requestBody: any) => {
 export const updateSchedule = async (requestBody: any, scheduleId: number) => {
     const response: any = { error: null, data: null, success: false }
     try {
-        const { data } = await axiosClient.put(`/api/v1/schedules?id=${scheduleId}`, requestBody);
+        const { data } = await axiosClient.put(`/api/v1/schedules/${scheduleId}`, requestBody);
         if (data && data.Errors) {
             response.error = data.Errors
         } else {

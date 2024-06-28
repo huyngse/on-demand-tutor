@@ -48,9 +48,9 @@ const UpdateScheduleButton = ({ scheduleData, classId, rerender }: UpdateSchedul
         }
         const { error } = await updateSchedule(requestBody, scheduleData.scheduleID);
         if (error) {
-            toast.error("Tạo lịch thất bại!");
+            toast.error("Cập nhật lịch thất bại!");
         } else {
-            toast.success("Tạo lịch thành công");
+            toast.success("Cập nhật lịch thành công");
             setTimeout(() => {
                 rerender();
             }, 1000);
@@ -83,6 +83,7 @@ const UpdateScheduleButton = ({ scheduleData, classId, rerender }: UpdateSchedul
             />
             <Modal
                 title="Chỉnh sửa thông tin lịch dạy"
+                forceRender
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -92,7 +93,6 @@ const UpdateScheduleButton = ({ scheduleData, classId, rerender }: UpdateSchedul
                 )}
             >
                 <Form
-                    name="basic"
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 18 }}
                     onFinish={onFinish}

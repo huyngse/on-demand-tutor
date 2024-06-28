@@ -10,9 +10,11 @@ import Schedule from "./Schedule";
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { Button } from "antd";
+import { getSchedulesByClassId } from "@/lib/api/schedule-api";
 const ClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [classDetail, setClassDetail] = useState<any>();
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [pfp, setPfp] = useState<string>();
 
   const { classId } = useParams();
@@ -20,14 +22,22 @@ const ClassDetailPage = () => {
     const fetchData = async () => {
       if (classId) {
         setIsLoading(true);
-        const { data, error } = await getClassById(parseInt(classId));
-        if (error) {
+        const classDetailResult = await getClassById(parseInt(classId));
+        if (classDetailResult.error) {
           toast.error("Lấy thông tin thất bại", {
             toastId: 'error_classDetail',
           });
         } else {
-          setClassDetail(data);
-          setPfp(data.tutor.profileImage);
+          setClassDetail(classDetailResult.data);
+          setPfp(classDetailResult.data.tutor.profileImage);
+        }
+        const schedulesResult = await getSchedulesByClassId(parseInt(classId));
+        if (schedulesResult.error) {
+          toast.error("Lấy lịch của lớp thất bại", {
+            toastId: 'error_tutorClassSchedule',
+          });
+        } else {
+          setSchedules(schedulesResult.data);
         }
         setIsLoading(false);
       }
@@ -95,16 +105,16 @@ const ClassDetailPage = () => {
             <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
           </div>
           {
-            classDetail.schedules.length == 0 && (
+            schedules.length == 0 && (
               <div className="bg-white rounded-lg drop-shadow p-3 font-semibold text-gray-500 text-center">
                 Lớp chưa có lịch dạy nào
               </div>
             )
           }
           {
-            classDetail.schedules.length != 0 && (
+            schedules.length != 0 && (
               <div className="flex flex-col gap-3">
-                {classDetail.schedules.map((schedule: any, index: number) => <Schedule data={schedule} key={`schedule-${index}`} />)}
+                {schedules.map((schedule: any, index: number) => <Schedule data={schedule} key={`schedule-${index}`} />)}
               </div>
             )
           }

@@ -15,7 +15,7 @@ import { getSchedulesByClassId } from "@/lib/api/schedule-api";
 const TutorClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [classDetail, setClassDetail] = useState<any>();
-  const [schedules, setSchedules] = useState<any[]>([])
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [renderKey, setRenderKey] = useState(0);
   const rerender = () => {
     setRenderKey(renderKey + 1);
@@ -95,7 +95,9 @@ const TutorClassDetailPage = () => {
       {
         classDetail.schedules.length != 0 && (
           <div className="flex flex-col gap-3">
-            {schedules.map((schedule: any) => <Schedule data={schedule} rerender={rerender} />)}
+            {schedules.map((schedule: any, index: number) => (
+              <Schedule data={schedule} rerender={rerender} key={`class-schedule-${index}`} />
+            ))}
           </div>
         )
       }

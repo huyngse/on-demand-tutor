@@ -6,7 +6,8 @@ import { deleteSchedule } from "@/lib/api/schedule-api";
 import { toast } from "react-toastify";
 import BookingCard from "./BookingCard";
 import { useState } from "react";
-
+import type { PopconfirmProps } from 'antd';
+import { Popconfirm } from 'antd';
 type ScheduleProps = {
   data: any;
   rerender: () => void;
@@ -24,6 +25,13 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
       }, 1000);
     }
   }
+  const confirm: PopconfirmProps['onConfirm'] = () => {
+    handleDeleteSchedule();
+  };
+
+  const cancel: PopconfirmProps['onCancel'] = () => {
+  };
+
   if (!data) return;
   var pendingBookingCount = 0;
   data.bookings.forEach((booking: any) => {
@@ -39,13 +47,21 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
           {data.title}
         </p>
         <div className="flex gap-2">
-          <Button
-            type="default"
-            danger
-            shape="circle"
-            icon={<Trash2 width={15} />}
-            onClick={handleDeleteSchedule}
-          />
+          <Popconfirm
+            title="Xóa lịch"
+            description="Xác nhận xóa lịch học này?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Xóa"
+            cancelText="Hủy"
+          >
+            <Button
+              type="default"
+              danger
+              shape="circle"
+              icon={<Trash2 width={15} />}
+            />
+          </Popconfirm>
           <UpdateScheduleButton
             classId={0}
             scheduleData={data}
@@ -104,7 +120,13 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
                   <div className="flex flex-col gap-2">
                     {
                       data.bookings.map((booking: any, index: number) => {
-                        return <BookingCard key={`schedule-${data.scheduleID}-booking-${index}`} bookingData={booking} />
+                        return (
+                          <BookingCard
+                            key={`schedule-${data.scheduleID}-booking-${index}`}
+                            bookingData={booking}
+                            rerender={rerender}
+                          />
+                        )
                       })
                     }
                   </div>

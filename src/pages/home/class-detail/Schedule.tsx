@@ -107,7 +107,16 @@ const Schedule = ({ data }: ScheduleProps) => {
       }
       {
         loggedUser?.role != Roles.Tutor && (
-          <div className="text-end mt-5">
+          <div className="flex justify-end mt-5 gap-2 items-center">
+            {
+              data.bookings.length > 0 ? (
+                <p className="text-sm text-gray-500">Đã có {data.bookings.length} lượt đặt lịch này</p>
+              )
+              : 
+              (
+                <p className="text-sm text-gray-500">Chưa có lượt đặt nào</p>
+              )
+            }
             <Button type="primary" onClick={showModal}>Đặt học lịch này</Button>
             <Modal
               title="Đặt lịch học"
@@ -146,7 +155,7 @@ const Schedule = ({ data }: ScheduleProps) => {
                   label="Phương thức thanh toán"
                   rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
                 >
-                  <Radio.Group>
+                  <Radio.Group defaultValue="cash">
                     <Radio value="cash"> Thanh toán trực tiếp </Radio>
                     <Radio value="vnpay" disabled> Thanh toán VNPay </Radio>
                   </Radio.Group>
