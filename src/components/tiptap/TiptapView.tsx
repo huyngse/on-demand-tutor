@@ -1,9 +1,7 @@
 import { extensions } from './extensions';
 import { EditorProvider } from '@tiptap/react';
 
-const defaultContent = `
-<h2>This is a example</h2>
-`;
+const defaultContent = ``;
 
 export default function TiptapView({ content = defaultContent }: { content?: string }) {
     return (

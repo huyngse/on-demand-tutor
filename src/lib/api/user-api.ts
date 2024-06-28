@@ -2,7 +2,7 @@ import { axiosClient } from "./config/axios-client";
 
 export const handleApiError = (error: any) => {
   try {
-    const errorMessage = error.response?.data || 'An unexpected error occurred.';
+    const errorMessage = error.Errors?.ErrorMessage || 'An unexpected error occurred.';
     const data = null;
     return { error: errorMessage, data };
   } catch (err) {
@@ -12,16 +12,18 @@ export const handleApiError = (error: any) => {
 
 export const getAllUsers = async () => {
   const response: any = { error: null, data: null, success: false }
-  try {
-    const { data } = await axiosClient.get("api/v1/users");
-    if (data) {
-      response.data = data;
-      response.success = true;
+    try {
+        const { data } = await axiosClient.get("api/v1/users");
+        if (data && data.Errors) {
+          response.error = data.Errors
+        } else {
+          response.data = data;
+          response.success = true;
+        }
+      return response;
+    } catch (error) {
+      return handleApiError(error);
     }
-    return response;
-  } catch (error) {
-    return handleApiError(error);
-  }
 }
 
 export const getUserById = async (userId: number) => {

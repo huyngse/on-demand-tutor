@@ -7,6 +7,7 @@ import { SquarePlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/Loader";
 import { toast } from "react-toastify";
+import { getTutorBooking } from "@/lib/api/booking-api";
 
 const TutorClassPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,12 +21,39 @@ const TutorClassPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const { data, error } = await getAllClass();
-      if (error) {
-        toast.error("Lấy thông tin thất bại");
+      const classesResult = await getAllClass();
+      if (classesResult.error) {
+        toast.error("Lấy danh sách lớp thất bại", {
+          toastId: 'error_tutorClassList',
+        });
       } else {
-        const filteredListClass = data.filter((c: any) => c.tutorId == loggedUser.userId);
-        setClasses(filteredListClass);
+        const bookingResult = await getTutorBooking(loggedUser.userId);
+        if (bookingResult.error) {
+          toast.error("Lấy thông tin đặt lớp thất bại!", {
+            toastId: 'error_tutorAvatarBooking',
+          });
+        } else {
+          const filteredBookings = bookingResult.data.filter((booking: any) => booking.status == "Pending");
+          const filteredListClass = classesResult.data.filter((c: any) => c.tutorId == loggedUser.userId);
+          const tableData = filteredListClass.map((_class: any) => {
+            let numOfBooking = 0;
+            filteredBookings.forEach((booking: any) => {
+              if (booking.class.classId == _class.classId) {
+                numOfBooking++;
+              }
+            });
+            return {
+              classId: _class.classId,
+              className: _class.className,
+              classLevel: _class.classLevel,
+              classMethod: _class.classMethod,
+              classFee: _class.classFee,
+              active: _class.active,
+              numOfBooking: numOfBooking
+            }
+          })
+          setClasses(tableData);
+        }
       }
       setIsLoading(false);
     }
@@ -54,7 +82,7 @@ const TutorClassPage = () => {
       </div>
       {
         !isLoading &&
-          classes ? <Datatable dataSource={classes} rerender={rerender}/> : <Loader />
+          classes ? <Datatable dataSource={classes} rerender={rerender} /> : <Loader />
       }
     </div>
   )

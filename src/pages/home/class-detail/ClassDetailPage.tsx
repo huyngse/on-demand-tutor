@@ -10,35 +10,62 @@ import Schedule from "./Schedule";
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { Button } from "antd";
+import { getSchedulesByClassId } from "@/lib/api/schedule-api";
+import { useAppSelector } from "@/hooks/useRedux";
 const ClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [classDetail, setClassDetail] = useState<any>();
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [pfp, setPfp] = useState<string>();
-
+  const [renderKey, setRenderKey] = useState(0);
+  const rerender = () => {
+    setRenderKey(renderKey + 1);
+  }
   const { classId } = useParams();
   useEffect(() => {
     const fetchData = async () => {
       if (classId) {
         setIsLoading(true);
-        const { data, error } = await getClassById(parseInt(classId));
-        if (error) {
+        const classDetailResult = await getClassById(parseInt(classId));
+        if (classDetailResult.error) {
           toast.error("Lấy thông tin thất bại", {
             toastId: 'error_classDetail',
           });
         } else {
-          setClassDetail(data);
-          setPfp(data.tutor.profileImage);
+          setClassDetail(classDetailResult.data);
+          setPfp(classDetailResult.data.tutor.profileImage);
+        }
+        const schedulesResult = await getSchedulesByClassId(parseInt(classId));
+        if (schedulesResult.error) {
+          toast.error("Lấy lịch của lớp thất bại", {
+            toastId: 'error_tutorClassSchedule',
+          });
+        } else {
+          setSchedules(schedulesResult.data);
         }
         setIsLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [renderKey]);
   if (isLoading) return <Loader />
   if (!classDetail) return;
+  var pendingBooking: any;
+  var bookedScheduleId: number;
+  if (loggedUser && schedules) {
+    schedules.forEach((schedule: any) => {
+      schedule.bookings.forEach((booking: any) => {
+        if (booking.student.userId == loggedUser.userId && (booking.status == "Pending" || booking.status == "Accepted" || booking.status == "Started")) {
+          pendingBooking = booking;
+          bookedScheduleId = schedule.scheduleID;
+        }
+      })
+    })
+  }
   return (
     <div className="bg-gray-50">
-      <div className="mx-5 mt-3">
+      <div className="mx-5 pt-3">
         <BackButton title="Quay về" iconWidth={15} />
       </div>
       <div className="grid grid-cols-12">
@@ -95,16 +122,24 @@ const ClassDetailPage = () => {
             <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
           </div>
           {
-            classDetail.schedules.length == 0 && (
+            schedules.length == 0 && (
               <div className="bg-white rounded-lg drop-shadow p-3 font-semibold text-gray-500 text-center">
                 Lớp chưa có lịch dạy nào
               </div>
             )
           }
           {
-            classDetail.schedules.length != 0 && (
+            schedules.length != 0 && (
               <div className="flex flex-col gap-3">
-                {classDetail.schedules.map((schedule: any, index: number) => <Schedule data={schedule} key={`schedule-${index}`} />)}
+                {schedules.map((schedule: any, index: number) => (
+                  <Schedule
+                    data={schedule}
+                    key={`schedule-${index}`}
+                    rerender={rerender}
+                    pendingBooking={pendingBooking}
+                    isBooked={bookedScheduleId == schedule.scheduleID}
+                  />
+                ))}
               </div>
             )
           }

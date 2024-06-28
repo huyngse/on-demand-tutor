@@ -1,29 +1,35 @@
 import { Roles } from "@/constants/roles";
 import { useAppSelector } from "@/hooks/useRedux";
-import { createBooking } from "@/lib/api/booking-api";
+import { changeBookingStatus, createBooking } from "@/lib/api/booking-api";
 import { getTimeString } from "@/utils/dateUtil";
-import { Button, Form, FormProps, Input, Modal, Radio } from "antd";
+import { Button, DatePicker, Form, FormProps, Input, Modal, Popconfirm, PopconfirmProps, Radio } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { Dayjs } from "dayjs";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 type ScheduleProps = {
   data: any;
+  rerender: () => void;
+  pendingBooking: any;
+  isBooked: boolean;
 }
 type FieldType = {
   userId: number;
   scheduleId: number;
-  createDate: string;
   description: string;
-  status: string;
   address: string;
+  duration: Dayjs[],
 };
-const Schedule = ({ data }: ScheduleProps) => {
+const { RangePicker } = DatePicker;
+
+const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: ScheduleProps) => {
   const navigate = useNavigate();
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const showModal = () => {
     if (!loggedUser) {
@@ -46,20 +52,23 @@ const Schedule = ({ data }: ScheduleProps) => {
   };
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    const requestBody = {
-      ...values
-    };
-    requestBody.userId = loggedUser.userId;
-    requestBody.scheduleId = data.scheduleID;
-    requestBody.createDate = new Date().toISOString();
-    requestBody.status = "pending";
+    const requestBody: any = {
+      userId: loggedUser.userId,
+      scheduleId: data.scheduleID,
+      description: values.description,
+      address: values.address,
+      startDate: values.duration[0].toISOString(),
+      endDate: values.duration[1].toISOString(),
+      status: "Pending"
+    }
     const { error } = await createBooking(requestBody);
     if (error) {
       toast.error("Đặt lịch thất bại!");
     } else {
       toast.success("Đặt lịch thành công");
       setTimeout(() => {
-        navigate("/student/class");
+        // navigate("/student/class");
+        rerender();
       }, 1000);
     }
     handleOk();
@@ -67,8 +76,26 @@ const Schedule = ({ data }: ScheduleProps) => {
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-
   if (!data) return;
+
+  const handleCancelBooking = async () => {
+    const cancelResult = await changeBookingStatus(pendingBooking.bookingId, "Cancelled");
+    if (cancelResult.error) {
+      toast.error("Hủy đơn đặt thất bại");
+    } else {
+      toast.success("Hủy đơn đặt thành công");
+      setTimeout(() => {
+        rerender();
+      }, 1000);
+    }
+  }
+  const cancelBooking_confirm: PopconfirmProps['onConfirm'] = () => {
+    handleCancelBooking();
+  };
+
+  const cancelBooking_cancel: PopconfirmProps['onCancel'] = () => {
+  };
+ console.log(pendingBooking)
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -107,8 +134,45 @@ const Schedule = ({ data }: ScheduleProps) => {
       }
       {
         loggedUser?.role != Roles.Tutor && (
-          <div className="text-end mt-5">
-            <Button type="primary" onClick={showModal}>Đặt học lịch này</Button>
+          <div className="flex justify-end mt-5 gap-2 items-center">
+            {
+              data.bookings.length > 0 ? (
+                <p className="text-sm text-gray-500">Đã có {data.bookings.length} lượt đặt lịch này</p>
+              )
+                :
+                (
+                  <p className="text-sm text-gray-500">Chưa có lượt đặt nào</p>
+                )
+            }
+            {
+              isBooked && pendingBooking.status == "Pending" && (
+                <p className="text-sm text-green-500">/ Bạn đang đặt lịch này</p>
+              )
+            }
+             {
+              isBooked && pendingBooking.status == "Accepted" && (
+                <p className="text-sm text-blue-500">/ Bạn đang học lịch này</p>
+              )
+            }
+            {
+              !pendingBooking && (
+                <Button type="primary" onClick={showModal}>Đặt học lịch này</Button>
+              )
+            }
+            {
+              pendingBooking && isBooked && (
+                <Popconfirm
+                  title="Hủy đơn đặt"
+                  description="Xác nhận hủy đơn đặt lịch dạy học này?"
+                  onConfirm={cancelBooking_confirm}
+                  onCancel={cancelBooking_cancel}
+                  okText="Xác nhận"
+                  cancelText="Hủy"
+                >
+                  <Button danger>Hủy đơn dạy</Button>
+                </Popconfirm>
+              )
+            }
             <Modal
               title="Đặt lịch học"
               open={isModalOpen}
@@ -142,11 +206,20 @@ const Schedule = ({ data }: ScheduleProps) => {
                 >
                   <Input placeholder="Địa chỉ học" />
                 </Form.Item>
+
+                <Form.Item
+                  label="Ngày học"
+                  name="duration"
+                  rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
+                >
+                  <RangePicker format={"DD/MM/YYYY"} />
+                </Form.Item>
+
                 <Form.Item
                   label="Phương thức thanh toán"
                   rules={[{ required: true, message: 'Vui lòng chọn phương thức thanh toán!' }]}
                 >
-                  <Radio.Group>
+                  <Radio.Group defaultValue="cash">
                     <Radio value="cash"> Thanh toán trực tiếp </Radio>
                     <Radio value="vnpay" disabled> Thanh toán VNPay </Radio>
                   </Radio.Group>
