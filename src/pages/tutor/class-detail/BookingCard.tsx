@@ -41,6 +41,30 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
         }
     }
 
+    const handleStartTeaching = async () => {
+        const denyResult = await changeBookingStatus(bookingData.bookingId, "Started");
+        if (denyResult.error) {
+            toast.error("Cập nhật thông tin thất bại");
+        } else {
+            toast.success("Cập nhật thông tin thành công");
+            setTimeout(() => {
+                rerender();
+            }, 1000);
+        }
+    }
+
+    const handleEndTeaching = async () => {
+        const denyResult = await changeBookingStatus(bookingData.bookingId, "Ended");
+        if (denyResult.error) {
+            toast.error("Cập nhật thông tin thất bại");
+        } else {
+            toast.success("Cập nhật thông tin thành công");
+            setTimeout(() => {
+                rerender();
+            }, 1000);
+        }
+    }
+
     const handleCancelBooking = async () => {
         const cancelResult = await changeBookingStatus(bookingData.bookingId, "Cancelled");
         if (cancelResult.error) {
@@ -117,6 +141,14 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
             statusEl = <span className="text-gray-500">Đã hủy</span>
             break;
         }
+        case "Started": {
+            statusEl = <span className="text-blue-500">Đang dạy</span>
+            break;
+        }
+        case "Ended": {
+            statusEl = <span className="text-orange-500">Đã kết thúc</span>
+            break;
+        }
     }
 
     useEffect(() => {
@@ -148,7 +180,7 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                 </p>
 
             </div>
-            <div className="col-span-9">
+            <div className="col-span-9 flex flex-col">
                 <h5 className="font-bold  text-lg">Thông tin chi tiết đơn đặt</h5>
                 {
                     bookingData.startDate && bookingData.endDate && (
@@ -175,7 +207,7 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                 <p className="font-semibold">
                     Trạng thái: <span className="">{statusEl}</span>
                 </p>
-                <div className="flex gap-2 justify-end">
+                <div className="flex gap-2 justify-end flex-1 items-end">
                     {
                         bookingData.status == "Pending" && (
                             <>
@@ -197,15 +229,33 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                         bookingData.status == "Accepted" && (
                             <>
                                 <Popconfirm
-                                    title="Từ chối đơn đặt"
-                                    description="Xác nhận từ chối đơn đặt lịch dạy này?"
+                                    title="Hủy đơn dạy"
+                                    description="Xác nhận hủy dạy lịch này?"
                                     onConfirm={cancelBooking_confirm}
                                     onCancel={cancelBooking_cancel}
-                                    okText="Từ chối"
+                                    okText="Xác nhận"
                                     cancelText="Hủy"
                                 >
                                     <Button danger>Hủy đơn dạy</Button>
                                 </Popconfirm>
+                                <Button type="primary" onClick={handleStartTeaching}>Bắt đầu dạy</Button>
+                            </>
+                        )
+                    }
+                    {
+                        bookingData.status == "Started" && (
+                            <>
+                                <Popconfirm
+                                    title="Hủy đơn dạy"
+                                    description="Xác nhận hủy dạy lịch này?"
+                                    onConfirm={cancelBooking_confirm}
+                                    onCancel={cancelBooking_cancel}
+                                    okText="Xác nhận"
+                                    cancelText="Hủy"
+                                >
+                                    <Button danger>Hủy đơn dạy</Button>
+                                </Popconfirm>
+                                <Button type="primary" onClick={handleEndTeaching}>Kết thúc dạy</Button>
                             </>
                         )
                     }

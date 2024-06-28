@@ -11,12 +11,17 @@ import { formatNumberWithCommas } from "@/utils/numberUtil";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { Button } from "antd";
 import { getSchedulesByClassId } from "@/lib/api/schedule-api";
+import { useAppSelector } from "@/hooks/useRedux";
 const ClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [classDetail, setClassDetail] = useState<any>();
   const [schedules, setSchedules] = useState<any[]>([]);
   const [pfp, setPfp] = useState<string>();
-
+  const [renderKey, setRenderKey] = useState(0);
+  const rerender = () => {
+    setRenderKey(renderKey + 1);
+  }
   const { classId } = useParams();
   useEffect(() => {
     const fetchData = async () => {
@@ -43,9 +48,21 @@ const ClassDetailPage = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [renderKey]);
   if (isLoading) return <Loader />
   if (!classDetail) return;
+  var pendingBooking: any;
+  var bookedScheduleId: number;
+  if (loggedUser && schedules) {
+    schedules.forEach((schedule: any) => {
+      schedule.bookings.forEach((booking: any) => {
+        if (booking.student.userId == loggedUser.userId && (booking.status == "Pending" || booking.status == "Accepted" || booking.status == "Started")) {
+          pendingBooking = booking;
+          bookedScheduleId = schedule.scheduleID;
+        }
+      })
+    })
+  }
   return (
     <div className="bg-gray-50">
       <div className="mx-5 pt-3">
@@ -114,7 +131,15 @@ const ClassDetailPage = () => {
           {
             schedules.length != 0 && (
               <div className="flex flex-col gap-3">
-                {schedules.map((schedule: any, index: number) => <Schedule data={schedule} key={`schedule-${index}`} />)}
+                {schedules.map((schedule: any, index: number) => (
+                  <Schedule
+                    data={schedule}
+                    key={`schedule-${index}`}
+                    rerender={rerender}
+                    pendingBooking={pendingBooking}
+                    isBooked={bookedScheduleId == schedule.scheduleID}
+                  />
+                ))}
               </div>
             )
           }

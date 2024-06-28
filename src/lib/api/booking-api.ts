@@ -42,7 +42,7 @@ export const getTutorBooking = async (tutorId: number) => {
   }
 }
 
-type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied";
+type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended";
 export const changeBookingStatus = async (
   bookingId: number,
   bookingStatus: BookingStatus
