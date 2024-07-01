@@ -30,7 +30,6 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   const showModal = () => {
     if (!loggedUser) {
       toast.error("Vui lòng đăng nhập để đặt học!");

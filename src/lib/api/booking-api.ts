@@ -58,8 +58,42 @@ export const getStudentBooking = async (studentId: number) => {
   }
 }
 
+export const getBookingbyId = async (bookingId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/bookings/${bookingId}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
 
-type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended";
+export const getBookingDetailbyId = async (bookingId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/bookings/detail/${bookingId}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+
+
+
+type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended" | "Cancelled_by_student" | "Cancelled_by_tutor";
 export const changeBookingStatus = async (
   bookingId: number,
   bookingStatus: BookingStatus

@@ -66,7 +66,7 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
     }
 
     const handleCancelBooking = async () => {
-        const cancelResult = await changeBookingStatus(bookingData.bookingId, "Cancelled");
+        const cancelResult = await changeBookingStatus(bookingData.bookingId, "Cancelled_by_tutor");
         if (cancelResult.error) {
             toast.error("Cập nhật thông tin thất bại");
         } else {
@@ -139,6 +139,14 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
         }
         case "Cancelled": {
             statusEl = <span className="text-gray-500">Đã hủy</span>
+            break;
+        }
+        case "Cancelled_by_tutor": {
+            statusEl = <span className="text-gray-500">Đã hủy bởi gia sư</span>
+            break;
+        }
+        case "Cancelled_by_student": {
+            statusEl = <span className="text-gray-500">Đã hủy bởi học sinh</span>
             break;
         }
         case "Started": {
