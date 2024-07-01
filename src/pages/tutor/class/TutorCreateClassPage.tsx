@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 type FieldType = {
   className: string;
-  classTime: string;
   classInfo: string;
   classRequire: string;
   classAddress: string;
@@ -81,7 +80,6 @@ const TutorCreateClassPage = () => {
       ...values
     }
     requestBody.createdDate = new Date().toISOString();
-    requestBody.classTime = new Date().toISOString();
     requestBody.classAddress = "";
     requestBody.tutorId = loggedUser?.userId;
     console.log(requestBody);

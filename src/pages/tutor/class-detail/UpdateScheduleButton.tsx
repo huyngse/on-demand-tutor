@@ -1,4 +1,4 @@
-import { getScheduleById, updateSchedule } from "@/lib/api/schedule-api";
+import { updateSchedule } from "@/lib/api/schedule-api";
 import { Button, Form, FormProps, Input, Modal, Select, TimePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
@@ -13,12 +13,12 @@ type FieldType = {
     classTime: Dayjs[];
 };
 type UpdateScheduleButtonProps = {
-    scheduleId: number;
+    scheduleData: any;
     classId: number;
     rerender: () => void;
 }
 const format = 'HH:mm';
-const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleButtonProps) => {
+const UpdateScheduleButton = ({ scheduleData, classId, rerender }: UpdateScheduleButtonProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -46,11 +46,11 @@ const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleB
         if (requestBody.description == null) {
             requestBody.description = "";
         }
-        const { error } = await updateSchedule(requestBody, scheduleId);
+        const { error } = await updateSchedule(requestBody, scheduleData.scheduleID);
         if (error) {
-            toast.error("Tạo lịch thất bại!");
+            toast.error("Cập nhật lịch thất bại!");
         } else {
-            toast.success("Tạo lịch thành công");
+            toast.success("Cập nhật lịch thành công");
             setTimeout(() => {
                 rerender();
             }, 1000);
@@ -62,22 +62,15 @@ const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleB
         console.log('Failed:', errorInfo);
     };
     useEffect(() => {
-        const fetchData = async () => {
-            const { data, error } = await getScheduleById(scheduleId);
-            if (error) {
-                toast.error("Lấy thông tin thất bại");
-            } else {
-                form.setFieldValue("title", data.title);
-                form.setFieldValue("description", data.description);
-                form.setFieldValue("dateOfWeek", data.dateOfWeek);
-                form.setFieldValue("classTime",
-                    [
-                        dayjs(data.startTime),
-                        dayjs(data.endTime),
-                    ]);
-            }
-        }
-        fetchData();
+
+        form.setFieldValue("title", scheduleData.title);
+        form.setFieldValue("description", scheduleData.description);
+        form.setFieldValue("dateOfWeek", scheduleData.dateOfWeek);
+        form.setFieldValue("classTime",
+            [
+                dayjs(scheduleData.startTime),
+                dayjs(scheduleData.endTime),
+            ]);
     }, [])
 
     return (
@@ -90,6 +83,7 @@ const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleB
             />
             <Modal
                 title="Chỉnh sửa thông tin lịch dạy"
+                forceRender
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -99,7 +93,6 @@ const UpdateScheduleButton = ({ scheduleId, classId, rerender }: UpdateScheduleB
                 )}
             >
                 <Form
-                    name="basic"
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 18 }}
                     onFinish={onFinish}

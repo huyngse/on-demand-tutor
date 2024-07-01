@@ -27,6 +27,8 @@ import {
     TutorUpdateClassPage,
     ClassDetailPage,
     AdminManageClassPage,
+    StudentClassPage,
+    StudentClassDetailPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -224,6 +226,18 @@ const router = createBrowserRouter([
                 path: '/student/',
                 element: (
                     <StudentProfilePage />
+                ),
+            },
+            {
+                path: '/student/class',
+                element: (
+                    <StudentClassPage />
+                ),
+            },
+            {
+                path: '/student/class/:bookingId',
+                element: (
+                    <StudentClassDetailPage />
                 ),
             },
             {

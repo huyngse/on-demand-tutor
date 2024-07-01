@@ -1,20 +1,24 @@
 import { axiosClient } from './config/axios-client';
-import { accountData } from "@/data/account";
 export const handleApiError = (error: any) => {
   try {
-    const errorMessage = error.response?.data || 'An unexpected error occurred.';
+    const errorMessage = error.Errors?.ErrorMessage || 'An unexpected error occurred.';
     const data = null;
     return { error: errorMessage, data };
   } catch (err) {
     throw new Error('An unexpected error occurred.');
   }
 };
-
 export const getAllAccounts = async () => {
-  const response: any = { error: null, data: null, success: false }
+  const response: any = {
+    error: null,
+    data: null,
+    success: false
+  }
   try {
     const { data } = await axiosClient.get("/api/v1/users");
-    if (data) {
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
       response.data = data;
       response.success = true;
     }
@@ -25,11 +29,38 @@ export const getAllAccounts = async () => {
 }
 
 export const getAccountById = async (id: number) => {
-  const account = accountData.find(a => a.id == id)
+  const response: any = { error: null, data: null, success: false }
   try {
-    return { error: null, data: account, success: true };
+    console.log(`/api/v1/users/${id}`);
+    const { data } = await axiosClient.get(`/api/v1/users/idTmp?idTmp=${id}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
   } catch (error) {
     return handleApiError(error);
   }
 }
 
+export const getApi = async () => {
+  const response: any = {
+    error: null,
+    data: null,
+    success: false
+  }
+  try {
+    const { data } = await axiosClient.get("/api/v1/users");
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}

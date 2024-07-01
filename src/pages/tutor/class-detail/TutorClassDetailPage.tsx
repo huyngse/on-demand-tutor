@@ -10,10 +10,12 @@ import ActionButton from "./ActionButton";
 import BackButton from "@/components/BackButton";
 import Schedule from "./Schedule";
 import CreateScheduleButton from "./CreateScheduleButton";
+import { getSchedulesByClassId } from "@/lib/api/schedule-api";
 
 const TutorClassDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [classDetail, setClassDetail] = useState<any>();
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [renderKey, setRenderKey] = useState(0);
   const rerender = () => {
     setRenderKey(renderKey + 1);
@@ -25,9 +27,19 @@ const TutorClassDetailPage = () => {
         setIsLoading(true);
         const { data, error } = await getClassById(parseInt(classId));
         if (error) {
-          toast.error("Lấy thông tin thất bại");
+          toast.error("Lấy thông tin thất bại", {
+            toastId: 'error_tutorClassDetail',
+          });
         } else {
           setClassDetail(data);
+        }
+        const schedulesResult = await getSchedulesByClassId(parseInt(classId));
+        if (schedulesResult.error) {
+          toast.error("Lấy lịch của lớp thất bại", {
+            toastId: 'error_tutorClassSchedule',
+          });
+        } else {
+          setSchedules(schedulesResult.data);
         }
         setIsLoading(false);
       }
@@ -35,7 +47,7 @@ const TutorClassDetailPage = () => {
     fetchData();
   }, [renderKey]);
   if (isLoading) return <Loader />
-  if (!classDetail) return;
+  if (!classDetail || !schedules) return;
   return (
     <div>
       <BackButton title="Quay về" iconWidth={15} />
@@ -71,7 +83,7 @@ const TutorClassDetailPage = () => {
       </div>
       <div className="flex justify-between  items-center my-2">
         <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
-        <CreateScheduleButton classId={classDetail.classId} rerender={rerender}/>
+        <CreateScheduleButton classId={classDetail.classId} rerender={rerender} />
       </div>
       {
         classDetail.schedules.length == 0 && (
@@ -83,7 +95,9 @@ const TutorClassDetailPage = () => {
       {
         classDetail.schedules.length != 0 && (
           <div className="flex flex-col gap-3">
-            {classDetail.schedules.map((schedule: any) => <Schedule data={schedule} rerender={rerender}/>)}
+            {schedules.map((schedule: any, index: number) => (
+              <Schedule data={schedule} rerender={rerender} key={`class-schedule-${index}`} />
+            ))}
           </div>
         )
       }

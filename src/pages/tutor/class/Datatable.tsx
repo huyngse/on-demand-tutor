@@ -1,6 +1,6 @@
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import ActionButton from "./ActionButton";
-import { Table } from "antd";
+import { Badge, Table } from "antd";
 
 type DataTableProps = {
   dataSource: any[];
@@ -8,7 +8,7 @@ type DataTableProps = {
 }
 
 const Datatable = ({ dataSource, rerender }: DataTableProps) => {
- 
+
   const columns = [
     {
       title: 'ID',
@@ -131,7 +131,9 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
       key: 'action',
       render: (_: any, record: any) => (
         <div>
-          <ActionButton id={record.classId} isActive={record.active} rerender={rerender}/>
+          <Badge count={record.numOfBooking}>
+            <ActionButton id={record.classId} isActive={record.active} rerender={rerender} />
+          </Badge>
         </div>
       ),
     },

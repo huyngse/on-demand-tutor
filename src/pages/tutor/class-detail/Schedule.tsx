@@ -4,12 +4,16 @@ import { Trash2 } from "lucide-react";
 import UpdateScheduleButton from "./UpdateScheduleButton";
 import { deleteSchedule } from "@/lib/api/schedule-api";
 import { toast } from "react-toastify";
-
+import BookingCard from "./BookingCard";
+import { useState } from "react";
+import type { PopconfirmProps } from 'antd';
+import { Popconfirm } from 'antd';
 type ScheduleProps = {
   data: any;
   rerender: () => void;
 }
 const Schedule = ({ data, rerender }: ScheduleProps) => {
+  const [showBooking, setShowBooking] = useState(false);
   const handleDeleteSchedule = async () => {
     const { error } = await deleteSchedule(data.scheduleID);
     if (error) {
@@ -21,7 +25,20 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
       }, 1000);
     }
   }
+  const confirm: PopconfirmProps['onConfirm'] = () => {
+    handleDeleteSchedule();
+  };
+
+  const cancel: PopconfirmProps['onCancel'] = () => {
+  };
+
   if (!data) return;
+  var pendingBookingCount = 0;
+  data.bookings.forEach((booking: any) => {
+    if (booking.status == "Pending") {
+      pendingBookingCount++;
+    }
+  });
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -30,16 +47,24 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
           {data.title}
         </p>
         <div className="flex gap-2">
-          <Button
-            type="default"
-            danger
-            shape="circle"
-            icon={<Trash2 width={15} />}
-            onClick={handleDeleteSchedule}
-          />
+          <Popconfirm
+            title="Xóa lịch"
+            description="Xác nhận xóa lịch học này?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="Xóa"
+            cancelText="Hủy"
+          >
+            <Button
+              type="default"
+              danger
+              shape="circle"
+              icon={<Trash2 width={15} />}
+            />
+          </Popconfirm>
           <UpdateScheduleButton
             classId={0}
-            scheduleId={data.scheduleID}
+            scheduleData={data}
             rerender={rerender}
           />
         </div>
@@ -72,7 +97,50 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
           </>
         )
       }
-
+      <hr className="my-2" />
+      <div>
+        {(data.bookings != null && data.bookings.length > 0) && (
+          <>
+            {
+              pendingBookingCount > 0 && (
+                <p className="text-red-500">Có {pendingBookingCount} đơn đặt đang đợi duyệt</p>
+              )
+            }
+            {
+              showBooking ? (
+                <>
+                  <div className="flex gap-5 items-center mb-3">
+                    <h4 className="font-semibold text-lg">
+                      Đơn đặt lịch học
+                    </h4>
+                    <button className="text-orange-400" onClick={() => { setShowBooking(false) }}>
+                      &lt;&lt; Ẩn đơn đặt lịch học
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    {
+                      data.bookings.map((booking: any, index: number) => {
+                        return (
+                          <BookingCard
+                            key={`schedule-${data.scheduleID}-booking-${index}`}
+                            bookingData={booking}
+                            rerender={rerender}
+                          />
+                        )
+                      })
+                    }
+                  </div>
+                </>
+              )
+                : (
+                  <button className="text-blue-400" onClick={() => { setShowBooking(true) }}>
+                    Hiện đơn đặt lịch học &gt;&gt;
+                  </button>
+                )
+            }
+          </>
+        )}
+      </div>
     </div>
   )
 }
