@@ -10,13 +10,6 @@ export const handleApiError = (error: any) => {
     throw new Error('An unexpected error occurred.');
   }
 };
-export const getAllTutors = async () => {
-  try {
-    return { error: null, data: tutorData, success: true };
-  } catch (error) {
-    return handleApiError(error);
-  }
-}
 export type TutorStatisticType = {
   noOfCreatedClasses: number;
   noOfActiveClasses: number;

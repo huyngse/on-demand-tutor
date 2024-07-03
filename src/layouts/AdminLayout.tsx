@@ -40,14 +40,16 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
             ]
         },
         {
-            label: "Quản lí môn học",
-            key: "subject",
-            icon: <Book />,
-        },
-        {
             label: "Quản lí lớp học",
             key: "class",
             icon: <BookUser />,
+            disabled: true,
+        },
+        {
+            label: "Quản lí môn học",
+            key: "subject",
+            icon: <Book />,
+            disabled: true,
         },
         {
             label: "Quản lí FAQ",

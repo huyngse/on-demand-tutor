@@ -1,6 +1,6 @@
-import { getAllTutors } from "@/lib/api/tutor-api";
 import { useEffect, useState } from "react";
 import DataTable from "./DataTable";
+import { getAllTutors } from "@/lib/api/user-api";
 
 const ManageTutorPage = () => {
   const [tutors, setTutors] = useState<any[]>();
@@ -8,7 +8,23 @@ const ManageTutorPage = () => {
     const fetchData = async () => {
       const tutorsResult = await getAllTutors();
       if (tutorsResult.data != null) {
-        setTutors(tutorsResult.data);
+        const tableData = tutorsResult.data.map((x: any) => {
+          var income = 0;
+          x.bookings.forEach((b: any) => {
+            if (b.status == "Ended") {
+              income += b.classFee;
+            }
+          });
+          return {
+            userId: x.userId,
+            fullName: x.fullName,
+            emailAddress: x.emailAddress,
+            city: x.city,
+            numOfClass: x.classes.length,
+            income: income
+          }
+        })
+        setTutors(tableData);
       }
     }
     fetchData();

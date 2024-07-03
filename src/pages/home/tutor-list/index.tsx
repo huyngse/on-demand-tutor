@@ -9,8 +9,8 @@ import subjectData from "@/data/subjects.json";
 import tutorTypesData from "@/data/tutorTypes.json"
 import { SelectOptionType } from "@/types/antd-types";
 import { CityType, DistrictType } from "@/types/address";
-import { getAllTutors } from "@/lib/api/tutor-api";
 import TutorCard from "./TutorCard";
+import { getAllTutors } from "@/lib/api/user-api";
 type FieldType = {
   city?: string;
   district?: string;
