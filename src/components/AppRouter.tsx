@@ -26,6 +26,7 @@ import {
     TutorClassDetailPage,
     TutorUpdateClassPage,
     ClassDetailPage,
+    AdminManageClassPage,
     StudentClassPage,
     StudentClassDetailPage,
 } from '@/pages';
@@ -121,6 +122,12 @@ const router = createBrowserRouter([
                 path: '/admin/tutor/:tutorId/edit',
                 element: (
                     <AdminUpdateTutorPage />
+                ),
+            },
+            {
+                path: '/admin/manage-class',
+                element: (
+                    <AdminManageClassPage />
                 ),
             },
         ],

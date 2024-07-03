@@ -88,6 +88,10 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 navigate("/admin/manage-tutor");
                 break;
             }
+            case "class": {
+                navigate("/admin/manage-class");
+                break;
+            }
         }
     }
     const [collapsed, setCollapsed] = useState(false);
