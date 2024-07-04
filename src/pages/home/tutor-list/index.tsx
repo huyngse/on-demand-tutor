@@ -1,43 +1,64 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { getVietnamAddress } from "@/lib/api/address-api";
-import { Button, Form, FormProps, Input, Select } from "antd";
-import { SearchProps } from "antd/es/input";
+import { Button, Empty, Form, FormProps, Input, Pagination, Select } from "antd";
 import { ListFilter } from "lucide-react";
 import { useEffect, useState } from "react";
 import { setAddress } from "@/lib/redux/addressSlice";
-import subjectData from "@/data/subjects.json";
 import tutorTypesData from "@/data/tutorTypes.json"
 import { SelectOptionType } from "@/types/antd-types";
 import { CityType, DistrictType } from "@/types/address";
 import TutorCard from "./TutorCard";
-import { getAllTutors } from "@/lib/api/user-api";
+import { searchTutor } from "@/lib/api/user-api";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Loader from "@/components/Loader";
+import { PaginationProp } from "@/types/pagination-types";
+import { useForm } from "antd/es/form/Form";
+import ScrollToTop from "@/components/ScrollToTop";
 type FieldType = {
-  city?: string;
-  district?: string;
-  subject?: string;
-  tutorType?: string;
+  TutorName?: string;
+  City?: string;
+  District?: string;
+  TutorType?: string;
 };
 const { Search } = Input;
-const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+
 const TutorListPage = () => {
   const addresses: CityType[] = useAppSelector(state => state.address.value);
+  const navigate = useNavigate();
   const [districts, setDistricts] = useState<DistrictType[]>([]);
+  const [pageProps, setPageProps] = useState<PaginationProp>(
+    {
+      currentPage: 0,
+      totalCount: 0,
+      totalPages: 0,
+    }
+  );
   const [tutors, setTutors] = useState<any[]>();
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const addressResult = await getVietnamAddress();
       if (addressResult.data != null) {
         dispatch(setAddress(addressResult.data));
       }
-      const tutorsResult = await getAllTutors();
+      const tutorsResult = await searchTutor(searchParams.toString());
       if (tutorsResult.data != null) {
+        setPageProps({
+          currentPage: tutorsResult.currentPage,
+          totalCount: tutorsResult.totalCount,
+          totalPages: tutorsResult.totalPages,
+        })
         setTutors(tutorsResult.data);
       }
+      setIsLoading(false);
     }
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   var cityOptions: SelectOptionType[] = [];
   if (addresses != null) {
@@ -57,13 +78,7 @@ const TutorListPage = () => {
       }
     })
   }
-  var subjectOptions: SelectOptionType[] = [];
-  subjectOptions = subjectData.map(subject => {
-    return {
-      value: subject.name,
-      label: subject.name
-    }
-  });
+
   var tutorTypesOptions: SelectOptionType[] = [];
   tutorTypesOptions = tutorTypesData.map(tutorType => {
     return {
@@ -75,6 +90,27 @@ const TutorListPage = () => {
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
     console.log('Success:', values);
+    var strQuery = "";
+    const queryArr: string[] = [];
+    if (values.TutorName) {
+      queryArr.push("TutorName=" + values.TutorName);
+    }
+    if (values.City) {
+      queryArr.push("City=" + values.City);
+    }
+    if (values.District) {
+      queryArr.push("District=" + values.District);
+    }
+    if (values.TutorType) {
+      queryArr.push("TutorType=" + values.TutorType);
+    }
+    if (pageProps.currentPage) {
+      queryArr.push("PageNumber=" + pageProps.currentPage);
+    }
+    if (queryArr.length > 0) {
+      strQuery = "?" + queryArr.join("&");
+      navigate(`/tutor-list${strQuery}`);
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -89,6 +125,7 @@ const TutorListPage = () => {
 
   return (
     <div className="bg-gray-100">
+      <ScrollToTop />
       <Form
         name="basic"
         form={form}
@@ -101,17 +138,18 @@ const TutorListPage = () => {
           <h1 className="text-white font-semibold text-center text-3xl">
             Danh Sách Gia Sư
           </h1>
-          <Search
-            placeholder="Nhập tên gia sư để tìm kiếm"
-            allowClear
-            onSearch={onSearch}
-            style={{
-              width: 600,
-            }}
-            size="large"
-          // enterButton={<Button>Hello</Button>}
-          />
-          <p className="text-white text-sm">Có {tutors?.length} kết quả</p>
+          <Form.Item name="TutorName" className="mb-0">
+            <Search
+              placeholder="Nhập tên gia sư để tìm kiếm"
+              allowClear
+              style={{
+                width: 600,
+              }}
+              size="large"
+            // enterButton={<Button>Hello</Button>}
+            />
+          </Form.Item>
+          <p className="text-white text-sm">Có {pageProps.totalCount} kết quả</p>
         </div>
         <div className="p-5 grid grid-cols-12 gap-5">
           <div className="col-span-3">
@@ -121,21 +159,17 @@ const TutorListPage = () => {
                 Lọc kết quả tìm kiếm
               </h2>
               <p className="font-bold mb-1">Tỉnh/thành</p>
-              <Form.Item name="city" className="mb-3">
-                <Select showSearch options={cityOptions} placeholder="-- Chọn tỉnh/thành --" onChange={onCityChange} />
+              <Form.Item name="City" className="mb-3">
+                <Select showSearch options={cityOptions} placeholder="-- Chọn tỉnh/thành --" onChange={onCityChange} allowClear />
               </Form.Item>
               <p className="font-bold mb-1">Quận/huyện</p>
-              <Form.Item name="district">
-                <Select options={districtOptions} placeholder="-- Chọn quận/huyện --" />
+              <Form.Item name="District">
+                <Select options={districtOptions} placeholder="-- Chọn quận/huyện --" allowClear />
               </Form.Item>
               <hr className="mb-5" />
-              <p className="font-bold mb-1">Môn học</p>
-              <Form.Item name="subject" className="mb-3">
-                <Select options={subjectOptions} placeholder="-- Chọn môn học --" />
-              </Form.Item>
               <p className="font-bold mb-1">Đối tượng dạy học</p>
-              <Form.Item name="tutorType">
-                <Select options={tutorTypesOptions} placeholder="-- Chọn đối tượng dạy --" />
+              <Form.Item name="TutorType">
+                <Select options={tutorTypesOptions} placeholder="-- Chọn đối tượng dạy --" allowClear />
               </Form.Item>
               <Form.Item className="mb-0">
                 <Button type="primary" htmlType="submit" className="w-full">
@@ -144,17 +178,44 @@ const TutorListPage = () => {
               </Form.Item>
             </div>
           </div>
-
-          <div className="col-span-9 grid grid-cols-3 gap-5">
+          <div className="col-span-9">
             {
-              tutors?.map((tutor: any, index: number) => {
-                return (
-                  <div key={`tutor-card-${index}`} className="col-span-1">
-                    <TutorCard data={tutor} />
-                  </div>
-                )
-              })
+              isLoading ? <Loader /> :
+                <>
+                  {
+                    tutors && tutors.length > 0 ? (
+                      <div className="grid grid-cols-4 gap-5">
+                        {
+                          tutors?.map((tutor: any, index: number) => {
+                            return (
+                              <div key={`tutor-card-${index}`} className="col-span-1">
+                                <TutorCard data={tutor} />
+                              </div>
+                            )
+                          })
+                        }
+                      </div>
+                    ) : (
+                      <div className="pt-10">
+                        <Empty description="Không có kết quả" />
+                      </div>
+                    )
+                  }
+                </>
             }
+            <div className="flex justify-center my-2">
+              <Pagination defaultCurrent={1} current={pageProps.currentPage} total={pageProps.totalCount} onChange={
+                (page: number, pageSize: number) => {
+                  setPageProps(
+                    {
+                      ...pageProps,
+                      currentPage: page
+                    }
+                  );
+                  form.submit();
+                }
+              } />
+            </div>
           </div>
         </div>
       </Form>
