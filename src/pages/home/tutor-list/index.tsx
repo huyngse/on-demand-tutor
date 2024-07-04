@@ -12,7 +12,6 @@ import { searchTutor } from "@/lib/api/user-api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "@/components/Loader";
 import { PaginationProp } from "@/types/pagination-types";
-import { useForm } from "antd/es/form/Form";
 import ScrollToTop from "@/components/ScrollToTop";
 type FieldType = {
   TutorName?: string;
@@ -205,7 +204,7 @@ const TutorListPage = () => {
             }
             <div className="flex justify-center my-2">
               <Pagination defaultCurrent={1} current={pageProps.currentPage} total={pageProps.totalCount} onChange={
-                (page: number, pageSize: number) => {
+                (page: number, _: number) => {
                   setPageProps(
                     {
                       ...pageProps,
