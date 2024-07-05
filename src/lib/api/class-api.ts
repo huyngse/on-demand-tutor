@@ -12,7 +12,7 @@ export const handleApiError = (error: any) => {
 export const getAllClass = async () => {
   const response: any = { error: null, data: null, success: false }
   try {
-    const { data } = await axiosClient.get("/api/v1/classs/classes");
+    const { data } = await axiosClient.get("/api/v1/class");
     if (data && data.Errors) {
       response.error = data.Errors
     } else {
@@ -37,7 +37,7 @@ export const getClassesByTutorId = async (tutorId: number) => {
 export const getClassById = async (classId: number) => {
   const response: any = { error: null, data: null, success: false }
   try {
-    const { data } = await axiosClient.get(`/api/v1/classs/${classId}`);
+    const { data } = await axiosClient.get(`/api/v1/class/${classId}`);
     if (data && data.Errors) {
       response.error = data.Errors
     } else {
@@ -54,7 +54,7 @@ export const deactivateClass = async (classId: number) => {
   const response: any = { error: null, data: null, success: false }
   try {
     console.log(`/api/v1/classs/${classId}`);
-    const { data } = await axiosClient.put(`/api/v1/classs/${classId}`);
+    const { data } = await axiosClient.put(`/api/v1/class/deativate/${classId}`);
     if (data && data.Errors) {
       response.error = data.Errors
     } else {
@@ -70,7 +70,7 @@ export const deactivateClass = async (classId: number) => {
 export const createClass = async (requestBody: any) => {
   const response: any = { error: null, data: null, success: false }
   try {
-    const { data } = await axiosClient.post("/api/v1/classs", requestBody);
+    const { data } = await axiosClient.post("/api/v1/class", requestBody);
     if (data && data.Errors) {
       response.error = data.Errors
     } else {
@@ -86,7 +86,7 @@ export const createClass = async (requestBody: any) => {
 export const updateClass = async (requestBody: any, classId: number) => {
   const response: any = { error: null, data: null, success: false }
   try {
-    const { data } = await axiosClient.put(`/api/v1/classs/class/${classId}`, requestBody);
+    const { data } = await axiosClient.put(`/api/v1/class/${classId}`, requestBody);
     if (data) {
       response.data = data;
       response.success = true;
