@@ -58,7 +58,8 @@ const TutorListPage = () => {
     }
     fetchData();
   }, [searchParams]);
-
+  console.log("Search param: ", searchParams);
+  console.log("Page props: ", pageProps);
   var cityOptions: SelectOptionType[] = [];
   if (addresses != null) {
     cityOptions = addresses.map(addr => {

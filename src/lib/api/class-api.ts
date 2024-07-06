@@ -1,4 +1,3 @@
-import classesData from "@/data/classes";
 import { axiosClient } from "./config/axios-client";
 export const handleApiError = (error: any) => {
   try {
@@ -26,9 +25,16 @@ export const getAllClass = async () => {
 }
 
 export const getClassesByTutorId = async (tutorId: number) => {
+  const response: any = { error: null, data: null, success: false }
   try {
-    const classes = classesData.filter((x: any) => x.TutorId == tutorId);
-    return { error: null, data: classes, success: true };
+    const { data } = await axiosClient.get(`/api/v1/class/tutor/${tutorId}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
   } catch (error) {
     return handleApiError(error);
   }

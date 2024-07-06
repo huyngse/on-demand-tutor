@@ -263,7 +263,7 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: '/tutor/:id',
+        path: '/tutor/:tutorId',
         element: (
             <MainLayout>
                 <TutorDetailPage />
