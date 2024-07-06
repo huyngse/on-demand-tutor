@@ -3,7 +3,7 @@ import useAuthentication from "@/hooks/useAuthentication";
 import { useAppSelector } from "@/hooks/useRedux";
 import { getTutorBooking } from "@/lib/api/booking-api";
 import { Avatar, Badge, Dropdown, MenuProps } from "antd"
-import { CircleUser, DoorOpen } from "lucide-react";
+import { CircleUser, DoorOpen, LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -30,15 +30,15 @@ const AppAvartar = () => {
 
     var profileUrl: string;
     switch (loggedUser.role) {
-        case "Admin": {
+        case Roles.Admin: {
             profileUrl = "/admin/";
             break;
         }
-        case "Tutor": {
+        case Roles.Tutor: {
             profileUrl = "/tutor/";
             break;
         }
-        case "Student": {
+        case Roles.Student: {
             profileUrl = "/student/";
             break;
         }
@@ -66,8 +66,28 @@ const AppAvartar = () => {
             onClick: logout,
         },
     ];
+
+    const adminItems: MenuProps['items'] = [
+        {
+            key: '1',
+            label: (
+                <a href={profileUrl}>
+                    Vào trang quản lí
+                </a>
+            ),
+            icon: <LayoutDashboard />,
+        },
+        {
+            key: '2',
+            label: (
+                "Đăng xuất"
+            ),
+            icon: <DoorOpen />,
+            onClick: logout,
+        },
+    ];
     return (
-        <Dropdown menu={{ items }} trigger={["click"]} className="cursor-pointer">
+        <Dropdown menu={loggedUser.role == Roles.Admin ? { items: adminItems } : { items }} trigger={["click"]} className="cursor-pointer">
             <div className="flex gap-2 items-center">
                 <p className="font-semibold">
                     {loggedUser.fullName ? loggedUser.fullName : "Họ và tên"}
