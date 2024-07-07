@@ -81,10 +81,7 @@ const CreateScheduleButton = ({ classId, rerender }: CreateScheduleButtonProps) 
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
-                footer={() => (
-                    <>
-                    </>
-                )}
+                footer={() => (<></>)}
             >
                 <Form
                     name="basic"

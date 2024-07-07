@@ -1,6 +1,7 @@
 import { formatDate } from "@/utils/dateUtil";
 import ActionButton from "./ActionButton";
 import { Table, Tag } from "antd";
+import { Link } from "react-router-dom";
 
 type DataTableProps = {
   dataSource: any[];
@@ -41,6 +42,9 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
           }
         },
       },
+      render: (_: any, record: any) => {
+        return <Link to={`/student/class/${record.bookingId}`}>{record.className}</Link>;
+      }
     },
     {
       title: 'Gia sư',

@@ -12,18 +12,90 @@ export const handleApiError = (error: any) => {
 
 export const getAllUsers = async () => {
   const response: any = { error: null, data: null, success: false }
-    try {
-        const { data } = await axiosClient.get("api/v1/users");
-        if (data && data.Errors) {
-          response.error = data.Errors
-        } else {
-          response.data = data;
-          response.success = true;
-        }
-      return response;
-    } catch (error) {
-      return handleApiError(error);
+  try {
+    const { data } = await axiosClient.get("api/v1/users");
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
     }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export const getAllTutors = async () => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get("api/v1/users/tutor");
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export const getTutorbyId = async (userId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/users/tutor/${userId}`);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export const searchTutor = async (searchQuery: string) => {
+  const response: any = {
+    error: null,
+    data: null,
+    success: false,
+    currentPage: 0,
+    totalCount: 0,
+    totalPages: 0,
+  }
+  if (searchQuery.length > 0) {
+    searchQuery = "?" + searchQuery;
+  }
+
+  try {
+    const { data, headers } = await axiosClient.get(`api/v1/users/tutor/search${searchQuery}`);
+    if (data) {
+      response.currentPage = parseInt(headers["x-current-page"]);
+      response.totalCount = parseInt(headers["x-total-count"]);
+      response.totalPages = parseInt(headers["x-total-pages"]);
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+export const updateUserProfileImage = async (userId: number, imageUrl: string) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.put(`​/api​/v1​/users​/profileImage​/${userId}`, imageUrl);
+    if (data) {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
 }
 
 export const getUserById = async (userId: number) => {

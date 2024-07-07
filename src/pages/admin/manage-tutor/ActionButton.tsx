@@ -1,36 +1,23 @@
-import { MenuProps } from "antd";
-import { Eye, EyeOff, Pencil } from "lucide-react";
+import { Button, Dropdown, MenuProps } from "antd";
+import { EllipsisVertical, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-
 type ActionButtonProps = {
-  id: number;
-  isVerified: boolean;
+  userId: any;
 }
-const ActionButton = ({ id, isVerified }: ActionButtonProps) => {
+const ActionButton = ({ userId }: ActionButtonProps) => {
   const navigate = useNavigate();
-  const handleToggleVerify = (currentState: boolean) => {
-    toast.success(`${currentState ? "Hủy" : "Kích hoạt"} tài khoản thành công`);
-}
   const items: MenuProps['items'] = [
     {
-      label: "Chỉnh sửa",
+      label: "Xem chi tiết",
       key: '0',
-      icon: <Pencil width={15} />,
-      onClick: () => { navigate(`/admin/account/${id}/edit`) }
-    },
-    {
-      label: isVerified ? "Hủy kích hoạt" : "Kích hoạt",
-      key: '1',
-      icon: isVerified ? <EyeOff width={15} /> : <Eye width={15} />,
-      onClick: () => { handleToggleVerify(isVerified) },
-    },
-    {
-      type: 'divider',
+      icon: <Info width={15} />,
+      onClick: () => { navigate(`/admin/tutor/${userId}`) }
     },
   ];
   return (
-    <div>ActionButton</div>
+    <Dropdown menu={{ items }} trigger={['click']}>
+      <Button type="default" shape="circle" icon={<EllipsisVertical width={15} />} />
+    </Dropdown>
   )
 }
 
