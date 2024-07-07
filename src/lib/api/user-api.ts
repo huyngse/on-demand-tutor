@@ -115,7 +115,6 @@ export const getUserById = async (userId: number) => {
 
 export type UpdateUserRequest = {
   username: string;
-  password: string;
   fullName: string;
   phoneNumber: string;
   dateOfBirth: string;
@@ -168,7 +167,6 @@ export const updateUserRoles = async (userId: number, role: UserRole) => {
   }
 }
 export type UpdateTutorProfileRequest = {
-  password: string,
   fullName: string,
   phoneNumber: string,
   dateOfBirth: string,

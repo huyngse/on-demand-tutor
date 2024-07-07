@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { formatDate } from "@/utils/dateUtil";
+import { getUserById } from "@/lib/api/user-api";
 
 const TutorProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
@@ -37,7 +38,7 @@ const TutorProfilePage = () => {
   const [tutorDetail, setTutorDetail] = useState<any>();
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await getAccountById(loggedUser.userId);
+      const { data, error } = await getUserById(loggedUser.userId);
       if (error) {
         toast.error("Lấy thông tin thất bại!", {
           toastId: 'error_tutorProfile',
