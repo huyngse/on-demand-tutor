@@ -13,7 +13,9 @@ import AdminManageAccountPage from "./admin/manage-account";
 import AdminUpdateAccountPage from "./admin/manage-account/UpdateAccountPage";
 import AdminManageTutorPage from "./admin/manage-tutor/ManageTutorPage";
 import AdminUpdateTutorPage from "./admin/manage-tutor/ManageTutorPage";
-import AdminTutorDetailPage from "./admin/manage-tutor/TutorDetailPage";
+import AdminTutorDetailPage from "./admin/tutor-detail/TutorDetailPage";
+import AdminManageClassPage from "./admin/manage-class/ManageClassPage";
+import AdminClassDetailPage from "./admin/class-detail/AdminClassDetailPage";
 import TutorProfilePage from "./tutor/profile/TutorProfilePage";
 import TutorDashboardPage from "./tutor/dashboard/TutorDashboardPage";
 import TutorCertification from "./tutor/profile/TutorCertification";
@@ -26,7 +28,6 @@ import StudentClassPage from "./student/class/StudentClassPage";
 import StudentProfilePage from "./student/profile/StudentProfile_Page";
 import StudentTimetable from "./student/timetable/StudentTimetable";
 import StudentUpdateProfilePage from "./student/profile/UpdateStudentProfile_Page";
-import AdminManageClassPage from "./admin/manage-class/ManageClassPage";
 import StudentClassDetailPage from "./student/class-detail/StudentClassDetailPage";
 export {
     LoginPage,
@@ -58,5 +59,6 @@ export {
     StudentTimetable,
     StudentUpdateProfilePage,
     StudentClassDetailPage,
-    AdminManageClassPage
+    AdminManageClassPage,
+    AdminClassDetailPage
 };

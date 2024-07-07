@@ -29,6 +29,7 @@ import {
     AdminManageClassPage,
     StudentClassPage,
     StudentClassDetailPage,
+    AdminClassDetailPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -128,6 +129,12 @@ const router = createBrowserRouter([
                 path: '/admin/manage-class',
                 element: (
                     <AdminManageClassPage />
+                ),
+            },
+            {
+                path: '/admin/class/:classId',
+                element: (
+                    <AdminClassDetailPage />
                 ),
             },
         ],
