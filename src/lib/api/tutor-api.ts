@@ -48,3 +48,18 @@ export const getTutorById = async (id: number) => {
     return handleApiError(error);
   }
 }
+
+export const getTutorDegrees = async (tutorId: number) => {
+  try {
+    const response = await axiosClient.get(`/api/v1/tutordegrees`, {
+      params: { TutorId: tutorId }
+    });
+    if (response && response.data.Errors) {
+      return { error: response.data.Errors, data: null, success: false };
+    } else {
+      return { error: null, data: response.data, success: true };
+    }
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
