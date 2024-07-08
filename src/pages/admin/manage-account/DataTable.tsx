@@ -102,7 +102,7 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                         break;
                     }
                     case Roles.Student: {
-                        roleName = "Phụ huynh/Học sinh";
+                        roleName = "Học sinh";
                         color = "blue";
                         break;
                     }
@@ -136,7 +136,7 @@ const DataTable = ({ dataSource }: DataTableProps) => {
                     value: Roles.Tutor,
                 },
                 {
-                    text: 'Phụ huynh/Học sinh',
+                    text: 'Học sinh',
                     value: Roles.Student,
                 },
                 {

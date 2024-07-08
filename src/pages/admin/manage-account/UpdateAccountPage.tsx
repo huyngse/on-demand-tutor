@@ -1,25 +1,26 @@
-import { getAccountById } from "@/lib/api/account-api";
 import { Button, DatePicker, Form, FormProps, Input, Radio, Select } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import UpdateAvatarButton from "./UpdateAvatarButton";
-
+import { getUserById } from "@/lib/api/user-api";
+import { Roles } from "@/constants/roles";
+import DefaultProfileImage from "@/assets/images/default_profile_picture.jpg";
 const UpdateAccountPage = () => {
-    const [account, setAccount] = useState<any>();
     const navigate = useNavigate();
     const { accountId } = useParams();
+  const [pfp, setPfp] = useState<string>("");
     const [form] = Form.useForm();
     type FieldType = {
-        id: number;
+        userId: number;
         fullName: string;
-        email: string;
+        emailAddress: string;
         password: string;
         role: string;
         isActive: boolean;
         phoneNumber: string;
-        gender: "male" | "female";
+        gender: "Male" | "Female";
     };
     const handleCancel = () => {
         navigate(-1);
@@ -39,17 +40,17 @@ const UpdateAccountPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (accountId) {
-                const result = await getAccountById(parseInt(accountId));
+                const result = await getUserById(parseInt(accountId));
                 if (result.data) {
-                    setAccount(result.data);
-                    form.setFieldValue("id", result.data.id);
+                    form.setFieldValue("userId", result.data.userId);
                     form.setFieldValue("fullName", result.data.fullName);
                     form.setFieldValue("dob", dayjs(result.data.dob));
-                    form.setFieldValue("email", result.data.email);
+                    form.setFieldValue("emailAddress", result.data.emailAddress);
                     form.setFieldValue("password", result.data.password);
                     form.setFieldValue("role", result.data.role);
-                    form.setFieldValue("phone", result.data.phone);
+                    form.setFieldValue("phoneNumber", result.data.phoneNumber);
                     form.setFieldValue("gender", result.data.gender);
+                    setPfp(result.data.profileImage);
                 }
             }
         }
@@ -64,7 +65,7 @@ const UpdateAccountPage = () => {
             >
                 <div className="flex flex-col gap-2 col-span-4 px-5">
                     <div className="overflow-hidden drop-shadow rounded-lg aspect-square">
-                        <img src={account?.profilePicUrl} alt="" className="w-full h-full object-cover" />
+                        <img src={pfp} onError={() => {setPfp(DefaultProfileImage)}} alt="" className="w-full h-full object-cover" />
                     </div>
                     <UpdateAvatarButton />
                     <Button>Gỡ ảnh đại diện</Button>
@@ -80,7 +81,7 @@ const UpdateAccountPage = () => {
                 >
                     <label className="font-bold">ID</label>
                     <Form.Item
-                        name="id"
+                        name="userId"
                         className="mb-3 col-span-3"
                     >
                         <Input placeholder="ID" disabled />
@@ -106,8 +107,8 @@ const UpdateAccountPage = () => {
                         className="mb-3 col-span-3"
                     >
                         <Radio.Group id="gender">
-                            <Radio value="male"> Nam </Radio>
-                            <Radio value="female"> Nữ </Radio>
+                            <Radio value="Male"> Nam </Radio>
+                            <Radio value="Female"> Nữ </Radio>
                         </Radio.Group>
                     </Form.Item>
                     <label htmlFor="dob" className="font-bold">Ngày sinh</label>
@@ -131,7 +132,7 @@ const UpdateAccountPage = () => {
 
                     <label htmlFor="email" className="font-bold">Email</label>
                     <Form.Item
-                        name="email"
+                        name="emailAddress"
                         rules={[
                             { required: true, message: 'Vui lòng nhập email của bạn!' },
                             { type: 'email', message: 'email không hợp lệ' }
@@ -140,14 +141,6 @@ const UpdateAccountPage = () => {
                     >
                         <Input id="email" placeholder="Email" />
                     </Form.Item>
-                    <label htmlFor="password" className="font-bold">Mật khẩu</label>
-                    <Form.Item
-                        name="password"
-                        rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-                        className="mb-3 col-span-3"
-                    >
-                        <Input.Password id="password" autoComplete="new-password" placeholder="Mật khẩu" />
-                    </Form.Item>
                     <p className="font-bold">Vai trò</p>
                     <Form.Item name="role"
                         rules={[{ required: true, message: 'Vui lòng chọn loại tài khoản!' }]}
@@ -155,10 +148,10 @@ const UpdateAccountPage = () => {
                     >
                         <Select
                             options={[
-                                { value: 'student_parent', label: 'Phụ huynh, học sinh' },
-                                { value: 'tutor', label: 'Gia sư' },
-                                { value: 'admin', label: 'Admin' },
-                                { value: 'moderator', label: 'Quản trị viên' },
+                                { value: Roles.Student, label: 'Học sinh' },
+                                { value: Roles.Tutor, label: 'Gia sư' },
+                                { value: Roles.Admin, label: 'Admin' },
+                                { value: Roles.Moderator, label: 'Quản trị viên' },
                             ]}
                             placeholder="Vai trò"
                         />
