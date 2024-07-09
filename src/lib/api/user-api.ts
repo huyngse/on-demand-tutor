@@ -88,7 +88,7 @@ export const searchTutor = async (searchQuery: string) => {
 export const updateUserProfileImage = async (userId: number, imageUrl: string) => {
   const response: any = { error: null, data: null, success: false }
   try {
-    const { data } = await axiosClient.put(`​/api​/v1​/users​/profileImage​/${userId}`, imageUrl);
+    const { data } = await axiosClient.put(`/api/v1/users/profileImage/${userId}`, imageUrl);
     if (data) {
       response.data = data;
       response.success = true;

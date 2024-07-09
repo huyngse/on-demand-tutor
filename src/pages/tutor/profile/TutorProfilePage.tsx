@@ -1,6 +1,5 @@
 import TiptapView from "@/components/tiptap/TiptapView";
 import { useAppSelector } from "@/hooks/useRedux"
-import { getAccountById } from "@/lib/api/account-api";
 import AchievementCard from "@/pages/home/tutor-detail/AchievementCard";
 import Feedback from "@/pages/home/tutor-detail/Feedback";
 import { Button, Dropdown, MenuProps } from "antd";
@@ -11,16 +10,30 @@ import { toast } from "react-toastify";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { formatDate } from "@/utils/dateUtil";
 import { getUserById } from "@/lib/api/user-api";
+import UpdateAvatarModal from "./UpdateAvatarModal";
+import useRerender from "@/hooks/useRerender";
 
 const TutorProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [pfp, setPfp] = useState<string>();
   const navigate = useNavigate();
+  const { renderKey, rerender } = useRerender();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const items: MenuProps['items'] = [
     {
       label: "Cập nhật ảnh đại diện",
       key: 'update-pfp',
       icon: <ImageUp width={15} />,
+      onClick: () => { showModal() }
     },
     {
       label: "Chỉnh sửa thông tin cá nhân",
@@ -51,7 +64,7 @@ const TutorProfilePage = () => {
     if (loggedUser) {
       fetchData();
     }
-  }, [loggedUser])
+  }, [loggedUser, renderKey])
   if (!tutorDetail) return;
   return (
     <div>
@@ -137,6 +150,12 @@ const TutorProfilePage = () => {
           })
         }
       </div>
+      <UpdateAvatarModal
+        rerender={rerender}
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      />
     </div>
   )
 }

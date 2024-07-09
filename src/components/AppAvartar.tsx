@@ -46,7 +46,6 @@ const AppAvartar = () => {
             profileUrl = "";
         }
     }
-
     const items: MenuProps['items'] = [
         {
             key: '1',
