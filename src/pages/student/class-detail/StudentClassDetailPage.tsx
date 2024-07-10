@@ -226,6 +226,16 @@ const StudentClassDetailPage = () => {
               <p className="font-semibold">
                 Trạng thái: <span className="">{statusEl}</span>
               </p>
+              {
+                (
+                  bookingDetail.status == "Cancelled_by_student" ||
+                  bookingDetail.status == "Cancelled_by_tutor" ||
+                  bookingDetail.status == "Cancelled") && (
+                  <p>
+                    <span className="font-semibold">Lý do hủy: </span>{bookingDetail.cancellationReason}
+                  </p>
+                )
+              }
               <div className="flex justify-end gap-2">
                 {
                   bookingDetail.status == "Pending" && (
@@ -242,7 +252,7 @@ const StudentClassDetailPage = () => {
                   )
                 }
                 {
-                  bookingDetail.status == "Accepted" || bookingDetail.status == "Started" && (
+                  (bookingDetail.status == "Accepted" || bookingDetail.status == "Started") && (
                     <CancelBookingButton rerender={rerender} bookingId={bookingDetail.bookingId} />
                   )
                 }

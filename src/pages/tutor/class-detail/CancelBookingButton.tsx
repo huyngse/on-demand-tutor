@@ -26,11 +26,11 @@ const CancelBookingButton = ({ bookingId, rerender }: Props) => {
         setIsModalOpen(false);
     };
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        const { error } = await cancelBooking(bookingId, "Cancelled_by_student", values.cancellationReason);
+        const { error } = await cancelBooking(bookingId, "Cancelled_by_tutor", values.cancellationReason);
         if (error) {
-            toast.error("Hủy lớp học thất bại");
+            toast.error("Hủy dạy thất bại");
         } else {
-            toast.success("Hủy lớp học thành công");
+            toast.success("Hủy dạy thành công");
             handleOk();
             setTimeout(() => {
                 rerender();
@@ -43,8 +43,8 @@ const CancelBookingButton = ({ bookingId, rerender }: Props) => {
     };
     return (
         <>
-            <Button danger onClick={showModal}>Hủy lớp học</Button>
-            <Modal title="Xác nhận hủy lớp học"
+            <Button danger onClick={showModal}>Hủy đơn dạy</Button>
+            <Modal title="Xác nhận hủy dạy"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}

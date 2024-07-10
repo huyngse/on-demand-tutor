@@ -114,6 +114,16 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
             label = "Đã hủy";
             break;
           }
+          case "Cancelled_by_tutor": {
+            color = "default";
+            label = "Đã hủy bởi gia sư";
+            break;
+          }
+          case "Cancelled_by_student": {
+            color = "default";
+            label = "Đã hủy bởi học sinh";
+            break;
+          }
           case "Request_change": {
             color = "purple";
             label = "Yêu cầu đổi lịch";

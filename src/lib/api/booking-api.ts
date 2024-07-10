@@ -114,16 +114,16 @@ export const changeBookingStatus = async (
 }
 export const cancelBooking = async (
   bookingId: number,
-  bookingStatus: BookingStatus,
+  status: BookingStatus,
   cancellationReason: string,
 ) => {
   const response: any = { error: null, data: null, success: false }
   const request = {
-    bookingStatus: bookingStatus,
+    status: status,
     cancellationReason: cancellationReason
   };
   try {
-    const { data } = await axiosClient.put(`/api/v1/bookings/cancel/${bookingId}}`, request);
+    const { data } = await axiosClient.put(`/api/v1/bookings/cancel/${bookingId}`, request);
     if (data && data.Errors) {
       response.error = data.Errors
     } else {
