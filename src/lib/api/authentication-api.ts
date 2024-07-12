@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 import { axiosClient } from './config/axios-client';
 export const handleApiError = (error: any) => {
   try {
@@ -41,18 +39,37 @@ export const register = async (requestBody: any) => {
       response.data = data;
       response.success = true;
     }
+    return response;
   } catch (error) {
     return handleApiError(error);
   }
 }
 
-export const checkToken = async () => {
-  const response: any = { error: null, data: null, success: false };
-  const cookieValue = Cookies.get('loggedUser');
+export const sendEmail = async (email: string) => {
+  const response: any = { error: null, data: null, success: false }
   try {
-    if (cookieValue) {
-      const user = JSON.parse(cookieValue);
-      response.data = user;
+    const { data } = await axiosClient.post(`/SendMail?to=${email}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
+
+export const checkToken = async () => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`/checkToken`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
       response.success = true;
     }
     return response;

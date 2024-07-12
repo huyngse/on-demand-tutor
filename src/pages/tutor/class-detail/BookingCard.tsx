@@ -7,6 +7,7 @@ import type { PopconfirmProps } from 'antd';
 import dayjs, { Dayjs } from "dayjs";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { toast } from "react-toastify";
+import CancelBookingButton from "./CancelBookingButton";
 
 type BookingCardProps = {
     bookingData: any;
@@ -215,6 +216,16 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                 <p className="font-semibold">
                     Trạng thái: <span className="">{statusEl}</span>
                 </p>
+                {
+                    (
+                        bookingData.status == "Cancelled_by_student" ||
+                        bookingData.status == "Cancelled_by_tutor" ||
+                        bookingData.status == "Cancelled") && (
+                        <p>
+                            <span className="font-semibold">Lý do hủy: </span>{bookingData.cancellationReason}
+                        </p>
+                    )
+                }
                 <div className="flex gap-2 justify-end flex-1 items-end">
                     {
                         bookingData.status == "Pending" && (
@@ -236,34 +247,31 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                     {
                         bookingData.status == "Accepted" && (
                             <>
-                                <Popconfirm
-                                    title="Hủy đơn dạy"
-                                    description="Xác nhận hủy dạy lịch này?"
-                                    onConfirm={cancelBooking_confirm}
-                                    onCancel={cancelBooking_cancel}
-                                    okText="Xác nhận"
-                                    cancelText="Hủy"
+                                <CancelBookingButton
+                                    bookingId={bookingData.bookingId}
+                                    rerender={rerender}
+                                />
+                                <Button
+                                    type="primary"
+                                    onClick={handleStartTeaching}
                                 >
-                                    <Button danger>Hủy đơn dạy</Button>
-                                </Popconfirm>
-                                <Button type="primary" onClick={handleStartTeaching}>Bắt đầu dạy</Button>
+                                    Bắt đầu dạy
+                                </Button>
                             </>
                         )
                     }
                     {
                         bookingData.status == "Started" && (
                             <>
-                                <Popconfirm
-                                    title="Hủy đơn dạy"
-                                    description="Xác nhận hủy dạy lịch này?"
-                                    onConfirm={cancelBooking_confirm}
-                                    onCancel={cancelBooking_cancel}
-                                    okText="Xác nhận"
-                                    cancelText="Hủy"
-                                >
-                                    <Button danger>Hủy đơn dạy</Button>
-                                </Popconfirm>
-                                <Button type="primary" onClick={handleEndTeaching}>Kết thúc dạy</Button>
+                                <CancelBookingButton
+                                    bookingId={bookingData.bookingId}
+                                    rerender={rerender}
+                                />
+                                <Button
+                                    type="primary"
+                                    onClick={handleEndTeaching}
+                                >Kết thúc dạy
+                                </Button>
                             </>
                         )
                     }
@@ -280,7 +288,7 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                 )}
             >
                 <Form
-                    name="basic"
+                    name="accept_booking"
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"

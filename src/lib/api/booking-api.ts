@@ -112,6 +112,29 @@ export const changeBookingStatus = async (
     return handleApiError(error);
   }
 }
+export const cancelBooking = async (
+  bookingId: number,
+  status: BookingStatus,
+  cancellationReason: string,
+) => {
+  const response: any = { error: null, data: null, success: false }
+  const request = {
+    status: status,
+    cancellationReason: cancellationReason
+  };
+  try {
+    const { data } = await axiosClient.put(`/api/v1/bookings/cancel/${bookingId}`, request);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
 
 export type UpdateBookingDto = {
   description: string,

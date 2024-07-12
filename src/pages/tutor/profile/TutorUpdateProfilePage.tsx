@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import tutorTypesData from "@/data/tutorTypes.json";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { getAccountById } from "@/lib/api/account-api";
+import { UpdateTutorProfileRequest, getUserById, updateTutorProfile } from "@/lib/api/user-api";
 type FieldType = {
   fullName: string;
   gender: string;
@@ -85,10 +85,27 @@ const TutorUpdateProfilePage = () => {
     form.setFieldValue("ward", null);
   }
 
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-    toast.success("Cập nhật thông tin thành công!");
-    setTimeout(() => { navigate("/tutor/profile") }, 1000);
+  const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const request: UpdateTutorProfileRequest = {
+      fullName: values.fullName,
+      city: values.city,
+      dateOfBirth: values.dateOfBirth,
+      district: values.district,
+      gender: values.gender,
+      phoneNumber: values.phoneNumber,
+      school: values.school,
+      street: values.street,
+      tutorDescription: values.tutorDescription,
+      tutorType: values.tutorType,
+      ward: values.ward
+    }
+    const { error } = await updateTutorProfile(loggedUser.userId, values);
+    if (error) {
+      toast.error("Cập nhật thông tin thất bại");
+    } else {
+      toast.success("Cập nhật thông tin thành công!");
+      setTimeout(() => { navigate("/tutor/profile") }, 1000);
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -103,7 +120,7 @@ const TutorUpdateProfilePage = () => {
         dispatch(setAddress(addressResult.data));
       }
       if (loggedUser) {
-        const tutorResult = await getAccountById(loggedUser.userId);
+        const tutorResult = await getUserById(loggedUser.userId);
         if (tutorResult) {
           setTutorDetail(tutorResult.data);
           form.setFieldValue("username", loggedUser.username);
@@ -148,7 +165,7 @@ const TutorUpdateProfilePage = () => {
           rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
           className="col-span-6 mb-0"
         >
-          <Input placeholder="Tên đăng nhập" disabled/>
+          <Input placeholder="Tên đăng nhập" disabled />
         </Form.Item>
         <Form.Item
           label="Email"
@@ -262,7 +279,7 @@ const TutorUpdateProfilePage = () => {
               >
                 <Input placeholder="Trường đang học/đã tốt nghiệp" />
               </Form.Item>
-            
+
               <div className="col-span-12">
                 <div className="mb-2 font-semibold text-lg">
                   Thông tin cơ bản
