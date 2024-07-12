@@ -94,14 +94,13 @@ const TutorUpdateClassPage = () => {
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
   useEffect(() => {
     const fetchData = async () => {
       const addressResult = await getVietnamAddress();
       if (addressResult.data != null) {
         dispatch(setAddress(addressResult.data));
       }
-
-
       if (classId) {
         const classResult = await getClassById(parseInt(classId));
         if (classResult.data) {
@@ -121,6 +120,16 @@ const TutorUpdateClassPage = () => {
     }
     fetchData();
   }, []);
+  useEffect(() => {
+    if (classDetail) {
+      const selectedCity = addresses.find(addr => addr.Name == classDetail.city);
+      if (selectedCity == null) return;
+      setDistricts(selectedCity.Districts);
+      const selectedDistrict = districts.find(addr => addr.Name == classDetail.district);
+      if (selectedDistrict == null) return;
+      setWards(selectedDistrict.Wards);
+    }
+  }, [classDetail])
   return (
     <div>
       <BackButton title="Quay về" iconWidth={15} />
