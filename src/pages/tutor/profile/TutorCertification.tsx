@@ -11,6 +11,7 @@ const TutorCertification = ({ tutorId }: any ) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const handleDelete = () => {
+    console.log("Delete success!");
 }
   const items: MenuProps['items'] = [
     {
@@ -19,10 +20,10 @@ const TutorCertification = ({ tutorId }: any ) => {
       icon: <ImageUp width={15} />,
     },
     {
-      label: <div className="text-red-500 opacity-100">Gỡ ảnh bằng cấp</div>,
+      label: <div className="text-red-500 ">Gỡ ảnh bằng cấp</div>,
       key: '3',
       onClick: handleDelete,
-      icon: <Trash2 width={15} color="red" className="opacity-100"/>,
+      icon: <Trash2 width={15} color="red"/>,
       disabled: false,
   }
   ]

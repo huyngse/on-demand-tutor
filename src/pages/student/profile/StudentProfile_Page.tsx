@@ -12,16 +12,6 @@ const StudentProfilePage = () => {
   const navigate = useNavigate();
   const [studentDetail, setStudentDetail] = useState<any>();
 
-  // useEffect(() => {
-  //   const fetchStudentDetails = async () => {
-  //     const result = await fetch(`/api/student/${loggedUser?.id}`);
-  //     const data = await result.json();
-  //     setStudentDetail(data);
-  //   };
-
-  //   fetchStudentDetails();
-  // }, [loggedUser]);
-
   useEffect(() => {
     const fetchStudentDetails = async () => {
       const { error, data } = await getUserById(loggedUser.userId);
