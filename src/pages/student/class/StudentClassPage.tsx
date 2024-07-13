@@ -26,7 +26,8 @@ const StudentClassPage = () => {
             className: booking.class.className,
             tutorName: booking.tutor.fullName,
             createDate: booking.createDate,
-            status: booking.status
+            status: booking.status,
+            classMethod: booking.class.classMethod,
           }
         });
         setBookings(mappedList);

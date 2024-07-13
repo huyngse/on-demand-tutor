@@ -63,6 +63,28 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
       },
     },
     {
+      title: 'Hình thức dạy',
+      dataIndex: 'classMethod',
+      key: 'classMethod',
+      render: (_: any, record: any) => {
+        return record.classMethod == "In-person" ?
+          <span className="text-pink-500">Trực tiếp</span>
+          :
+          <span className="text-blue-500">Online</span>
+      },
+      sorter: {
+        compare: (a: any, b: any) => {
+          if (a.classMethod < b.classMethod) {
+            return -1;
+          } else if (a.classMethod > b.classMethod) {
+            return 1;
+          } else {
+            return 0;
+          }
+        },
+      },
+    },
+    {
       title: 'Ngày đặt',
       dataIndex: 'createDate',
       key: 'createDate',
@@ -77,6 +99,7 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
         return formatDate(new Date(record.createDate));
       }
     },
+
     {
       title: 'Trạng thái',
       key: 'status',
