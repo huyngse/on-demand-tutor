@@ -4,6 +4,8 @@ import AchievementCard from '@/pages/home/tutor-detail/AchievementCard';
 import { useNavigate } from "react-router-dom";
 import { Button, Dropdown, MenuProps } from 'antd';
 import { EllipsisVertical, ImageUp, Trash2 } from "lucide-react";
+import UpdateAvatarModal from "./UpdateAvatarModal";
+import useRerender from "@/hooks/useRerender";
 
 
 const TutorCertification = ({ tutorId }: any ) => {
@@ -13,11 +15,24 @@ const TutorCertification = ({ tutorId }: any ) => {
   const handleDelete = () => {
     console.log("Delete success!");
 }
+const { renderKey, rerender } = useRerender();
+const [isModalOpen, setIsModalOpen] = useState(false);
+const showModal = () => {
+  setIsModalOpen(true);
+};
+const handleOk = () => {
+  setIsModalOpen(false);
+};
+const handleCancel = () => {
+  setIsModalOpen(false);
+};
+
   const items: MenuProps['items'] = [
     {
       label: "Cập nhật ảnh bằng cấp",
       key: 'update-pfp',
       icon: <ImageUp width={15} />,
+      onClick: () => { showModal() }
     },
     {
       label: <div className="text-red-500 ">Gỡ ảnh bằng cấp</div>,
@@ -34,13 +49,13 @@ const TutorCertification = ({ tutorId }: any ) => {
       if (response.data) {
         setDegrees(response.data);
       } else {
-        console.error('Error fetching degrees:', response.error);
+        console.error('Lấy thông tin bằng cấp thất bại!:', response.error);
       }
       setLoading(false);
     };
 
     fetchDegrees();
-  }, []);
+  }, [tutorId, renderKey]);
 
   if (loading) {
     return (
@@ -61,6 +76,12 @@ const TutorCertification = ({ tutorId }: any ) => {
           <AchievementCard key={degree} data={degree} />
         ))}
       </div>
+      <UpdateAvatarModal
+        rerender={rerender}
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      />
     </div>
   );
 };
