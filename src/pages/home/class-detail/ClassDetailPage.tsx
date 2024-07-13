@@ -4,7 +4,7 @@ import { getClassById } from "@/lib/api/class-api";
 import { formatDate } from "@/utils/dateUtil";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Schedule from "./Schedule";
 import { formatNumberWithCommas } from "@/utils/numberUtil";
@@ -81,7 +81,9 @@ const ClassDetailPage = () => {
             <p><span className="font-semibold">Số điện thoại: </span>{classDetail.tutor.phoneNumber}</p>
             <p><span className="font-semibold">Email:  </span>{classDetail.tutor.emailAddress}</p>
             <p><span className="font-semibold">Địa chỉ: </span>{classDetail.tutor.street}, {classDetail.tutor.ward}, {classDetail.tutor.district}, {classDetail.tutor.city}</p>
-            <Button className="w-full mt-5">Xem chi tiết</Button>
+            <Link to={`/tutor/${classDetail.tutor.userId}`}>
+              <Button className="w-full mt-5">Xem chi tiết</Button>
+            </Link>
           </div>
         </div>
         <div className="col-span-9 p-3">

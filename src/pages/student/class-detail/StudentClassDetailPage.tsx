@@ -2,7 +2,7 @@ import BackButton from "@/components/BackButton";
 import Loader from "@/components/Loader";
 import { changeBookingStatus, getBookingDetailbyId } from "@/lib/api/booking-api";
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { Button, Popconfirm, PopconfirmProps } from "antd";
@@ -113,7 +113,9 @@ const StudentClassDetailPage = () => {
             <p><span className="font-semibold">Số điện thoại: </span>{bookingDetail.tutor.phoneNumber}</p>
             <p><span className="font-semibold">Email:  </span>{bookingDetail.tutor.emailAddress}</p>
             <p><span className="font-semibold">Địa chỉ: </span>{bookingDetail.tutor.street}, {bookingDetail.tutor.ward}, {bookingDetail.tutor.district}, {bookingDetail.tutor.city}</p>
-            <Button className="w-full mt-5">Xem chi tiết</Button>
+            <Link to={`/tutor/${bookingDetail.tutor.userId}`}>
+              <Button className="w-full mt-5">Xem chi tiết</Button>
+            </Link>
           </div>
         </div>
         <div className="col-span-9 p-3">
@@ -224,6 +226,16 @@ const StudentClassDetailPage = () => {
               <p className="font-semibold">
                 Trạng thái: <span className="">{statusEl}</span>
               </p>
+              {
+                (
+                  bookingDetail.status == "Cancelled_by_student" ||
+                  bookingDetail.status == "Cancelled_by_tutor" ||
+                  bookingDetail.status == "Cancelled") && (
+                  <p>
+                    <span className="font-semibold">Lý do hủy: </span>{bookingDetail.cancellationReason}
+                  </p>
+                )
+              }
               <div className="flex justify-end gap-2">
                 {
                   bookingDetail.status == "Pending" && (
@@ -240,7 +252,7 @@ const StudentClassDetailPage = () => {
                   )
                 }
                 {
-                  bookingDetail.status == "Accepted" || bookingDetail.status == "Started" && (
+                  (bookingDetail.status == "Accepted" || bookingDetail.status == "Started") && (
                     <CancelBookingButton rerender={rerender} bookingId={bookingDetail.bookingId} />
                   )
                 }

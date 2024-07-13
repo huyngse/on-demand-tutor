@@ -6,6 +6,7 @@ import { createClass } from "@/lib/api/class-api";
 import { setAddress } from "@/lib/redux/addressSlice";
 import { CityType, DistrictType, WardType } from "@/types/address";
 import { SelectOptionType } from "@/types/antd-types";
+import { meetLinkPattern } from "@/utils/urlUtil";
 import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -25,11 +26,13 @@ type FieldType = {
   district: string;
   tutorId: number;
   active: boolean
+  meetingLink: string;
 };
 const TutorCreateClassPage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const addresses: CityType[] = useAppSelector(state => state.address.value);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
+  const [classMethod, setClassMethod] = useState<string>("In-person");
   const [wards, setWards] = useState<WardType[]>([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -82,7 +85,13 @@ const TutorCreateClassPage = () => {
     requestBody.createdDate = new Date().toISOString();
     requestBody.classAddress = "";
     requestBody.tutorId = loggedUser?.userId;
-    console.log(requestBody);
+    if (classMethod == "Online") {
+      requestBody.city = "";
+      requestBody.district = "";
+      requestBody.ward = "";
+    } else {
+      requestBody.meetingLink = "";
+    }
     const { error } = await createClass(requestBody);
     if (error) {
       toast.error("Tạo lớp tạo lớp thất bại!");
@@ -91,7 +100,7 @@ const TutorCreateClassPage = () => {
       setTimeout(() => { navigate("/tutor/class") }, 1000);
     }
   };
-
+  //https://meet.google.com/qqi-gqno-wca
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
@@ -143,14 +152,28 @@ const TutorCreateClassPage = () => {
           >
             <TiptapInput content={""} handleUpdate={(string: string) => form.setFieldValue('classRequire', string)} />
           </Form.Item>
+
+          <Form.Item
+            label="Phương thức dạy"
+            name="classMethod"
+            rules={[{ required: true, message: 'Vui lòng chọn phương thức dạy học!' }]}
+            initialValue={"In-person"}
+          >
+            <Radio.Group onChange={(e) => { setClassMethod(e.target.value) }}>
+              <Radio value="In-person"> Trực tiếp (tại nhà) </Radio>
+              <Radio value="Online"> Online </Radio>
+            </Radio.Group>
+          </Form.Item>
+
           <hr className="my-2" />
 
           <h3 className="font-bold text-lg mb-2">Địa chỉ lớp</h3>
           <Form.Item
             label="Tỉnh/thành"
             name="city"
-            rules={[{ required: true, message: 'Vui lòng chọn tỉnh/thành!' }]}
+            rules={[{ required: classMethod == "In-person", message: 'Vui lòng chọn tỉnh/thành!' }]}
             wrapperCol={{ span: 8 }}
+            className={`${classMethod != "In-person" && "hidden"}`}
           >
             <Select
               showSearch
@@ -162,8 +185,9 @@ const TutorCreateClassPage = () => {
           <Form.Item
             label="Quận/huyện"
             name="district"
-            rules={[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]}
+            rules={[{ required: classMethod == "In-person", message: 'Vui lòng chọn quận/huyện!' }]}
             wrapperCol={{ span: 8 }}
+            className={`${classMethod != "In-person" && "hidden"}`}
           >
             <Select
               showSearch
@@ -175,8 +199,9 @@ const TutorCreateClassPage = () => {
           <Form.Item
             label="phường/xã"
             name="ward"
-            rules={[{ required: true, message: 'Vui lòng chọn phường/xã!' }]}
+            rules={[{ required: classMethod == "In-person", message: 'Vui lòng chọn phường/xã!' }]}
             wrapperCol={{ span: 8 }}
+            className={`${classMethod != "In-person" && "hidden"}`}
           >
             <Select
               showSearch
@@ -184,19 +209,29 @@ const TutorCreateClassPage = () => {
               placeholder="-- Chọn phường/xã --"
             />
           </Form.Item>
-
+          <Form.Item
+            label="Link Google Meet"
+            name="meetingLink"
+            wrapperCol={{ span: 8 }}
+            className={`${classMethod != "Online" && "hidden"}`}
+            rules={[
+              { required: classMethod == "Online", message: 'Vui lòng nhập link dạy học!' },
+              {
+                validator: (_, value) => {
+                  if (value) {
+                    if (!meetLinkPattern.test(value)) {
+                      return Promise.reject(new Error('Link Google Meet không hợp lệ'))
+                    }
+                    return Promise.resolve();
+                  }
+                },
+              },
+            ]}
+          >
+            <Input placeholder="Link lớp học online" />
+          </Form.Item>
           <hr className="my-2" />
 
-          <Form.Item
-            label="Phương thức dạy"
-            name="classMethod"
-            rules={[{ required: true, message: 'Vui lòng chọn phương thức dạy học!' }]}
-          >
-            <Radio.Group>
-              <Radio value="In-person"> Trực tiếp (tại nhà) </Radio>
-              <Radio value="Online"> Online </Radio>
-            </Radio.Group>
-          </Form.Item>
           <Form.Item
             label="Trình độ lớp học"
             name="classLevel"

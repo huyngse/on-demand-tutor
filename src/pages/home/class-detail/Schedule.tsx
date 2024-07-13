@@ -78,7 +78,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
   if (!data) return;
 
   const handleCancelBooking = async () => {
-    const cancelResult = await changeBookingStatus(pendingBooking.bookingId, "Cancelled");
+    const cancelResult = await changeBookingStatus(pendingBooking.bookingId, "Cancelled_by_student");
     if (cancelResult.error) {
       toast.error("Hủy đơn đặt thất bại");
     } else {

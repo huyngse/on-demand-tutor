@@ -1,6 +1,7 @@
 import { formatNumberWithCommas } from "@/utils/numberUtil";
 import ActionButton from "./ActionButton";
 import { Badge, Table } from "antd";
+import { Link } from "react-router-dom";
 
 type DataTableProps = {
   dataSource: any[];
@@ -41,6 +42,11 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
           }
         },
       },
+      render: (_: any, record: any) => {
+        return (
+          <Link to={`/tutor/class/${record.classId}`}>{record.className}</Link>
+        );
+      }
     },
 
     {
