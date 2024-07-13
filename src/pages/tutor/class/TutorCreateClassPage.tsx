@@ -219,7 +219,7 @@ const TutorCreateClassPage = () => {
               {
                 validator: (_, value) => {
                   if (value) {
-                    if (!meetLinkPattern.test(value)) {
+                    if (classMethod == "Online" && !meetLinkPattern.test(value)) {
                       return Promise.reject(new Error('Link Google Meet không hợp lệ'))
                     }
                     return Promise.resolve();
