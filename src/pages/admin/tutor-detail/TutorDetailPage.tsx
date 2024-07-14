@@ -138,7 +138,7 @@ const TutorDetailPage = () => {
             {
               !tutorDetail.classes || tutorDetail.classes.length == 0 && (<div>Chưa có lớp nào</div>)
             }
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex gap-3 overflow-auto">
               {
                 tutorDetail.classes?.map((_class: any, index: number) => {
                   return (

@@ -27,7 +27,7 @@ const ClassCard = ({ classData }: ClassCardProps) => {
                 </div>
                 <Button
                     type="default"
-                    onClick={() => { navigate(`/class/${classData.classId}`) }}
+                    onClick={() => { navigate(`/admin/class/${classData.classId}`) }}
                     style={{
                         width: "100%"
                     }}
