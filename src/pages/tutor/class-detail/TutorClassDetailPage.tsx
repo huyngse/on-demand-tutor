@@ -63,7 +63,13 @@ const TutorClassDetailPage = () => {
         <div className="flex gap-5 flex-wrap">
           <h3 className="font-semibold">Phí dạy học: <span className="text-blue-500">{formatNumberWithCommas(classDetail?.classFee)}₫</span></h3>
           <h3 className="font-semibold">Hình thức dạy: <span className="font-normal">{classDetail.classMethod == "In-person" ? "Dạy trực tiếp (tại nhà)" : "Dạy online"}</span></h3>
-          <h3 className="font-semibold">Địa chỉ lớp học: <span className="font-normal">{classDetail.ward}, {classDetail.district}, {classDetail.city}</span></h3>
+          {
+            classDetail.classMethod == "In-person" ? (
+              <h3 className="font-semibold">Địa chỉ lớp học: <span className="font-normal">{classDetail.ward}, {classDetail.district}, {classDetail.city}</span></h3>
+            ) : (
+              <h3 className="font-semibold">Link lớp học online:<a href={classDetail.meetingLink}> <span className="font-normal">{classDetail.meetingLink}</span></a></h3>
+            )
+          }
           <h3 className="font-semibold">
             Trạng thái lớp: &nbsp;
             <span className={`font-normal ${classDetail.active ? "text-green-500" : "text-red-500"}`}>
@@ -96,7 +102,12 @@ const TutorClassDetailPage = () => {
         classDetail.schedules.length != 0 && (
           <div className="flex flex-col gap-3">
             {schedules.map((schedule: any, index: number) => (
-              <Schedule data={schedule} rerender={rerender} key={`class-schedule-${index}`} />
+              <Schedule
+                key={`class-schedule-${index}`}
+                classMethod={classDetail.classMethod}
+                data={schedule}
+                rerender={rerender}
+              />
             ))}
           </div>
         )

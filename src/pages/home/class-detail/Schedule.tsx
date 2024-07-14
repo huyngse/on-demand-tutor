@@ -14,6 +14,7 @@ type ScheduleProps = {
   rerender: () => void;
   pendingBooking: any;
   isBooked: boolean;
+  classMethod: string;
 }
 type FieldType = {
   userId: number;
@@ -24,7 +25,7 @@ type FieldType = {
 };
 const { RangePicker } = DatePicker;
 
-const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: ScheduleProps) => {
+const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMethod }: ScheduleProps) => {
   const navigate = useNavigate();
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [form] = Form.useForm();
@@ -55,7 +56,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
       userId: loggedUser.userId,
       scheduleId: data.scheduleID,
       description: values.description,
-      address: values.address,
+      address: classMethod == "Online" ? "" : values.address,
       startDate: values.duration[0].toISOString(),
       endDate: values.duration[1].toISOString(),
       status: "Pending"
@@ -94,7 +95,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
 
   const cancelBooking_cancel: PopconfirmProps['onCancel'] = () => {
   };
- console.log(pendingBooking)
+  console.log(pendingBooking)
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -148,7 +149,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
                 <p className="text-sm text-green-500">/ Bạn đang đặt lịch này</p>
               )
             }
-             {
+            {
               isBooked && pendingBooking.status == "Accepted" && (
                 <p className="text-sm text-blue-500">/ Bạn đang học lịch này</p>
               )
@@ -201,7 +202,8 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false }: Schedule
                 <Form.Item
                   label="Địa chỉ học"
                   name="address"
-                  rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
+                  rules={[{ required: classMethod == "In-person", message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
+                  className={`${classMethod == "Online" && "hidden"}`}
                 >
                   <Input placeholder="Địa chỉ học" />
                 </Form.Item>

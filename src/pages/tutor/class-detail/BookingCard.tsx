@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import CancelBookingButton from "./CancelBookingButton";
 
 type BookingCardProps = {
+    classMethod: string;
     bookingData: any;
     rerender: () => void;
 }
@@ -21,7 +22,7 @@ type FieldType = {
 };
 
 const { RangePicker } = DatePicker;
-const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
+const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [pfp, setPfp] = useState<string>(bookingData.student.profileImage);
@@ -66,17 +67,17 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
         }
     }
 
-    const handleCancelBooking = async () => {
-        const cancelResult = await changeBookingStatus(bookingData.bookingId, "Cancelled_by_tutor");
-        if (cancelResult.error) {
-            toast.error("Cập nhật thông tin thất bại");
-        } else {
-            toast.success("Cập nhật thông tin thành công");
-            setTimeout(() => {
-                rerender();
-            }, 1000);
-        }
-    }
+    // const handleCancelBooking = async () => {
+    //     const cancelResult = await changeBookingStatus(bookingData.bookingId, "Cancelled_by_tutor");
+    //     if (cancelResult.error) {
+    //         toast.error("Cập nhật thông tin thất bại");
+    //     } else {
+    //         toast.success("Cập nhật thông tin thành công");
+    //         setTimeout(() => {
+    //             rerender();
+    //         }, 1000);
+    //     }
+    // }
 
     const denyBooking_confirm: PopconfirmProps['onConfirm'] = () => {
         handleDenyBooking();
@@ -85,12 +86,12 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
     const denyBooking_cancel: PopconfirmProps['onCancel'] = () => {
     };
 
-    const cancelBooking_confirm: PopconfirmProps['onConfirm'] = () => {
-        handleCancelBooking();
-    };
+    // const cancelBooking_confirm: PopconfirmProps['onConfirm'] = () => {
+    //     handleCancelBooking();
+    // };
 
-    const cancelBooking_cancel: PopconfirmProps['onCancel'] = () => {
-    };
+    // const cancelBooking_cancel: PopconfirmProps['onCancel'] = () => {
+    // };
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -103,7 +104,7 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         const requestBody: UpdateBookingDto = {
             description: values.description,
-            address: values.address,
+            address: classMethod == "In-person" ? values.address : "",
             startDate: values.duration[0].toISOString(),
             endDate: values.duration[1].toISOString(),
             status: "Accepted"
@@ -203,10 +204,13 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                         </>
                     )
                 }
-
-                <p>
-                    <span className="font-semibold">Địa chỉ dạy: </span>{bookingData.address}
-                </p>
+                {
+                    classMethod == "In-person" && (
+                        <p>
+                            <span className="font-semibold">Địa chỉ dạy: </span>{bookingData.address}
+                        </p>
+                    )
+                }
                 <p>
                     <span className="font-semibold">Ghi chú: </span>{bookingData.description}
                 </p>
@@ -306,7 +310,8 @@ const BookingCard = ({ bookingData, rerender }: BookingCardProps) => {
                     <Form.Item
                         label="Địa chỉ học"
                         name="address"
-                        rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
+                        rules={[{ required: classMethod == "In-person", message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
+                        className={`${classMethod == "Online" && "hidden"}`}
                     >
                         <Input placeholder="Địa chỉ học" />
                     </Form.Item>

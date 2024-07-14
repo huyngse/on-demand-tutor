@@ -102,7 +102,13 @@ const ClassDetailPage = () => {
                 </span>
               </h3>
               <h3 className="font-semibold">Hình thức dạy: <span className="font-normal">{classDetail.classMethod == "In-person" ? "Dạy trực tiếp (tại nhà)" : "Dạy online"}</span></h3>
-              <h3 className="font-semibold">Địa chỉ lớp học: <span className="font-normal">{classDetail.ward}, {classDetail.district}, {classDetail.city}</span></h3>
+              {
+                classDetail.classMethod == "In-person" ? (
+                  <h3 className="font-semibold">Địa chỉ lớp học: <span className="font-normal">{classDetail.ward}, {classDetail.district}, {classDetail.city}</span></h3>
+                ) : (
+                  <h3 className="font-semibold">Link lớp học online:<a href={classDetail.meetingLink}> <span className="font-normal">{classDetail.meetingLink}</span></a></h3>
+                )
+              }
               <h3 className="font-semibold">
                 Trạng thái lớp: &nbsp;
                 <span className={`font-normal ${classDetail.active ? "text-green-500" : "text-red-500"}`}>
@@ -140,6 +146,7 @@ const ClassDetailPage = () => {
                     rerender={rerender}
                     pendingBooking={pendingBooking}
                     isBooked={bookedScheduleId == schedule.scheduleID}
+                    classMethod={classDetail.classMethod}
                   />
                 ))}
               </div>

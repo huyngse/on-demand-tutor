@@ -17,7 +17,7 @@ const AchievementCard = ({ data }: any) => {
     };
     return (
         <>
-            <button className="col-span-1 aspect-square overflow-hidden drop-shadow rounded-lg" onClick={showModal}>
+            <button className="flex-shrink-0 w-[300px] aspect-square overflow-hidden drop-shadow rounded-lg" onClick={showModal}>
                 <img src={data.degreeImageUrl} className="w-full h-full object-cover"></img>
             </button>
             <Modal

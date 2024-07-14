@@ -7,7 +7,7 @@ type ClassCardProps = {
 const ClassCard = ({ classData }: ClassCardProps) => {
     const navigate = useNavigate();
     return (
-        <div className="bg-white rounded-lg drop-shadow overflow-hidden">
+        <div className="bg-white rounded-lg drop-shadow overflow-hidden w-[300px] flex-shrink-0">
             <div className="overflow-auto flex flex-col justify-between h-full">
                 <div className="p-3 flex-1">
                     <Link to={`/class/${classData.classId}`}>
@@ -18,7 +18,11 @@ const ClassCard = ({ classData }: ClassCardProps) => {
                         :
                         <span className="text-blue-500">Online</span>}</p>
                     <p><span className="font-semibold">Phí dạy học:</span> {formatNumberWithCommas(classData.classFee)}₫</p>
-                    <p><span className="font-semibold">Địa chỉ dạy:</span> {classData.ward}, {classData.district}, {classData.city}</p>
+                    {
+                        classData.classMethod == "In-person" && (
+                            <p><span className="font-semibold">Địa chỉ dạy:</span> {classData.ward}, {classData.district}, {classData.city}</p>
+                        )
+                    }
                     <p><span className="font-semibold">Số lịch học:</span> {classData.schedules.length}</p>
                 </div>
                 <Button

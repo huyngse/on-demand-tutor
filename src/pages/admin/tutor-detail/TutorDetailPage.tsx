@@ -119,7 +119,7 @@ const TutorDetailPage = () => {
             {
               !tutorDetail.achievements && (<div>Chưa có hình ảnh hoạt động dạy học/thành tích nào</div>)
             }
-            <div className="grid grid-cols-4 gap-3">
+            <div className="flex overflow-auto gap-3">
               {
                 tutorDetail.achievements?.map((achieve: any, index: number) => {
                   return (

@@ -31,7 +31,7 @@ const LoginPage = () => {
     setIsLoading(true);
     const { data, error } = await login(values.userName, values.password);
     if (error) {
-      toast.error("Đăng nhập thất bại thất bại!");
+      toast.error("Đăng nhập thất bại!");
       setIsLoading(false);
       return;
     } else {

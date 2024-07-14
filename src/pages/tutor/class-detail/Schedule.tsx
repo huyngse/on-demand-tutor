@@ -9,10 +9,11 @@ import { useState } from "react";
 import type { PopconfirmProps } from 'antd';
 import { Popconfirm } from 'antd';
 type ScheduleProps = {
+  classMethod: string;
   data: any;
   rerender: () => void;
 }
-const Schedule = ({ data, rerender }: ScheduleProps) => {
+const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
   const [showBooking, setShowBooking] = useState(false);
   const handleDeleteSchedule = async () => {
     const { error } = await deleteSchedule(data.scheduleID);
@@ -123,6 +124,7 @@ const Schedule = ({ data, rerender }: ScheduleProps) => {
                         return (
                           <BookingCard
                             key={`schedule-${data.scheduleID}-booking-${index}`}
+                            classMethod={classMethod}
                             bookingData={booking}
                             rerender={rerender}
                           />

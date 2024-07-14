@@ -27,7 +27,11 @@ const ClassCard = ({ classData }: ClassCardProps) => {
                     :
                     <span className="text-blue-500">Online</span>}</p>
                 <p><span className="font-semibold">Phí dạy học:</span> {formatNumberWithCommas(classData.classFee)}₫</p>
-                <p><span className="font-semibold">Địa chỉ dạy:</span> {classData.ward}, {classData.district}, {classData.city}</p>
+                {
+                    classData.classMethod == "In-person" && (
+                        <p><span className="font-semibold">Địa chỉ dạy:</span> {classData.ward}, {classData.district}, {classData.city}</p>
+                    )
+                }
                 <p><span className="font-semibold">Số lịch học:</span> {classData.schedules.length}</p>
             </div>
             <Button className="h-full" icon={<ChevronRight />} onClick={() => { navigate(`/class/${classData.classId}`) }} />

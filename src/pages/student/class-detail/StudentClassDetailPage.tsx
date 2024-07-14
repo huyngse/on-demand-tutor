@@ -213,10 +213,18 @@ const StudentClassDetailPage = () => {
                   </>
                 )
               }
+              {
+                bookingDetail.class.classMethod == "In-person" ? (
+                  <p>
+                    <span className="font-semibold">Địa chỉ dạy: </span>{bookingDetail.address}
+                  </p>
+                ) : (
+                  <p>
+                    <span className="font-semibold">Link lớp học online: </span><a href={bookingDetail.class.meetingLink}> {bookingDetail.class.meetingLink}</a>
+                  </p>
+                )
+              }
 
-              <p>
-                <span className="font-semibold">Địa chỉ dạy: </span>{bookingDetail.address}
-              </p>
               <p>
                 <span className="font-semibold">Ghi chú: </span>{bookingDetail.description}
               </p>
