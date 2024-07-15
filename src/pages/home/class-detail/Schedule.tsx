@@ -4,7 +4,7 @@ import { changeBookingStatus, createBooking } from "@/lib/api/booking-api";
 import { getTimeString } from "@/utils/dateUtil";
 import { Button, DatePicker, Form, FormProps, Input, Modal, Popconfirm, PopconfirmProps, Radio } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -213,7 +213,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMetho
                   name="duration"
                   rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
                 >
-                  <RangePicker format={"DD/MM/YYYY"} />
+                  <RangePicker format={"DD/MM/YYYY"} minDate={dayjs()}/>
                 </Form.Item>
 
                 <Form.Item

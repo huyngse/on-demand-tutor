@@ -320,7 +320,7 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
                         name="duration"
                         rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
                     >
-                        <RangePicker format={"DD/MM/YYYY"} />
+                        <RangePicker format={"DD/MM/YYYY"} minDate={dayjs()} />
                     </Form.Item>
 
                     <Form.Item
