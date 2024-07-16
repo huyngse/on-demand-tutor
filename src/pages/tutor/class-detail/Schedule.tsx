@@ -5,9 +5,10 @@ import UpdateScheduleButton from "./UpdateScheduleButton";
 import { deleteSchedule } from "@/lib/api/schedule-api";
 import { toast } from "react-toastify";
 import BookingCard from "./BookingCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PopconfirmProps } from 'antd';
 import { Popconfirm } from 'antd';
+import { getBookingByScheduleId } from "@/lib/api/booking-api";
 type ScheduleProps = {
   classMethod: string;
   data: any;
@@ -15,6 +16,7 @@ type ScheduleProps = {
 }
 const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
   const [showBooking, setShowBooking] = useState(false);
+  const [bookings, setBookings] = useState<any[]>([]);
   const handleDeleteSchedule = async () => {
     const { error } = await deleteSchedule(data.scheduleID);
     if (error) {
@@ -26,12 +28,34 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
       }, 1000);
     }
   }
+
   const confirm: PopconfirmProps['onConfirm'] = () => {
     handleDeleteSchedule();
   };
 
   const cancel: PopconfirmProps['onCancel'] = () => {
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const bookingsResult = await getBookingByScheduleId(data.scheduleID);
+      if (bookingsResult.error) {
+        toast.error("Lấy thông tin đặt lịch thất bại");
+      } else {
+        var sortedBookings = [];
+        if (bookingsResult.data != null && bookingsResult.data.length > 0) {
+          sortedBookings = bookingsResult.data.sort((bookingA: any, bookingB: any) => {
+            const dateA = new Date(bookingA.createDate);
+            const dateB = new Date(bookingB.createDate);
+            return dateB.getTime() - dateA.getTime();
+          })
+        }
+        setBookings(sortedBookings);
+      }
+    }
+    fetchData();
+  }, [data])
+
 
   if (!data) return;
   var pendingBookingCount = 0;
@@ -40,14 +64,7 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
       pendingBookingCount++;
     }
   });
-  var sortedBookings = [];
-  if (data.bookings != null && data.bookings.length > 0) {
-    sortedBookings = data.bookings.sort((bookingA: any, bookingB: any) => {
-      const dateA = new Date(bookingA.createDate);
-      const dateB = new Date(bookingB.createDate);
-      return dateB.getTime() - dateA.getTime();
-    })
-  }
+
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -128,7 +145,7 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
                   </div>
                   <div className="flex flex-col gap-2">
                     {
-                      sortedBookings.map((booking: any, index: number) => {
+                      bookings.map((booking: any, index: number) => {
                         return (
                           <BookingCard
                             key={`schedule-${data.scheduleID}-booking-${index}`}

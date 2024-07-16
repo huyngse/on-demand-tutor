@@ -58,6 +58,22 @@ export const getStudentBooking = async (studentId: number) => {
   }
 }
 
+export const getBookingByScheduleId = async (scheduleId: number) => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/bookings/schedule/${scheduleId}`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
 export const getBookingbyId = async (bookingId: number) => {
   const response: any = { error: null, data: null, success: false }
   try {

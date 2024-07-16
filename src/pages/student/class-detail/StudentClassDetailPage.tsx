@@ -59,7 +59,6 @@ const StudentClassDetailPage = () => {
 
   if (isLoading) return <Loader />
   if (!bookingDetail) return;
-  console.log("Booking detail:", bookingDetail);
   var statusEl;
   switch (bookingDetail.status) {
     case "Pending": {

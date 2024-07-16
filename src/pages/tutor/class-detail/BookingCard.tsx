@@ -1,5 +1,5 @@
-import { UpdateBookingDto, changeBookingStatus, updateBooking } from "@/lib/api/booking-api";
-import { formatDate } from "@/utils/dateUtil"
+import { UpdateBookingDto, changeBookingStatus, getTutorBooking, updateBooking } from "@/lib/api/booking-api";
+import { checkDateInterference, formatDate, getTimeString } from "@/utils/dateUtil"
 import { Button, DatePicker, Form, FormProps, Input, Modal, Popconfirm, Radio } from "antd"
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import dayjs, { Dayjs } from "dayjs";
 import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { toast } from "react-toastify";
 import CancelBookingButton from "./CancelBookingButton";
+import { useAppSelector } from "@/hooks/useRedux";
 
 type BookingCardProps = {
     classMethod: string;
@@ -26,7 +27,7 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     const [pfp, setPfp] = useState<string>(bookingData.student.profileImage);
-
+    const loggedUser = useAppSelector(state => state.user.loggedUser);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -102,6 +103,62 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
     };
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const bookingResult = await getTutorBooking(loggedUser.userId);
+        if (bookingResult.error) {
+            toast.error("Lấy thông tin đặt lịch thất bại");
+            return;
+        }
+        const bookings = bookingResult.data;
+        const overlapBooking: any[] = [];
+        bookings.forEach((booking: any) => {
+            var condition_1 = (booking.status == "Accepted" || booking.status == "Started");
+            var condition_2 = booking.schedule.dateOfWeek == bookingData.schedule.dateOfWeek;
+            var startTimeDateA = new Date(booking.schedule.startTime);
+            startTimeDateA.setDate(1);
+            startTimeDateA.setMonth(0);
+            startTimeDateA.setFullYear(2000);
+            var startTimeDateB = new Date(bookingData.schedule.startTime);
+            startTimeDateB.setDate(1);
+            startTimeDateB.setMonth(0);
+            startTimeDateB.setFullYear(2000);
+            var endTimeDateA = new Date(booking.schedule.endTime);
+            endTimeDateA.setDate(1);
+            endTimeDateA.setMonth(0);
+            endTimeDateA.setFullYear(2000);
+            var endTimeDateB = new Date(bookingData.schedule.endTime);
+            endTimeDateB.setDate(1);
+            endTimeDateB.setMonth(0);
+            endTimeDateB.setFullYear(2000);
+            var condition_3 = checkDateInterference(
+                startTimeDateA,
+                endTimeDateA,
+                startTimeDateB,
+                endTimeDateB
+            )
+            var condition_4 = checkDateInterference(
+                new Date(booking.startDate),
+                new Date(booking.endDate),
+                new Date(values.duration[0].toISOString()),
+                new Date(values.duration[1].toISOString())
+            )
+            if (condition_1 && condition_2 && condition_3 && condition_4) {
+                overlapBooking.push(booking);
+            }
+        })
+        if (overlapBooking.length > 0) {
+            var alertString = "Không thể chấp nhận lịch học do thời gian dạy học lớp này bị trùng với thời gian của lớp khác bạn đang dạy: ";
+            overlapBooking.forEach((booking: any) => {
+                alertString += `
+            Lớp ${booking.class.className}:
+            Học sinh:  ${booking.student.fullName};
+            Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.startDate))};
+            ${booking.schedule.dateOfWeek == 0 ? "Thứ hai, tư, sáu" : "Thứ ba, năm, bảy"};
+            Thời gian từ ${getTimeString(new Date(booking.schedule.startTime))} đến ${getTimeString(new Date(booking.schedule.endTime))}.
+            `
+            })
+            alert(alertString);
+            return;
+        }
         const requestBody: UpdateBookingDto = {
             description: values.description,
             address: classMethod == "In-person" ? values.address : "",
