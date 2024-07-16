@@ -63,3 +63,18 @@ export const getTutorDegrees = async (tutorId: number) => {
     return handleApiError(error);
   }
 };
+
+export const deleteDegree = async (degreeId: number) => {
+  try {
+    const response = await axiosClient.delete(`/api/v1/tutordegrees`, {
+      params: { id: degreeId }
+    });
+    if (response && response.data.Errors) {
+      return { error: response.data.Errors, data: null, success: false };
+    } else {
+      return { error: null, data: response.data, success: true };
+    }
+  } catch (error) {
+    return handleApiError(error);
+  }
+};

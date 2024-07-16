@@ -1,11 +1,13 @@
 import { useAppSelector } from '@/hooks/useRedux';
-import { getUserById } from '@/lib/api/user-api';
+import { getUserById, updateUser } from '@/lib/api/user-api';
 import { Button, DatePicker, Form, FormProps, Input, Radio } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 type FieldType = {
+  username: string;
   emailAddress: string;
   fullname: string;
   dateOfBirth: Dayjs;
@@ -21,13 +23,16 @@ type FieldType = {
 const UpdateStudentProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchStudentDetails = async () => {
       const { error, data } = await getUserById(loggedUser.userId);
       if (error) {
         toast.error("loi");
       } else {
-        form.setFieldValue("fullname", data.fullname)
+        form.setFieldValue("username", data.username)
+        form.setFieldValue("fullName", data.fullName)
         form.setFieldValue("phoneNumber", data.phoneNumber)
         form.setFieldValue("emailAddress", data.emailAddress)
         form.setFieldValue("dateOfBirth", dayjs(data.dateOfBirth))
@@ -43,12 +48,25 @@ const UpdateStudentProfilePage = () => {
     }
   }, [loggedUser]);
 
-
-  const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+  const onFinish: FormProps<FieldType>['onFinish'] = async ( values) => {
     const requestBody: any = { ...values };
     requestBody.dateOfBirth = values.dateOfBirth.toISOString();
+    delete requestBody.emailAddress;
     console.log('Success:', requestBody);
+    try {
+      const response = await updateUser(loggedUser.userId, requestBody);
+      if (response.success) {
+        toast.success("Cập nhật thành công!");
+        setTimeout(() => { navigate("/student/profile") }, 1000);
+      } else {
+        toast.error(response.error);
+      }
+    } catch (error) {
+      toast.error("Cập nhật lỗi!");
+    }
   };
+
+
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -68,10 +86,17 @@ const UpdateStudentProfilePage = () => {
       >
         <Form.Item
           label="Họ và tên"
-          name="fullname"
+          name="fullName"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Tên tài khoản"
+          name="username"
+        >
+          <Input disabled/>
         </Form.Item>
 
         <Form.Item
@@ -85,9 +110,8 @@ const UpdateStudentProfilePage = () => {
         <Form.Item
           label="Email"
           name="emailAddress"
-          rules={[{ required: true, message: 'Please input your email!' }]}
         >
-          <Input />
+          <Input disabled/>
         </Form.Item>
 
         <Form.Item

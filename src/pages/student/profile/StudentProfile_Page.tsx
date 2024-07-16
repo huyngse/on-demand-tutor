@@ -5,22 +5,13 @@ import { Button, Dropdown, MenuProps } from "antd";
 import { Pencil, EllipsisVertical, ImageUp } from "lucide-react";
 import { getUserById } from "@/lib/api/user-api";
 import { toast } from "react-toastify";
+import { formatDate } from "@/utils/dateUtil";
 
 
 const StudentProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   const [studentDetail, setStudentDetail] = useState<any>();
-
-  // useEffect(() => {
-  //   const fetchStudentDetails = async () => {
-  //     const result = await fetch(`/api/student/${loggedUser?.id}`);
-  //     const data = await result.json();
-  //     setStudentDetail(data);
-  //   };
-
-  //   fetchStudentDetails();
-  // }, [loggedUser]);
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
@@ -81,13 +72,12 @@ const StudentProfilePage = () => {
               <tr>
                 <td className="py-2">
                   <div className="flex flex-col gap-2">
-                    <span className="block">Họ và tên: {studentDetail.fullname}</span>
+                    <span className="block">Họ và tên: {studentDetail.fullName}</span>
                     <span className="block">Số điện thoại: {studentDetail.phoneNumber}</span>
                     <span className="block">Email: {studentDetail.emailAddress}</span>
-                    <span className="block">Ngày sinh: {studentDetail.dateOfBirth}</span>
+                    <span className="block">Ngày sinh: {formatDate(new Date(studentDetail.dateOfBirth))}</span>
                     <span className="block">Giới tính: {studentDetail.gender == "Male" ? "Nam" : "Nữ"}</span>
-                    <span className="block">Địa chỉ: {`${studentDetail.street}, 
-                    ${studentDetail.ward}, 
+                    <span className="block">Địa chỉ: {`${studentDetail.ward}, 
                     ${studentDetail.district}, 
                     ${studentDetail.city}`}</span>
                   </div>
