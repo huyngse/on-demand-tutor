@@ -93,10 +93,10 @@ export const getBookingDetailbyId = async (bookingId: number) => {
 
 
 
-type BookingStatus = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended" | "Cancelled_by_student" | "Cancelled_by_tutor";
+export type BookingStatusType = "Pending" | "Cancelled" | "Accepted" | "Denied" | "Started" | "Ended" | "Cancelled_by_student" | "Cancelled_by_tutor";
 export const changeBookingStatus = async (
   bookingId: number,
-  bookingStatus: BookingStatus
+  bookingStatus: BookingStatusType
 ) => {
   const response: any = { error: null, data: null, success: false }
   try {
@@ -114,7 +114,7 @@ export const changeBookingStatus = async (
 }
 export const cancelBooking = async (
   bookingId: number,
-  status: BookingStatus,
+  status: BookingStatusType,
   cancellationReason: string,
 ) => {
   const response: any = { error: null, data: null, success: false }
@@ -139,7 +139,7 @@ export const cancelBooking = async (
 export type UpdateBookingDto = {
   description: string,
   address: string,
-  status: BookingStatus,
+  status: BookingStatusType,
   startDate: string,
   endDate: string,
 }

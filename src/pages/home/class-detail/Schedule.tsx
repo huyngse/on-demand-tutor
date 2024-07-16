@@ -1,7 +1,7 @@
 import { Roles } from "@/constants/roles";
 import { useAppSelector } from "@/hooks/useRedux";
-import { changeBookingStatus, createBooking } from "@/lib/api/booking-api";
-import { getTimeString } from "@/utils/dateUtil";
+import { changeBookingStatus, createBooking, getStudentBooking } from "@/lib/api/booking-api";
+import { checkDateInterference, formatDate, getTimeString } from "@/utils/dateUtil";
 import { Button, DatePicker, Form, FormProps, Input, Modal, Popconfirm, PopconfirmProps, Radio } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs, { Dayjs } from "dayjs";
@@ -52,6 +52,63 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMetho
   };
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const bookingResult = await getStudentBooking(loggedUser.userId);
+    if (bookingResult.error) {
+      toast.error("Lấy thông tin đặt lịch thất bại");
+      return;
+    }
+    const bookings = bookingResult.data;
+    const overlapBooking: any[] = [];
+    bookings.forEach((booking: any) => {
+      var condition_1 = (booking.status == "Pending" ||
+        booking.status == "Accepted" ||
+        booking.status == "Started");
+      var condition_2 = booking.schedule.dateOfWeek == data.dateOfWeek;
+      var startTimeDateA = new Date(booking.schedule.startTime);
+      startTimeDateA.setDate(1);
+      startTimeDateA.setMonth(0);
+      startTimeDateA.setFullYear(2000);
+      var startTimeDateB = new Date(data.startTime);
+      startTimeDateB.setDate(1);
+      startTimeDateB.setMonth(0);
+      startTimeDateB.setFullYear(2000);
+      var endTimeDateA = new Date(booking.schedule.endTime);
+      endTimeDateA.setDate(1);
+      endTimeDateA.setMonth(0);
+      endTimeDateA.setFullYear(2000);
+      var endTimeDateB = new Date(data.endTime);
+      endTimeDateB.setDate(1);
+      endTimeDateB.setMonth(0);
+      endTimeDateB.setFullYear(2000);
+      var condition_3 = checkDateInterference(
+        startTimeDateA,
+        endTimeDateA,
+        startTimeDateB,
+        endTimeDateB
+      )
+      var condition_4 = checkDateInterference(
+        new Date(booking.startDate),
+        new Date(booking.endDate),
+        new Date(values.duration[0].toISOString()),
+        new Date(values.duration[1].toISOString())
+      )
+      if (condition_1 && condition_2 && condition_3 && condition_4) {
+        overlapBooking.push(booking);
+      }
+    })
+    if (overlapBooking.length > 0) {
+      var alertString = "Không thể đặt lịch học do thời gian học lớp này bị trùng với thời gian của lớp khác bạn đã đặt: ";
+      overlapBooking.forEach((booking: any) => {
+        alertString += `
+        Lịch học lớp ${booking.class.className}:
+        Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.startDate))};
+        ${booking.schedule.dateOfWeek == 0 ? "Thứ hai, tư, sáu" : "Thứ ba, năm, bảy"};
+        Thời gian từ ${getTimeString(new Date(booking.schedule.startTime))} đến ${getTimeString(new Date(booking.schedule.endTime))}.
+        `
+      })
+      alert(alertString);
+      return;
+    }
     const requestBody: any = {
       userId: loggedUser.userId,
       scheduleId: data.scheduleID,
@@ -95,7 +152,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMetho
 
   const cancelBooking_cancel: PopconfirmProps['onCancel'] = () => {
   };
-  console.log(pendingBooking)
+
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -213,7 +270,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMetho
                   name="duration"
                   rules={[{ required: true, message: 'Vui lòng nhập chi tiết địa chỉ dạy học' }]}
                 >
-                  <RangePicker format={"DD/MM/YYYY"} minDate={dayjs()}/>
+                  <RangePicker format={"DD/MM/YYYY"} minDate={dayjs()} />
                 </Form.Item>
 
                 <Form.Item
