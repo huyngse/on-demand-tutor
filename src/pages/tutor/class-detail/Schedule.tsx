@@ -40,6 +40,14 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
       pendingBookingCount++;
     }
   });
+  var sortedBookings = [];
+  if (data.bookings != null && data.bookings.length > 0) {
+    sortedBookings = data.bookings.sort((bookingA: any, bookingB: any) => {
+      const dateA = new Date(bookingA.createDate);
+      const dateB = new Date(bookingB.createDate);
+      return dateB.getTime() - dateA.getTime();
+    })
+  }
   return (
     <div className="bg-white rounded-lg drop-shadow p-3">
       <h3 className="font-semibold">Lịch #{data.scheduleID}</h3>
@@ -120,7 +128,7 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
                   </div>
                   <div className="flex flex-col gap-2">
                     {
-                      data.bookings.map((booking: any, index: number) => {
+                      sortedBookings.map((booking: any, index: number) => {
                         return (
                           <BookingCard
                             key={`schedule-${data.scheduleID}-booking-${index}`}
