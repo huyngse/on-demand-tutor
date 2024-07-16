@@ -238,7 +238,8 @@ const StudentClassDetailPage = () => {
                 (
                   bookingDetail.status == "Cancelled_by_student" ||
                   bookingDetail.status == "Cancelled_by_tutor" ||
-                  bookingDetail.status == "Cancelled") && (
+                  bookingDetail.status == "Cancelled") &&
+                  (bookingDetail.cancellationReason?.length > 0) && (
                   <p>
                     <span className="font-semibold">Lý do hủy: </span>{bookingDetail.cancellationReason}
                   </p>

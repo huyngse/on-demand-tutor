@@ -99,7 +99,8 @@ const BookingCard = ({ bookingData }: BookingCardProps) => {
                     (
                         bookingData.status == "Cancelled_by_student" ||
                         bookingData.status == "Cancelled_by_tutor" ||
-                        bookingData.status == "Cancelled") && (
+                        bookingData.status == "Cancelled") &&
+                        (bookingData.cancellationReason?.length > 0) && (
                         <p>
                             <span className="font-semibold">Lý do hủy: </span>{bookingData.cancellationReason}
                         </p>

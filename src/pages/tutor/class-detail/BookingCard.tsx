@@ -167,7 +167,6 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
         form.setFieldValue("status", bookingData.status);
         form.setFieldValue("duration", [dayjs(bookingData.startDate), dayjs(bookingData.endDate)]);
     }, [])
-
     return (
         <div className="bg-white drop-shadow p-3 rounded-lg grid grid-cols-12">
             <div className="col-span-3">
@@ -224,7 +223,8 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
                     (
                         bookingData.status == "Cancelled_by_student" ||
                         bookingData.status == "Cancelled_by_tutor" ||
-                        bookingData.status == "Cancelled") && (
+                        bookingData.status == "Cancelled") &&
+                    (bookingData.cancellationReason?.length > 0) && (
                         <p>
                             <span className="font-semibold">Lý do hủy: </span>{bookingData.cancellationReason}
                         </p>
