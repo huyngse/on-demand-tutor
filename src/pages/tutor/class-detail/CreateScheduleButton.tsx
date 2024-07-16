@@ -1,4 +1,5 @@
 import { createSchedule } from "@/lib/api/schedule-api";
+import { checkDateInterference, getTimeString } from "@/utils/dateUtil";
 import { Button, Form, FormProps, Input, Modal, Select, TimePicker } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { Dayjs } from "dayjs";
@@ -15,9 +16,10 @@ type FieldType = {
 type CreateScheduleButtonProps = {
     classId: number;
     rerender: () => void;
+    schedules: any[];
 }
 const format = 'HH:mm';
-const CreateScheduleButton = ({ classId, rerender }: CreateScheduleButtonProps) => {
+const CreateScheduleButton = ({ classId, rerender, schedules }: CreateScheduleButtonProps) => {
     const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -34,6 +36,47 @@ const CreateScheduleButton = ({ classId, rerender }: CreateScheduleButtonProps) 
     };
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        var overlapSchedule: any[] = [];
+        schedules.forEach((schedule: any) => {
+            var startTimeDateA = new Date(schedule.startTime);
+            startTimeDateA.setDate(1);
+            startTimeDateA.setMonth(0);
+            startTimeDateA.setFullYear(2000);
+            var startTimeDateB = new Date(values.classTime[0].toISOString());
+            startTimeDateB.setDate(1);
+            startTimeDateB.setMonth(0);
+            startTimeDateB.setFullYear(2000);
+            var endTimeDateA = new Date(schedule.endTime);
+            endTimeDateA.setDate(1);
+            endTimeDateA.setMonth(0);
+            endTimeDateA.setFullYear(2000);
+            var endTimeDateB = new Date(values.classTime[1].toISOString());
+            endTimeDateB.setDate(1);
+            endTimeDateB.setMonth(0);
+            endTimeDateB.setFullYear(2000);
+            var condition_1 = checkDateInterference(
+                startTimeDateA,
+                endTimeDateA,
+                startTimeDateB,
+                endTimeDateB
+            );
+            var condition_2 = schedule.dateOfWeek == values.dateOfWeek;
+            if (condition_1 && condition_2) {
+                overlapSchedule.push(schedule);
+            }
+        })
+        if (overlapSchedule.length > 0) {
+            var alertString = "Không thể tạo lịch do trùng thời gian với lịch khác của lớp này";
+            overlapSchedule.forEach((schedule: any) => {
+                alertString += `
+            ${schedule.title}:
+            ${schedule.dateOfWeek == 0 ? "Thứ hai, tư, sáu" : "Thứ ba, năm, bảy"};
+            Thời gian từ ${getTimeString(new Date(schedule.startTime))} đến ${getTimeString(new Date(schedule.endTime))}.
+            `
+            })
+            alert(alertString);
+            return;
+        }
         const requestBody: any = {
             ...values
         };

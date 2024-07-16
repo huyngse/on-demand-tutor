@@ -89,7 +89,7 @@ const TutorClassDetailPage = () => {
       </div>
       <div className="flex justify-between  items-center my-2">
         <h1 className="font-bold text-xl ">Lịch dạy lớp</h1>
-        <CreateScheduleButton classId={classDetail.classId} rerender={rerender} />
+        <CreateScheduleButton classId={classDetail.classId} rerender={rerender} schedules={schedules}/>
       </div>
       {
         classDetail.schedules.length == 0 && (
