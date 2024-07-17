@@ -103,9 +103,17 @@ const ClassDetailPage = () => {
               </h3>
               <h3 className="font-semibold">Hình thức dạy: <span className="font-normal">{classDetail.classMethod == "In-person" ? "Dạy trực tiếp (tại nhà)" : "Dạy online"}</span></h3>
               {
-                classDetail.classMethod == "In-person" ? (
+                classDetail.classMethod == "In-person" && (
                   <h3 className="font-semibold">Địa chỉ lớp học: <span className="font-normal">{classDetail.ward}, {classDetail.district}, {classDetail.city}</span></h3>
-                ) : (
+                )
+              }
+              {
+                classDetail.classMethod == "Online" 
+                && ((loggedUser 
+                && loggedUser.role == "Tutor" )
+                || pendingBooking?.status == "Accepted" 
+                || pendingBooking?.status == "Started") 
+                && (
                   <h3 className="font-semibold">Link lớp học online:<a href={classDetail.meetingLink}> <span className="font-normal">{classDetail.meetingLink}</span></a></h3>
                 )
               }
