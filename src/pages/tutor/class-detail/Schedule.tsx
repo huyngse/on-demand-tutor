@@ -13,8 +13,9 @@ type ScheduleProps = {
   classMethod: string;
   data: any;
   rerender: () => void;
+  schedules: any[];
 }
-const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
+const Schedule = ({ classMethod, data, rerender, schedules }: ScheduleProps) => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookings, setBookings] = useState<any[]>([]);
   const handleDeleteSchedule = async () => {
@@ -92,6 +93,7 @@ const Schedule = ({ classMethod, data, rerender }: ScheduleProps) => {
             classId={0}
             scheduleData={data}
             rerender={rerender}
+            schedules={schedules}
           />
         </div>
       </div>

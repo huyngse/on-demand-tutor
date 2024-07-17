@@ -107,6 +107,7 @@ const TutorClassDetailPage = () => {
                 classMethod={classDetail.classMethod}
                 data={schedule}
                 rerender={rerender}
+                schedules={schedules}
               />
             ))}
           </div>
