@@ -2,7 +2,7 @@ import BackButton from "@/components/BackButton"
 import TiptapInput from "@/components/tiptap/TiptapInput";
 import { useAppSelector } from "@/hooks/useRedux";
 import { getVietnamAddress } from "@/lib/api/address-api";
-import { createClass } from "@/lib/api/class-api";
+import { createClass, getClassesByTutorId } from "@/lib/api/class-api";
 import { setAddress } from "@/lib/redux/addressSlice";
 import { CityType, DistrictType, WardType } from "@/types/address";
 import { SelectOptionType } from "@/types/antd-types";
@@ -28,11 +28,13 @@ type FieldType = {
   active: boolean
   meetingLink: string;
 };
+
 const TutorCreateClassPage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const addresses: CityType[] = useAppSelector(state => state.address.value);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
   const [classMethod, setClassMethod] = useState<string>("In-person");
+  const [classes, setClasses] = useState<any[]>([]);
   const [wards, setWards] = useState<WardType[]>([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -111,11 +113,34 @@ const TutorCreateClassPage = () => {
       if (addressResult.data != null) {
         dispatch(setAddress(addressResult.data));
       }
+      if (loggedUser) {
+        const classesResult = await getClassesByTutorId(loggedUser?.userId);
+        if (classesResult.error) {
+          toast.error("Lấy thông tin lớp thất bại");
+        } else {
+          setClasses(classesResult.data);
+        }
+      }
     }
     fetchData();
     form.setFieldValue("active", true);
     form.setFieldValue("classFee", 10000);
   }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (loggedUser) {
+        const classesResult = await getClassesByTutorId(loggedUser?.userId);
+        if (classesResult.error) {
+          toast.error("Lấy thông tin lớp thất bại");
+        } else {
+          setClasses(classesResult.data);
+        }
+      }
+    }
+    fetchData();
+  }, [loggedUser])
+
 
   return (
     <div>
@@ -134,7 +159,22 @@ const TutorCreateClassPage = () => {
           <Form.Item
             label="Tên lớp"
             name="className"
-            rules={[{ required: true, message: 'Vui lòng nhập tên lớp!' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập tên lớp!' },
+              {
+                validator: (_, value) => {
+                  if (value) {
+                    for (var i = 0; i < classes.length; i++) {
+                      const _class = classes[i];
+                      if (_class.className == value) {
+                        return Promise.reject(new Error('Tên lớp đã tồn tại'))
+                      }
+                    }
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
             <Input placeholder="Tên lớp" />
           </Form.Item>
