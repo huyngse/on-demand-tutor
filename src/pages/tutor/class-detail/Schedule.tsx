@@ -19,6 +19,16 @@ const Schedule = ({ classMethod, data, rerender, schedules }: ScheduleProps) => 
   const [showBooking, setShowBooking] = useState(false);
   const [bookings, setBookings] = useState<any[]>([]);
   const handleDeleteSchedule = async () => {
+    var hasActiveBooking = false;
+    bookings.forEach((booking: any) => {
+      if (booking.status == "Accepted" || booking.status == "Started") {
+        hasActiveBooking = true;
+      }
+    });
+    if (hasActiveBooking) {
+      alert("Không thể xóa lịch do bạn đang dạy lịch này");
+      return;
+    }
     const { error } = await deleteSchedule(data.scheduleID);
     if (error) {
       toast.error("Xóa lịch thất bại!");
