@@ -58,8 +58,7 @@ const TutorListPage = () => {
     }
     fetchData();
   }, [searchParams]);
-  console.log("Search param: ", searchParams);
-  console.log("Page props: ", pageProps);
+
   var cityOptions: SelectOptionType[] = [];
   if (addresses != null) {
     cityOptions = addresses.map(addr => {
@@ -89,7 +88,6 @@ const TutorListPage = () => {
 
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
     var strQuery = "";
     const queryArr: string[] = [];
     if (values.TutorName) {

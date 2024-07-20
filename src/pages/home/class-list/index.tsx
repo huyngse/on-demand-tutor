@@ -1,20 +1,22 @@
 import Loader from "@/components/Loader";
 import { useAppSelector } from "@/hooks/useRedux";
 import { getVietnamAddress } from "@/lib/api/address-api";
-import { getAllClass } from "@/lib/api/class-api";
+import { searchClass } from "@/lib/api/class-api";
 import { setAddress } from "@/lib/redux/addressSlice";
 import { CityType, DistrictType, WardType } from "@/types/address";
 import { SelectOptionType } from "@/types/antd-types";
-import { Button, Empty, Form, FormProps, Radio, Select } from "antd";
+import { Button, Empty, Form, FormProps, Pagination, Radio, Select } from "antd";
 import Search from "antd/es/input/Search";
 import { ListFilter, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import ClassCard from "./ClassCard";
+import { PaginationProp } from "@/types/pagination-types";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 type FieldType = {
-  searchValue?: string;
+  className?: string;
   classMethod?: string;
   district?: string;
   ward?: string;
@@ -27,8 +29,17 @@ const ClassListPage = () => {
   const [classes, setClasses] = useState<any[]>([]);
   const [districts, setDistricts] = useState<DistrictType[]>([]);
   const [wards, setWards] = useState<WardType[]>([]);
+  const [pageProps, setPageProps] = useState<PaginationProp>(
+    {
+      currentPage: 0,
+      totalCount: 0,
+      totalPages: 0,
+    }
+  );
   const [form] = Form.useForm();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   function sortClassByDate(classesList: any) {
     return classesList.sort((classA: any, classB: any) => {
       const dateA = new Date(classA.createdDate);
@@ -37,7 +48,27 @@ const ClassListPage = () => {
     });
   }
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
+    var strQuery = "";
+    const queryArr: string[] = [];
+    if (values.className) {
+      queryArr.push("ClassName=" + values.className);
+    }
+    if (values.city) {
+      queryArr.push("City=" + values.city);
+    }
+    if (values.district) {
+      queryArr.push("District=" + values.district);
+    }
+    if (values.classMethod) {
+      queryArr.push("ClassMethod=" + values.classMethod);
+    }
+    if (pageProps.currentPage) {
+      queryArr.push("PageNumber=" + pageProps.currentPage);
+    }
+    if (queryArr.length > 0) {
+      strQuery = "?" + queryArr.join("&");
+      navigate(`/class-list${strQuery}`);
+    }
   };
 
   const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
@@ -90,20 +121,31 @@ const ClassListPage = () => {
       if (addressResult.data != null) {
         dispatch(setAddress(addressResult.data));
       }
+    }
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchSearchClassResult = async () => {
       setIsLoading(true);
-      const { data, error } = await getAllClass();
-      if (error) {
+      const classResult = await searchClass(searchParams.toString());
+      if (classResult.error) {
         toast.error("Lấy thông tin thất bại!", {
           toastId: 'error_classList',
         });
       } else {
-        const filteredClassList = data.filter((c: any) => c.active == true);
+        setPageProps({
+          currentPage: classResult.currentPage,
+          totalCount: classResult.totalCount,
+          totalPages: classResult.totalPages,
+        })
+        const filteredClassList = classResult.data.filter((c: any) => c.active == true);
         setClasses(sortClassByDate(filteredClassList));
       }
       setIsLoading(false);
     }
-    fetchData();
-  }, []);
+    fetchSearchClassResult();
+  }, [searchParams])
+
   return (
     <div>
       <Form
@@ -118,7 +160,7 @@ const ClassListPage = () => {
           <h1 className="text-white font-semibold text-center text-3xl">
             Danh sách lớp học
           </h1>
-          <Form.Item name="searchValue" className="mb-0">
+          <Form.Item name="className" className="mb-0">
             <Search
               placeholder="Nhập tên lớp để tìm kiếm"
               allowClear
@@ -135,7 +177,7 @@ const ClassListPage = () => {
               }
             />
           </Form.Item>
-          <p className="text-white text-sm">Có {classes?.length} kết quả</p>
+          <p className="text-white text-sm">Có {pageProps.totalCount} kết quả</p>
         </div>
         <div className="grid grid-cols-12 m-5">
           <div className="col-span-3">
@@ -215,6 +257,19 @@ const ClassListPage = () => {
                 })
               )
             }
+            <div className="flex justify-center my-2">
+              <Pagination defaultCurrent={1} current={pageProps.currentPage} total={pageProps.totalCount} onChange={
+                (page: number, _: number) => {
+                  setPageProps(
+                    {
+                      ...pageProps,
+                      currentPage: page
+                    }
+                  );
+                  form.submit();
+                }
+              } />
+            </div>
           </div>
         </div>
       </Form>
