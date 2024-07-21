@@ -24,6 +24,8 @@ import TutorClassPage from "./tutor/class/TutorClassPage";
 import TutorClassDetailPage from "./tutor/class-detail/TutorClassDetailPage";
 import TutorCreateClassPage from "./tutor/class/TutorCreateClassPage";
 import TutorUpdateClassPage from "./tutor/class/TutorUpdateClassPage";
+import TutorBookingListPage from "./home/bookings/TutorBookingListPage";
+import TutorBookingDetailPage from "./home/booking-detail/TutorBookingDetailPage";
 import StudentClassPage from "./student/class/StudentClassPage";
 import StudentProfilePage from "./student/profile/StudentProfile_Page";
 import StudentTimetable from "./student/timetable/StudentTimetable";
@@ -54,11 +56,13 @@ export {
     TutorClassDetailPage,
     TutorCreateClassPage,
     TutorUpdateClassPage,
+    TutorBookingListPage,
+    TutorBookingDetailPage,
     StudentClassPage,
     StudentProfilePage,
     StudentTimetable,
     StudentUpdateProfilePage,
     StudentClassDetailPage,
     AdminManageClassPage,
-    AdminClassDetailPage
+    AdminClassDetailPage,
 };

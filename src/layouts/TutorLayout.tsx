@@ -1,7 +1,7 @@
 import useAuthentication from "@/hooks/useAuthentication";
 import { useAppSelector } from "@/hooks/useRedux";
 import { Avatar, Layout, Menu, MenuProps } from "antd";
-import { ArrowBigLeft, Bell, CalendarClock, CircleUserRound, DoorOpen, LayoutDashboard, Shapes } from "lucide-react";
+import { ArrowBigLeft, Bell, CalendarClock, CircleUserRound, DoorOpen, LayoutDashboard, NotebookText, Shapes } from "lucide-react";
 import { ReactNode, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
 
@@ -30,6 +30,11 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
             label: "Danh sách lớp học",
             key: "class",
             icon: <Shapes />,
+        },
+        {
+            label: "Đơn đặt lớp",
+            key: "booking",
+            icon: <NotebookText />,
         },
         {
             label: "Thời gian biểu",
@@ -80,6 +85,10 @@ const TutorLayout = ({ children }: TutorLayoutProps) => {
             }
             case "class": {
                 navigate("/tutor/class");
+                break;
+            }
+            case "booking": {
+                navigate("/tutor/booking");
                 break;
             }
         }

@@ -30,6 +30,8 @@ import {
     StudentClassPage,
     StudentClassDetailPage,
     AdminClassDetailPage,
+    TutorBookingListPage,
+    TutorBookingDetailPage,
 } from '@/pages';
 import MainLayout from '@/layouts/MainLayout'
 import LoginLayout from '@/layouts/LoginLayout'
@@ -208,6 +210,18 @@ const router = createBrowserRouter([
                 path: '/tutor/class/create',
                 element: (
                     <TutorCreateClassPage />
+                ),
+            },
+            {
+                path: '/tutor/booking',
+                element: (
+                    <TutorBookingListPage />
+                ),
+            },
+            {
+                path: '/tutor/booking/:bookingId',
+                element: (
+                    <TutorBookingDetailPage />
                 ),
             },
         ],
