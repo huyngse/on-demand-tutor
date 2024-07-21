@@ -168,6 +168,29 @@ const Datatable = ({ dataSource, rerender }: DataTableProps) => {
           }
         },
       },
+      filters: [
+        {
+            text: 'Đợi xác nhận',
+            value: 'Pending',
+        },
+        {
+            text: 'Đã chấp nhận',
+            value: 'Accepted',
+        },
+        {
+            text: 'Đang học',
+            value: 'Started',
+        },
+        {
+            text: 'Đã kết thúc',
+            value: 'Ended',
+        },
+        {
+            text: 'Đã hủy',
+            value: 'Cancelled',
+        },
+    ],
+    onFilter: (value: any, record: any) => record.status.indexOf(value as string) === 0,
     },
     {
       title: '',
