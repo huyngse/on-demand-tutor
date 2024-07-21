@@ -4,7 +4,6 @@ import { getClassesByTutorId } from "@/lib/api/class-api";
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify";
 import BookingCard from "./BookingCard";
-
 const TutorDashboardPage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const [classes, setClasses] = useState<any[]>([]);

@@ -5,7 +5,6 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import type { PopconfirmProps } from 'antd';
 import dayjs, { Dayjs } from "dayjs";
-import DefaultPfp from "@/assets/images/default_profile_picture.jpg"
 import { toast } from "react-toastify";
 import CancelBookingButton from "../class-detail/CancelBookingButton";;
 import { useAppSelector } from "@/hooks/useRedux";
