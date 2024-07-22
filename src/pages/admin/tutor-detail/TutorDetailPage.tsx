@@ -10,11 +10,14 @@ import { getClassesByTutorId } from "@/lib/api/class-api";
 import { toast } from "react-toastify";
 import BackButton from "@/components/BackButton";
 import DefaultProfileImage from "@/assets/images/default_profile_picture.jpg";
+import { getTutorDegrees } from "@/lib/api/tutor-api";
 
 const TutorDetailPage = () => {
   const [tutorDetail, setTutorDetail] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pfp, setPfp] = useState<string>("");
+  const [degrees, setDegrees] = useState<any[]>([]);
+
   let { tutorId } = useParams();
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +25,9 @@ const TutorDetailPage = () => {
         setIsLoading(true);
         const result = await getTutorbyId(parseInt(tutorId));
         const classResult = await getClassesByTutorId(parseInt(tutorId));
-        if (result.error || classResult.error) {
+        const degreeResult = await getTutorDegrees(parseInt(tutorId));
+
+        if (result.error || classResult.error || degreeResult.error) {
           toast.error("Lấy thông tin thất bại");
         } else {
           if (classResult.data && result.data) {
@@ -30,6 +35,7 @@ const TutorDetailPage = () => {
             const detail = result.data;
             detail.classes = classResult.data;
             setTutorDetail(detail);
+            setDegrees(degreeResult.data);
           }
         }
         setIsLoading(false);
@@ -62,7 +68,7 @@ const TutorDetailPage = () => {
           <div className="py-3 px-14 grid grid-cols-12 gap-5">
             <div className="col-span-2 -translate-y-32">
               <div className="overflow-hidden drop-shadow rounded-lg aspect-square">
-                <img src={pfp} onError={() => {setPfp(DefaultProfileImage)}} alt="" className="w-full h-full object-cover" />
+                <img src={pfp} onError={() => { setPfp(DefaultProfileImage) }} alt="" className="w-full h-full object-cover" />
               </div>
               <table className="w-full border-r border-r-gray-300 mt-2">
                 <tbody>
@@ -117,11 +123,11 @@ const TutorDetailPage = () => {
           </div>
           <div className="bg-white rounded-lg drop-shadow overflow-hidden py-5 px-10">
             {
-              !tutorDetail.achievements && (<div>Chưa có hình ảnh hoạt động dạy học/thành tích nào</div>)
+              degrees.length == 0 && (<div>Chưa có hình ảnh hoạt động dạy học/thành tích nào</div>)
             }
             <div className="flex overflow-auto gap-3">
               {
-                tutorDetail.achievements?.map((achieve: any, index: number) => {
+                degrees.map((achieve: any, index: number) => {
                   return (
                     <AchievementCard data={achieve} key={`achievement-${index}`} />
                   )

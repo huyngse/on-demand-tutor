@@ -1,7 +1,7 @@
 import { Roles } from "@/constants/roles";
 import { useAppSelector } from "@/hooks/useRedux";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
@@ -43,9 +43,12 @@ const HomePage = () => {
                 Các gia sư chuyên môn ở nhiều lĩnh vực khác nhau sẵn sàng giúp bạn
                 đạt được mục tiêu học tập của mình.
               </p>
-              <button className="bg-white text-blue-600 py-3 px-6 rounded-full text-lg font-bold">
-                Bắt Đầu Ngay
-              </button>
+              <Link to={`/tutor-list`}>
+                <button className="bg-white text-blue-600 py-3 px-6 rounded-full text-lg font-bold">
+                  Bắt Đầu Ngay
+                </button>
+              </Link>
+
             </div>
             <img className="mr-4 relative" src="https://www.greatschools.org/gk/wp-content/uploads/2010/01/Looking-for-a-tutor.jpg" />
 

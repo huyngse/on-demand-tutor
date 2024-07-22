@@ -12,9 +12,11 @@ import { formatDate } from "@/utils/dateUtil";
 import { getUserById } from "@/lib/api/user-api";
 import UpdateAvatarModal from "./UpdateAvatarModal";
 import useRerender from "@/hooks/useRerender";
+import { getTutorDegrees } from "@/lib/api/tutor-api";
 
 const TutorProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
+  const [degrees, setDegrees] = useState<any[]>([]);
   const [pfp, setPfp] = useState<string>();
   const navigate = useNavigate();
   const { renderKey, rerender } = useRerender();
@@ -52,12 +54,14 @@ const TutorProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await getUserById(loggedUser.userId);
-      if (error) {
+      const degreeResult = await getTutorDegrees(parseInt(loggedUser.userId));
+      if (error && degreeResult.error) {
         toast.error("Lấy thông tin thất bại!", {
           toastId: 'error_tutorProfile',
         });
       } else {
         setTutorDetail(data);
+        setDegrees(degreeResult.data);
         setPfp(data.profileImage);
       }
     }
@@ -123,11 +127,11 @@ const TutorProfilePage = () => {
           Hình ảnh hoạt động dạy học/thành tích
         </h4>
         {
-          !tutorDetail.achievements && (<div>Chưa có hình ảnh hoạt động dạy học/thành tích nào</div>)
+          degrees.length == 0 && (<div>Chưa có hình ảnh hoạt động dạy học/thành tích nào</div>)
         }
         <div className="grid grid-cols-4 gap-3">
           {
-            tutorDetail.achievements?.map((achieve: any, index: number) => {
+            degrees.map((achieve: any, index: number) => {
               return (
                 <AchievementCard data={achieve} key={`achievement-${index}`} />
               )
