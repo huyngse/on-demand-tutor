@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { getTutorDegrees } from '@/lib/api/tutor-api';
-import AchievementCard from '@/pages/home/tutor-detail/AchievementCard';
 import { Button } from 'antd';
 import { Upload } from "lucide-react";
 import useRerender from "@/hooks/useRerender";
 import UpdateCertiModal from './UpdateCertiModal';
+import { useAppSelector } from '@/hooks/useRedux';
+import AchievementCard from './AchievementCard';
 
-
-const TutorCertification = ({ tutorId }: any) => {
+const TutorCertification = () => {
   const [degrees, setDegrees] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const { renderKey, rerender } = useRerender();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const loggedUser = useAppSelector(state => state.user.loggedUser);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -25,17 +25,19 @@ const TutorCertification = ({ tutorId }: any) => {
 
   useEffect(() => {
     const fetchDegrees = async () => {
-      const response = await getTutorDegrees(tutorId);
-      if (response.data) {
-        setDegrees(response.data);
-      } else {
-        console.error('Lấy thông tin bằng cấp thất bại!:', response.error);
+      setLoading(true);
+      if (loggedUser) {
+        const response = await getTutorDegrees(loggedUser.userId);
+        if (response.data) {
+          setDegrees(response.data);
+        } else {
+          console.error('Lấy thông tin bằng cấp thất bại!:', response.error);
+        }
       }
       setLoading(false);
     };
-
     fetchDegrees();
-  }, [tutorId, renderKey]);
+  }, [loggedUser, renderKey]);
 
   if (loading) {
     return (
@@ -49,7 +51,7 @@ const TutorCertification = ({ tutorId }: any) => {
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-2">Tutor Degrees</h1>
       <Button onClick={showModal} type='primary' icon={<Upload height={13} width={13} />}>Thêm ảnh bằng cấp</Button>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-12 gap-4 mt-2 w-full">
         {degrees.map((degree) => (
           <AchievementCard key={degree} data={degree} />
         ))}
