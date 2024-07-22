@@ -26,6 +26,22 @@ export const createBooking = async (requestBody: any) => {
   }
 }
 
+export const getAllBooking = async () => {
+  const response: any = { error: null, data: null, success: false }
+  try {
+    const { data } = await axiosClient.get(`api/v1/bookings`);
+    if (data && data.Errors) {
+      response.error = data.Errors
+    } else {
+      response.data = data;
+      response.success = true;
+    }
+    return response;
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
+
 export const getTutorBooking = async (tutorId: number) => {
   const response: any = { error: null, data: null, success: false }
   try {
