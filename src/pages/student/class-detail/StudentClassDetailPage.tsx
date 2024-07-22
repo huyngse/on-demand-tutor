@@ -194,6 +194,7 @@ const StudentClassDetailPage = () => {
             </div>
           </section>
           {/*  BOOKING */}
+          
           <section>
             <div className="flex justify-between  items-center my-2">
               <h1 className="font-bold text-xl ">Đơn đặt</h1>
