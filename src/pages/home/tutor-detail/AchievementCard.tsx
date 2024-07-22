@@ -21,7 +21,7 @@ const AchievementCard = ({ data }: any) => {
                 <img src={data.degreeImageUrl} className="w-full h-full object-cover"></img>
             </button>
             <Modal
-                title={data.description}
+                title={data.degreeName}
                 open={isModalOpen}
                 footer={<div></div>}
                 onOk={handleOk}

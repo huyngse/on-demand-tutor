@@ -1,6 +1,7 @@
 // import { axiosClient } from './config/axios-client';
 import { tutorData } from "@/data/tutor";
 import { axiosClient } from "./config/axios-client";
+import { axiosClientMultipart } from "./config/axios-client-multi-form";
 export const handleApiError = (error: any) => {
   try {
     const errorMessage = error.Errors?.ErrorMessage || 'An unexpected error occurred.';
@@ -51,9 +52,7 @@ export const getTutorById = async (id: number) => {
 
 export const getTutorDegrees = async (tutorId: number) => {
   try {
-    const response = await axiosClient.get(`/api/v1/tutordegrees`, {
-      params: { TutorId: tutorId }
-    });
+    const response = await axiosClient.get(`/api/v1/tutordegrees/tutor/${tutorId}`);
     if (response && response.data.Errors) {
       return { error: response.data.Errors, data: null, success: false };
     } else {
@@ -78,3 +77,18 @@ export const deleteDegree = async (degreeId: number) => {
     return handleApiError(error);
   }
 };
+
+export const createDegree = async (tutorId: number, imgFile: File, degreeName: string) => {
+  try {
+    const form = new FormData();
+    form.append("DegreeImageUrl", imgFile);
+    const response = await axiosClientMultipart.post(`/api/v1/tutordegrees?DegreeName=${encodeURIComponent(degreeName)}&Description=a&TutorId=${tutorId}`, form);
+    if (response && response.data.Errors) {
+      return { error: response.data.Errors, data: null, success: false };
+    } else {
+      return { error: null, data: response.data, success: true };
+    }
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
