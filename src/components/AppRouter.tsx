@@ -139,6 +139,12 @@ const router = createBrowserRouter([
                     <AdminClassDetailPage />
                 ),
             },
+            {
+                path: '/admin/booking/:bookingId',
+                element: (
+                    <TutorBookingDetailPage />
+                ),
+            },
         ],
     },
     // ############################## TUTOR #################################
