@@ -283,8 +283,8 @@ const TutorUpdateClassPage = () => {
                     if (classMethod == "Online" && !meetLinkPattern.test(value)) {
                       return Promise.reject(new Error('Link Google Meet không hợp lệ'))
                     }
-                    return Promise.resolve();
                   }
+                  return Promise.resolve();
                 },
               },
             ]}
@@ -312,8 +312,8 @@ const TutorUpdateClassPage = () => {
                     } else if (value > 1000000000) {
                       return Promise.reject(new Error('Phí dạy học tối đa 1.000.000.000₫'))
                     }
-                    return Promise.resolve();
                   }
+                  return Promise.resolve();
                 },
               },
             ]}
