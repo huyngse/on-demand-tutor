@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import tutorTypesData from "@/data/tutorTypes.json";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { UpdateTutorProfileRequest, getUserById, updateTutorProfile } from "@/lib/api/user-api";
+import { getUserById, updateTutorProfile } from "@/lib/api/user-api";
 type FieldType = {
   fullName: string;
   gender: string;
@@ -86,19 +86,19 @@ const TutorUpdateProfilePage = () => {
   }
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-    const request: UpdateTutorProfileRequest = {
-      fullName: values.fullName,
-      city: values.city,
-      dateOfBirth: values.dateOfBirth,
-      district: values.district,
-      gender: values.gender,
-      phoneNumber: values.phoneNumber,
-      school: values.school,
-      street: values.street,
-      tutorDescription: values.tutorDescription,
-      tutorType: values.tutorType,
-      ward: values.ward
-    }
+    // const request: UpdateTutorProfileRequest = {
+    //   fullName: values.fullName,
+    //   city: values.city,
+    //   dateOfBirth: values.dateOfBirth,
+    //   district: values.district,
+    //   gender: values.gender,
+    //   phoneNumber: values.phoneNumber,
+    //   school: values.school,
+    //   street: values.street,
+    //   tutorDescription: values.tutorDescription,
+    //   tutorType: values.tutorType,
+    //   ward: values.ward
+    // }
     const { error } = await updateTutorProfile(loggedUser.userId, values);
     if (error) {
       toast.error("Cập nhật thông tin thất bại");

@@ -2,7 +2,7 @@ import { useAppSelector } from '@/hooks/useRedux';
 import { getUserById, updateUser } from '@/lib/api/user-api';
 import { Button, DatePicker, Form, FormProps, Input, Radio } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 

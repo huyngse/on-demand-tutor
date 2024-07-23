@@ -10,7 +10,6 @@ import {
     Heading4,
     Heading5,
     Heading6,
-    ImagePlus,
     Italic,
     List,
     ListOrdered,
@@ -24,13 +23,13 @@ import {
     WrapText,
     Youtube,
 } from 'lucide-react';
-import { useRef } from 'react';
+// import { useRef } from 'react';
 import { extensions } from './extensions';
 import { Button, Input } from 'antd';
 
 const MenuBar = () => {
     const { editor } = useCurrentEditor();
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    // const fileInputRef = useRef<HTMLInputElement>(null);
 
     if (!editor) {
         return null;
@@ -51,9 +50,9 @@ const MenuBar = () => {
         }
     };
 
-    const handleClickAddOpenFile = () => {
-        fileInputRef.current?.click();
-    };
+    // const handleClickAddOpenFile = () => {
+    //     fileInputRef.current?.click();
+    // };
 
     return (
         <>

@@ -1,4 +1,3 @@
-import { useAppSelector } from "@/hooks/useRedux";
 import { checkToken } from "@/lib/api/authentication-api";
 import { setLoggedUser } from "@/lib/redux/userSlice";
 import { ReactNode, useEffect } from "react";
@@ -21,7 +20,6 @@ const ProtectedRoute = ({ roles, children }: ProtectedRouteProps) => {
             }
         }
         fetchData();
-
     }, [])
     return (
         <>

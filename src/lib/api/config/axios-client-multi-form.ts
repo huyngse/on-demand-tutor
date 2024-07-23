@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const BASE_URL = 'https://localhost:7120/';
+export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
 export const axiosClientMultipart = axios.create({
   baseURL: BASE_URL,
