@@ -52,8 +52,12 @@ const TutorCertification = () => {
       <h1 className="text-3xl font-bold mb-2">Tutor Degrees</h1>
       <Button onClick={showModal} type='primary' icon={<Upload height={13} width={13} />}>Thêm ảnh bằng cấp</Button>
       <div className="grid grid-cols-12 gap-4 mt-2 w-full">
-        {degrees.map((degree) => (
-          <AchievementCard key={degree} data={degree} />
+        {degrees.map((degree: any, index: any) => (
+          <AchievementCard
+            key={`degree-${index}`}
+            data={degree}
+            rerender={rerender}
+          />
         ))}
       </div>
       <UpdateCertiModal
