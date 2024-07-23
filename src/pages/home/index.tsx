@@ -7,9 +7,6 @@ const HomePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!loggedUser) {
-      localStorage.removeItem("accessToken");
-    }
     if (loggedUser && loggedUser.role == Roles.Admin) {
       navigate("/admin/");
     }

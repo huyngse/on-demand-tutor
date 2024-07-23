@@ -11,8 +11,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     const dispatch = useDispatch();
     useEffect(() => {
         const fetchData = async () => {
-            const { data } = await checkToken();
-            dispatch(setLoggedUser(data));
+            const { data, error } = await checkToken();
+            if (error) {
+                localStorage.removeItem("accessToken");
+            } else {
+                dispatch(setLoggedUser(data));
+            }
         }
         fetchData();
     }, []);
