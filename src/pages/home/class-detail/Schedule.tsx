@@ -101,7 +101,7 @@ const Schedule = ({ data, rerender, pendingBooking, isBooked = false, classMetho
       overlapBooking.forEach((booking: any) => {
         alertString += `
         Lịch học lớp ${booking.class.className}:
-        Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.startDate))};
+        Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.endData))};
         ${booking.schedule.dateOfWeek == 0 ? "Thứ hai, tư, sáu" : "Thứ ba, năm, bảy"};
         Thời gian từ ${getTimeString(new Date(booking.schedule.startTime))} đến ${getTimeString(new Date(booking.schedule.endTime))}.
         `

@@ -6,13 +6,25 @@ import { Pencil, EllipsisVertical, ImageUp } from "lucide-react";
 import { getUserById } from "@/lib/api/user-api";
 import { toast } from "react-toastify";
 import { formatDate } from "@/utils/dateUtil";
+import UpdateAvatarModal from "@/pages/tutor/profile/UpdateAvatarModal";
+import useRerender from "@/hooks/useRerender";
 
 
 const StudentProfilePage = () => {
   const loggedUser = useAppSelector(state => state.user.loggedUser);
   const navigate = useNavigate();
   const [studentDetail, setStudentDetail] = useState<any>();
-
+  const { renderKey, rerender } = useRerender();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     const fetchStudentDetails = async () => {
       const { error, data } = await getUserById(loggedUser.userId);
@@ -25,13 +37,14 @@ const StudentProfilePage = () => {
     if (loggedUser) {
       fetchStudentDetails();
     }
-  }, [loggedUser]);
+  }, [loggedUser, renderKey]);
 
   const items: MenuProps['items'] = [
     {
       label: "Cập nhật ảnh đại diện",
       key: 'update-pfp',
       icon: <ImageUp width={15} />,
+      onClick: () => { showModal() },
     },
     {
       label: "Chỉnh sửa thông tin cá nhân",
@@ -87,6 +100,12 @@ const StudentProfilePage = () => {
           </table>
         </div>
       </div>
+      <UpdateAvatarModal
+        rerender={rerender}
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+      />
     </div>
   );
 };

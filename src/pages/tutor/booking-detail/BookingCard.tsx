@@ -149,7 +149,7 @@ const BookingCard = ({ classMethod, bookingData, rerender }: BookingCardProps) =
                 alertString += `
             Lớp ${booking.class.className}:
             Học sinh:  ${booking.student.fullName};
-            Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.startDate))};
+            Bắt đầu từ ngày ${formatDate(new Date(booking.startDate))} đến ${formatDate(new Date(booking.endDate))};
             ${booking.schedule.dateOfWeek == 0 ? "Thứ hai, tư, sáu" : "Thứ ba, năm, bảy"};
             Thời gian từ ${getTimeString(new Date(booking.schedule.startTime))} đến ${getTimeString(new Date(booking.schedule.endTime))}.
             `
