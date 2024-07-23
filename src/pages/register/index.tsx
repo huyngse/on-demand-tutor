@@ -1,5 +1,5 @@
 import { Roles } from "@/constants/roles";
-import { register, sendEmail } from "@/lib/api/authentication-api";
+import { register } from "@/lib/api/authentication-api";
 import { Button, DatePicker, Form, FormProps, Input, Radio } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,36 +31,31 @@ const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     setIsLoading(true);
-    const emailResult = await sendEmail(values.emailAddress);
-    if (emailResult.error) {
-      toast.error("Email không tồn tại!");
-    } else {
-      const requestBody = {
-        ...values
-      };
-      delete requestBody.confirmPassword;
-      requestBody.city = "";
-      requestBody.district = "";
-      requestBody.ward = "";
-      requestBody.street = "";
-      requestBody.tutorType = "";
-      requestBody.school = "";
-      requestBody.tutorDescription = "";
-      requestBody.dateOfBirth = values.dateOfBirth.toISOString();
-      console.log("requestBody: ", requestBody);
-      const { error } = await register(requestBody);
-      if (error) {
-        if (error.includes("Username and EmailAddress already exists")) {
-          toast.error("Tên đăng nhập hoặc email đã tồn tại!");
-        } else {
-          toast.error("Đăng ký thất bại!");
-        }
+    const requestBody = {
+      ...values
+    };
+    delete requestBody.confirmPassword;
+    requestBody.city = "";
+    requestBody.district = "";
+    requestBody.ward = "";
+    requestBody.street = "";
+    requestBody.tutorType = "";
+    requestBody.school = "";
+    requestBody.tutorDescription = "";
+    requestBody.dateOfBirth = values.dateOfBirth.toISOString();
+    console.log("requestBody: ", requestBody);
+    const { error } = await register(requestBody);
+    if (error) {
+      if (error.includes("Username and EmailAddress already exists")) {
+        toast.error("Tên đăng nhập hoặc email đã tồn tại!");
       } else {
-        toast.success("Đăng ký thành công!");
-        setTimeout(() => {
-          navigate("/login")
-        }, 1000);
+        toast.error("Đăng ký thất bại!");
       }
+    } else {
+      toast.success("Đăng ký thành công!");
+      setTimeout(() => {
+        navigate("/login")
+      }, 1000);
     }
     setIsLoading(false);
   };
