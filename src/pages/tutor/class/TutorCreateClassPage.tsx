@@ -86,7 +86,7 @@ const TutorCreateClassPage = () => {
     }
     requestBody.createdDate = new Date().toISOString();
     requestBody.classAddress = "";
-    requestBody.tutorId = loggedUser?.userId;
+    requestBody.tutorId = loggedUser.userId;
     if (classMethod == "Online") {
       requestBody.city = "";
       requestBody.district = "";
@@ -126,7 +126,7 @@ const TutorCreateClassPage = () => {
     form.setFieldValue("active", true);
     form.setFieldValue("classFee", 10000);
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (loggedUser) {
@@ -262,8 +262,8 @@ const TutorCreateClassPage = () => {
                     if (classMethod == "Online" && !meetLinkPattern.test(value)) {
                       return Promise.reject(new Error('Link Google Meet không hợp lệ'))
                     }
-                    return Promise.resolve();
                   }
+                  return Promise.resolve();
                 },
               },
             ]}
@@ -292,8 +292,8 @@ const TutorCreateClassPage = () => {
                     } else if (value > 1000000000) {
                       return Promise.reject(new Error('Phí dạy học tối đa 1.000.000.000₫'))
                     }
-                    return Promise.resolve();
                   }
+                  return Promise.resolve();
                 },
               },
             ]}
@@ -319,10 +319,12 @@ const TutorCreateClassPage = () => {
         </div>
         <div className="flex justify-end gap-2 mt-3">
           <Button type="default" htmlType="button" onClick={() => { navigate(-1) }}>Hủy</Button>
-          <Button type="primary" htmlType="submit">Tạo lớp</Button>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Tạo lớp</Button>
+          </Form.Item>
         </div>
-      </Form>
-    </div>
+      </Form >
+    </div >
   )
 }
 
